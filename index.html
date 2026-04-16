@@ -24,7 +24,6 @@
             padding: 30px 20px;
         }
 
-        /* Header */
         header {
             text-align: center;
             padding: 40px 0 30px;
@@ -79,7 +78,6 @@
             letter-spacing: 2px;
         }
 
-        /* Navegación principal */
         .nav-main {
             display: flex;
             gap: 5px;
@@ -115,7 +113,6 @@
             background: #ff0050;
         }
 
-        /* Páginas completas */
         .page {
             display: none;
             animation: fadeIn 0.4s ease;
@@ -130,7 +127,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Tabs internas de cada página */
         .tabs {
             display: flex;
             gap: 25px;
@@ -161,7 +157,6 @@
             display: block;
         }
 
-        /* Cards */
         .card {
             background: #121212;
             border: 1px solid #2a2a2a;
@@ -188,7 +183,6 @@
             margin: 25px 0 15px;
         }
 
-        /* Formularios */
         .input-group {
             margin-bottom: 22px;
         }
@@ -202,7 +196,7 @@
             text-transform: uppercase;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 14px 16px;
             background: #0a0a0a;
@@ -213,7 +207,7 @@
             transition: all 0.2s;
         }
 
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #ff0050;
             background: #0f0f0f;
@@ -221,7 +215,6 @@
 
         input::placeholder { color: #555; }
 
-        /* Botones */
         button {
             background: #1a1a1a;
             color: #fff;
@@ -243,7 +236,6 @@
             color: #fff;
         }
 
-        /* Progress */
         .progress-bar {
             width: 100%;
             height: 4px;
@@ -260,7 +252,6 @@
             border-radius: 4px;
         }
 
-        /* Task info */
         .task-info {
             padding: 20px;
             background: #0a0a0a;
@@ -281,7 +272,6 @@
             margin-right: 12px;
         }
 
-        /* Status badges */
         .status-badge {
             display: inline-block;
             padding: 3px 12px;
@@ -297,7 +287,6 @@
         .status-completed { background: #00e67622; color: #00e676; border: 1px solid #00e67633; }
         .status-failed { background: #ff444422; color: #ff4444; border: 1px solid #ff444433; }
 
-        /* URL box */
         .url-box {
             padding: 20px;
             background: #0a0a0a;
@@ -314,7 +303,6 @@
             flex: 1;
         }
 
-        /* Endpoints */
         .endpoint {
             padding: 20px;
             margin-bottom: 15px;
@@ -337,7 +325,6 @@
         .method.post { background: #00e67622; color: #00e676; }
         .method.get { background: #2196f322; color: #2196f3; }
 
-        /* Code */
         pre {
             background: #050505;
             padding: 18px;
@@ -347,9 +334,24 @@
             font-size: 0.85em;
             color: #ccc;
             border: 1px solid #2a2a2a;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
-        /* Stats grid */
+        .lyrics-box {
+            background: #050505;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-line;
+            line-height: 1.8;
+            color: #ccc;
+            font-size: 0.95em;
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -378,7 +380,6 @@
             letter-spacing: 2px;
         }
 
-        /* Tasks list */
         .tasks-list {
             max-height: 350px;
             overflow-y: auto;
@@ -394,7 +395,6 @@
             font-size: 0.85em;
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 30px 0;
@@ -405,7 +405,6 @@
             margin-top: 30px;
         }
 
-        /* Examples */
         .example-links {
             display: flex;
             gap: 12px;
@@ -431,7 +430,6 @@
             color: #fff;
         }
 
-        /* Listas */
         ul {
             margin-left: 20px;
             line-height: 2.2;
@@ -446,7 +444,6 @@
             color: #ff0050;
         }
 
-        /* Decoración */
         .platform-badge {
             display: inline-block;
             padding: 2px 10px;
@@ -458,7 +455,6 @@
             margin-left: 10px;
         }
 
-        /* Scroll */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
@@ -474,22 +470,20 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>TUBE</span></div>
-            <div class="subtitle">API · STREAMING</div>
+            <div class="subtitle">API · STREAMING · LYRICS</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">CHECKING</span>
             </div>
         </header>
         
-        <!-- Navegación principal (Páginas completas) -->
         <div class="nav-main">
             <button class="nav-btn active" onclick="showPage('youtube')">YouTube</button>
             <button class="nav-btn" onclick="showPage('tiktok')">TikTok</button>
+            <button class="nav-btn" onclick="showPage('lyrics')">Lyrics</button>
         </div>
         
-        <!-- ============================================ -->
-        <!-- PÁGINA: YOUTUBE -->
-        <!-- ============================================ -->
+        <!-- PÁGINA YOUTUBE -->
         <div id="youtube" class="page active">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('yt-download', 'youtube')">Download</button>
@@ -498,7 +492,6 @@
                 <button class="tab" onclick="showTab('yt-stats', 'youtube')">Stats</button>
             </div>
             
-            <!-- YouTube Download -->
             <div id="yt-download" class="tab-content active">
                 <div class="card">
                     <h2>YouTube Download</h2>
@@ -550,7 +543,6 @@
                 </div>
             </div>
             
-            <!-- YouTube Docs -->
             <div id="yt-docs" class="tab-content">
                 <div class="card">
                     <h2>API Documentation</h2>
@@ -574,19 +566,12 @@
                         <h3><span class="method get">GET</span> /api/stream/{id}</h3>
                         <p style="color: #888; margin: 10px 0;">Direct streaming</p>
                     </div>
-                    
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/info?url=URL</h3>
-                        <p style="color: #888; margin: 10px 0;">Get video info</p>
-                    </div>
                 </div>
             </div>
             
-            <!-- YouTube Baileys -->
             <div id="yt-baileys" class="tab-content">
                 <div class="card">
                     <h2>Baileys Integration</h2>
-                    <h3>Code</h3>
                     <pre id="yt-baileysCode">const axios = require('axios');
 const API = 'https://your-api.vercel.app';
 
@@ -610,17 +595,9 @@ async function download(sock, from, url) {
     });
 }</pre>
                     <button onclick="copyCode('yt-baileysCode')">Copy Code</button>
-                    
-                    <h3 style="margin-top: 25px;">Commands</h3>
-                    <ul>
-                        <li><code>.music [url]</code> — Download MP3</li>
-                        <li><code>.video [url]</code> — Download MP4</li>
-                        <li><code>.info [url]</code> — Get info</li>
-                    </ul>
                 </div>
             </div>
             
-            <!-- YouTube Stats -->
             <div id="yt-stats" class="tab-content">
                 <div class="card">
                     <h2>Statistics</h2>
@@ -631,28 +608,22 @@ async function download(sock, from, url) {
                         <div class="stat-card"><h3 id="yt-completedTasks">-</h3><p>Done</p></div>
                         <div class="stat-card"><h3 id="yt-failedTasks">-</h3><p>Failed</p></div>
                     </div>
-                    <h3>Active Tasks</h3>
-                    <div id="yt-tasksList" class="tasks-list">Loading...</div>
                     <button onclick="loadStats()">Refresh</button>
                 </div>
             </div>
         </div>
         
-        <!-- ============================================ -->
-        <!-- PÁGINA: TIKTOK (PANTALLA COMPLETA) -->
-        <!-- ============================================ -->
+        <!-- PÁGINA TIKTOK -->
         <div id="tiktok" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Download</button>
                 <button class="tab" onclick="showTab('tt-docs', 'tiktok')">Docs</button>
                 <button class="tab" onclick="showTab('tt-baileys', 'tiktok')">Baileys</button>
-                <button class="tab" onclick="showTab('tt-stats', 'tiktok')">Stats</button>
             </div>
             
-            <!-- TikTok Download -->
             <div id="tt-download" class="tab-content active">
                 <div class="card">
-                    <h2>TikTok Download <span class="platform-badge">NO WATERMARK</span></h2>
+                    <h2>TikTok Download <span class="platform-badge">HD</span></h2>
                     
                     <div class="input-group">
                         <label>URL</label>
@@ -666,13 +637,12 @@ async function download(sock, from, url) {
                     <div class="input-group">
                         <label>Watermark</label>
                         <select id="tt-watermark">
-                            <option value="false">Without Watermark (Clean)</option>
+                            <option value="false">Without Watermark</option>
                             <option value="true">With Watermark</option>
                         </select>
                     </div>
                     
                     <button onclick="startDownload('tt')">Download</button>
-                    <button onclick="getInfo('tt')">Info</button>
                     
                     <div id="tt-downloadStatus" style="display: none;">
                         <div class="progress-bar">
@@ -691,48 +661,29 @@ async function download(sock, from, url) {
                 </div>
             </div>
             
-            <!-- TikTok Docs -->
             <div id="tt-docs" class="tab-content">
                 <div class="card">
-                    <h2>TikTok API Documentation</h2>
-                    
+                    <h2>TikTok API</h2>
                     <div class="endpoint">
                         <h3><span class="method post">POST</span> /api/tiktok</h3>
-                        <p style="color: #888; margin: 10px 0;">Start TikTok download</p>
                         <pre>{
   "url": "https://www.tiktok.com/@user/video/...",
   "watermark": false
 }</pre>
                     </div>
-                    
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/status/{id}</h3>
-                        <p style="color: #888; margin: 10px 0;">Check download status</p>
-                    </div>
-                    
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/stream/{id}</h3>
-                        <p style="color: #888; margin: 10px 0;">Direct streaming (no watermark)</p>
-                    </div>
-                    
-                    <p style="margin-top: 20px; color: #888; font-size: 0.85em;">
-                        <span style="color: #ff0050;">✨</span> Videos download without watermark by default
-                    </p>
                 </div>
             </div>
             
-            <!-- TikTok Baileys -->
             <div id="tt-baileys" class="tab-content">
                 <div class="card">
                     <h2>TikTok + Baileys</h2>
-                    <h3>Code</h3>
                     <pre id="tt-baileysCode">const axios = require('axios');
 const API = 'https://your-api.vercel.app';
 
 async function downloadTikTok(sock, from, url) {
     const res = await axios.post(`${API}/api/tiktok`, {
         url: url,
-        watermark: false  // Sin marca de agua
+        watermark: false
     });
     
     const taskId = res.data.task_id;
@@ -746,43 +697,41 @@ async function downloadTikTok(sock, from, url) {
     await sock.sendMessage(from, {
         video: { url: `${API}/api/stream/${taskId}` },
         mimetype: 'video/mp4',
-        caption: `🎬 ${status.data.title || 'TikTok'}\n👤 ${status.data.uploader || 'User'}`
+        caption: status.data.title
     });
 }</pre>
                     <button onclick="copyCode('tt-baileysCode')">Copy Code</button>
-                    
-                    <h3 style="margin-top: 25px;">Commands</h3>
-                    <ul>
-                        <li><code>.tt [url]</code> — Download TikTok</li>
-                        <li><code>.tiktok [url]</code> — Download TikTok</li>
-                    </ul>
-                    
-                    <p style="margin-top: 20px; color: #00e676; font-size: 0.8em;">
-                        ✓ Zero storage · Direct streaming
-                    </p>
                 </div>
             </div>
-            
-            <!-- TikTok Stats -->
-            <div id="tt-stats" class="tab-content">
-                <div class="card">
-                    <h2>TikTok Statistics</h2>
-                    <div class="stats-grid">
-                        <div class="stat-card"><h3 id="tt-totalTasks">-</h3><p>Total</p></div>
-                        <div class="stat-card"><h3 id="tt-pendingTasks">-</h3><p>Pending</p></div>
-                        <div class="stat-card"><h3 id="tt-downloadingTasks">-</h3><p>Active</p></div>
-                        <div class="stat-card"><h3 id="tt-completedTasks">-</h3><p>Done</p></div>
-                        <div class="stat-card"><h3 id="tt-failedTasks">-</h3><p>Failed</p></div>
-                    </div>
-                    <h3>Active Tasks</h3>
-                    <div id="tt-tasksList" class="tasks-list">Loading...</div>
-                    <button onclick="loadStats()">Refresh</button>
+        </div>
+        
+        <!-- PÁGINA LYRICS -->
+        <div id="lyrics" class="page">
+            <div class="card">
+                <h2>Lyrics Finder <span class="platform-badge">BETA</span></h2>
+                
+                <div class="input-group">
+                    <label>Song Name or Artist + Title</label>
+                    <input type="text" id="lyrics-query" placeholder="Bad Bunny Me Porto Bonito">
+                </div>
+                
+                <div class="example-links">
+                    <span class="example-link" onclick="setLyricsExample('Bad Bunny Tití Me Preguntó')">Bad Bunny</span>
+                    <span class="example-link" onclick="setLyricsExample('Quevedo Bzrp Music Sessions')">Quevedo</span>
+                    <span class="example-link" onclick="setLyricsExample('Milo J Rara Vez')">Milo J</span>
+                </div>
+                
+                <button onclick="searchLyrics()">Search Lyrics</button>
+                
+                <div id="lyricsResult" style="display: none;">
+                    <div class="task-info" id="lyricsInfo"></div>
+                    <div class="lyrics-box" id="lyricsContent"></div>
                 </div>
             </div>
         </div>
         
         <footer>
-            <p>FRIKITUBE API · YOUTUBE · TIKTOK · STREAMING</p>
+            <p>FRIKITUBE API · YOUTUBE · TIKTOK · LYRICS</p>
         </footer>
     </div>
     
@@ -792,9 +741,6 @@ async function downloadTikTok(sock, from, url) {
         let ytTaskId = null, ttTaskId = null;
         let ytInterval = null, ttInterval = null;
         
-        // ============================================
-        // SERVER STATUS
-        // ============================================
         async function checkServerStatus() {
             try {
                 await fetch(`${API_URL}/health`);
@@ -808,34 +754,27 @@ async function downloadTikTok(sock, from, url) {
             }
         }
         
-        // ============================================
-        // NAVEGACIÓN PRINCIPAL (Páginas completas)
-        // ============================================
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(page).classList.add('active');
             event.target.classList.add('active');
-            loadStats();
         }
         
-        // ============================================
-        // TABS INTERNAS
-        // ============================================
         function showTab(tab, page) {
             const pageEl = document.getElementById(page);
             pageEl.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             pageEl.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
             document.getElementById(tab).classList.add('active');
             event.target.classList.add('active');
-            if (tab.includes('stats')) loadStats();
         }
         
-        // ============================================
-        // UTILIDADES
-        // ============================================
         function setExample(platform, url) {
             document.getElementById(`${platform}-url`).value = url;
+        }
+        
+        function setLyricsExample(query) {
+            document.getElementById('lyrics-query').value = query;
         }
         
         function copyCode(id) {
@@ -843,9 +782,25 @@ async function downloadTikTok(sock, from, url) {
             alert('Code copied!');
         }
         
-        // ============================================
-        // DESCARGAR (YouTube/TikTok)
-        // ============================================
+        async function searchLyrics() {
+            const query = document.getElementById('lyrics-query').value;
+            if (!query) return alert('Enter a song name');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/lyrics?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                
+                document.getElementById('lyricsResult').style.display = 'block';
+                document.getElementById('lyricsInfo').innerHTML = `
+                    <p><strong>Query</strong> ${data.query}</p>
+                    <p><strong>Source</strong> ${data.source}</p>
+                `;
+                document.getElementById('lyricsContent').textContent = data.lyrics || 'Lyrics not found';
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
+        }
+        
         async function startDownload(platform) {
             const url = document.getElementById(`${platform}-url`).value;
             if (!url) return alert('URL required');
@@ -890,7 +845,6 @@ async function downloadTikTok(sock, from, url) {
                 document.getElementById(`${platform}-taskInfo`).innerHTML = `
                     <p><strong>ID</strong> ${data.task_id}</p>
                     <p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>
-                    <p><strong>Message</strong> ${data.message}</p>
                 `;
             } catch(e) {
                 alert('Error: ' + e.message);
@@ -909,12 +863,14 @@ async function downloadTikTok(sock, from, url) {
                 
                 let cls = 'status-' + data.status;
                 let html = `
-                    <p><strong>ID</strong> ${data.task_id}</p>
                     <p><strong>Status</strong> <span class="status-badge ${cls}">${data.status}</span></p>
                     <p><strong>Progress</strong> ${data.progress}%</p>
                 `;
                 if (data.title) html += `<p><strong>Title</strong> ${data.title}</p>`;
                 if (data.uploader) html += `<p><strong>Uploader</strong> ${data.uploader}</p>`;
+                if (data.duration_str) html += `<p><strong>Duration</strong> ${data.duration_str}</p>`;
+                if (data.file_size_str) html += `<p><strong>Size</strong> ${data.file_size_str}</p>`;
+                if (data.resolution) html += `<p><strong>Resolution</strong> ${data.resolution}</p>`;
                 
                 document.getElementById(`${platform}-taskInfo`).innerHTML = html;
                 
@@ -929,14 +885,10 @@ async function downloadTikTok(sock, from, url) {
                 if (data.status === 'failed') {
                     if (platform === 'yt') clearInterval(ytInterval);
                     else clearInterval(ttInterval);
-                    document.getElementById(`${platform}-taskInfo`).innerHTML += `<p style="color:#ff4444;"><strong>Error</strong> ${data.error}</p>`;
                 }
             } catch(e) {}
         }
         
-        // ============================================
-        // INFO
-        // ============================================
         async function getInfo(platform) {
             const url = document.getElementById(`${platform}-url`).value;
             if (!url) return alert('URL required');
@@ -944,15 +896,12 @@ async function downloadTikTok(sock, from, url) {
             try {
                 const res = await fetch(`${API_URL}/api/info?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
-                alert(`${data.title}\n${data.uploader}\n${Math.floor(data.duration/60)}:${(data.duration%60).toString().padStart(2,'0')}`);
+                alert(`${data.title}\n${data.uploader}\n${data.duration_str}\n${data.file_size_str}`);
             } catch(e) {
                 alert('Error: ' + e.message);
             }
         }
         
-        // ============================================
-        // COPIAR / DESCARGAR
-        // ============================================
         function copyUrl(platform) {
             document.getElementById(`${platform}-downloadUrl`).select();
             document.execCommand('copy');
@@ -961,43 +910,23 @@ async function downloadTikTok(sock, from, url) {
         
         function downloadFile(platform) {
             const url = document.getElementById(`${platform}-downloadUrl`).value;
-            navigator.clipboard?.writeText(url);
-            alert('URL copied. Open in new tab.');
             window.open(url, '_blank');
         }
         
-        // ============================================
-        // ESTADÍSTICAS
-        // ============================================
         async function loadStats() {
             try {
                 const res = await fetch(`${API_URL}/api/tasks`);
                 const data = await res.json();
-                
-                ['yt', 'tt'].forEach(p => {
-                    document.getElementById(`${p}-totalTasks`).textContent = data.total || 0;
-                    document.getElementById(`${p}-pendingTasks`).textContent = data.pending || 0;
-                    document.getElementById(`${p}-downloadingTasks`).textContent = data.downloading || 0;
-                    document.getElementById(`${p}-completedTasks`).textContent = data.completed || 0;
-                    document.getElementById(`${p}-failedTasks`).textContent = data.failed || 0;
-                    
-                    let html = '';
-                    if (data.tasks?.length) {
-                        data.tasks.forEach(t => {
-                            html += `<div class="task-item"><span>${t.task_id?.substr(0,8)}...</span> <span class="status-badge status-${t.status}">${t.status}</span></div>`;
-                        });
-                    } else {
-                        html = '<p style="color:#666;">No active tasks</p>';
-                    }
-                    document.getElementById(`${p}-tasksList`).innerHTML = html;
-                });
+                document.getElementById('yt-totalTasks').textContent = data.total || 0;
+                document.getElementById('yt-pendingTasks').textContent = data.pending || 0;
+                document.getElementById('yt-downloadingTasks').textContent = data.downloading || 0;
+                document.getElementById('yt-completedTasks').textContent = data.completed || 0;
+                document.getElementById('yt-failedTasks').textContent = data.failed || 0;
             } catch(e) {}
         }
         
-        // Init
         checkServerStatus();
         setInterval(checkServerStatus, 30000);
-        loadStats();
     </script>
 </body>
 </html>
