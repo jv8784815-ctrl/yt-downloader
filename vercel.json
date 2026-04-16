@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/lyrics", "destination": "http://64.20.54.50:30325/api/lyrics" },
     { "source": "/api/tiktok", "destination": "http://64.20.54.50:30325/api/tiktok" },
     { "source": "/api/stream/:task_id", "destination": "http://64.20.54.50:30325/api/stream/:task_id" },
     { "source": "/api/download/:task_id", "destination": "http://64.20.54.50:30325/api/download/:task_id" },
