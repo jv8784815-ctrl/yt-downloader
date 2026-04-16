@@ -1,6 +1,9 @@
 {
-  "outputDirectory": ".",
-  "cleanUrls": true,
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
