@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FrikiTube API</title>
+    <title>FrikiTube · API</title>
     <style>
         * {
             margin: 0;
@@ -12,282 +12,284 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #000000;
+            font-family: 'Helvetica Neue', 'Segoe UI', sans-serif;
+            background: #f5f0eb;
             min-height: 100vh;
-            color: #ffffff;
+            color: #2c2c2c;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 30px 20px;
         }
 
-        /* Header Elegante */
+        /* Header estilo japonés */
         header {
             text-align: center;
-            padding: 60px 0 40px;
-            border-bottom: 1px solid #333333;
-            margin-bottom: 40px;
+            padding: 40px 0 30px;
+            border-bottom: 1px solid #d4c5b5;
+            margin-bottom: 30px;
         }
 
         .logo {
-            font-size: 4em;
-            font-weight: 300;
-            letter-spacing: 8px;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #ffffff 0%, #999999 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        .subtitle {
-            font-size: 1.1em;
-            color: #888888;
+        .logo-main {
+            font-size: 2.8em;
             font-weight: 300;
-            letter-spacing: 2px;
+            letter-spacing: 6px;
+            color: #4a3b32;
+        }
+
+        .logo-sub {
+            font-size: 0.9em;
+            color: #8b7355;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-left: 5px;
+        }
+
+        .divider {
+            color: #c4a882;
+            font-size: 1.2em;
+            margin: 0 5px;
+        }
+
+        .jp-text {
+            font-size: 0.8em;
+            color: #a08060;
+            letter-spacing: 3px;
+            margin-top: 5px;
         }
 
         .server-status {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.03);
-            padding: 10px 25px;
-            border-radius: 50px;
-            margin-top: 25px;
-            border: 1px solid #333333;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 5px 15px;
+            background: #ede5dc;
+            border-radius: 30px;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: #ffc107;
-            transition: all 0.3s ease;
+            background: #c4a882;
         }
 
         .status-dot.online {
-            background: #ffffff;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            background: #6b8c6b;
         }
 
         .status-dot.offline {
-            background: #666666;
+            background: #c47878;
         }
 
         #statusText {
-            color: #aaaaaa;
-            font-size: 0.9em;
-            letter-spacing: 1px;
+            font-size: 0.7em;
+            color: #6b5b4e;
+            letter-spacing: 2px;
         }
 
-        /* Tabs Minimalistas */
+        /* Tabs estilo japonés */
         .tabs {
             display: flex;
-            gap: 5px;
-            margin-bottom: 40px;
-            border-bottom: 1px solid #222222;
-            padding-bottom: 15px;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding: 0 10px;
         }
 
         .tab {
-            padding: 12px 30px;
+            padding: 8px 0;
             background: transparent;
             border: none;
-            color: #666666;
-            font-size: 1em;
-            font-weight: 400;
-            letter-spacing: 1px;
+            color: #a09080;
+            font-size: 0.85em;
+            letter-spacing: 3px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 0;
+            transition: all 0.3s;
             position: relative;
+            font-weight: 300;
         }
 
         .tab:hover {
-            color: #cccccc;
+            color: #4a3b32;
         }
 
         .tab.active {
-            color: #ffffff;
+            color: #4a3b32;
         }
 
         .tab.active::after {
-            content: '';
+            content: '·';
             position: absolute;
-            bottom: -16px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #ffffff;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #c4a882;
+            font-size: 1.2em;
         }
 
-        /* Cards Elegantes */
+        /* Cards minimalistas */
         .card {
-            background: #0a0a0a;
-            border: 1px solid #222222;
-            border-radius: 0;
-            padding: 40px;
-            margin-bottom: 30px;
+            background: #faf7f4;
+            border-radius: 4px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.02);
+            border: 1px solid #e8dfd6;
         }
 
         .card h2 {
-            color: #ffffff;
-            font-size: 1.8em;
+            color: #4a3b32;
+            font-size: 1.4em;
             font-weight: 300;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #333333;
+            letter-spacing: 4px;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0d4c8;
         }
 
         .card h3 {
-            color: #cccccc;
-            font-size: 1.2em;
+            color: #6b5b4e;
+            font-size: 0.95em;
             font-weight: 400;
-            letter-spacing: 1px;
-            margin: 25px 0 15px;
+            letter-spacing: 2px;
+            margin: 25px 0 12px;
         }
 
-        /* Formularios Estilizados */
+        /* Formularios limpios */
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 10px;
-            color: #999999;
-            font-size: 0.85em;
-            letter-spacing: 2px;
+            margin-bottom: 6px;
+            color: #8b7b6b;
+            font-size: 0.7em;
+            letter-spacing: 3px;
             text-transform: uppercase;
         }
 
         input, select {
             width: 100%;
-            padding: 15px;
-            background: #000000;
-            border: 1px solid #333333;
-            color: #ffffff;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            border-radius: 0;
+            padding: 12px 15px;
+            background: #ffffff;
+            border: 1px solid #e0d4c8;
+            color: #4a3b32;
+            font-size: 0.9em;
+            border-radius: 3px;
+            transition: all 0.2s;
+            font-weight: 300;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #ffffff;
-            background: #0a0a0a;
+            border-color: #c4a882;
+            box-shadow: 0 0 0 2px rgba(196,168,130,0.1);
         }
 
         input::placeholder {
-            color: #444444;
+            color: #c0b0a0;
+            font-weight: 300;
         }
 
-        /* Botones Minimalistas */
+        /* Botones sutiles */
         button {
-            background: transparent;
-            color: #ffffff;
-            border: 1px solid #444444;
-            padding: 14px 35px;
-            font-size: 0.9em;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            background: #ede5dc;
+            color: #5c4e42;
+            border: none;
+            padding: 10px 25px;
+            font-size: 0.75em;
+            letter-spacing: 3px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            border-radius: 0;
+            transition: all 0.3s;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            border-radius: 3px;
+            font-weight: 400;
+            text-transform: uppercase;
+            border: 1px solid #e0d4c8;
         }
 
         button:hover {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
+            background: #e0d4c8;
+            color: #3a2e25;
         }
 
-        button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        /* Progress Bar */
+        /* Progress bar minimal */
         .progress-bar {
             width: 100%;
-            height: 2px;
-            background: #222222;
-            margin: 30px 0;
+            height: 3px;
+            background: #e8dfd6;
+            margin: 25px 0;
+            border-radius: 2px;
         }
 
         .progress-fill {
             height: 100%;
-            background: #ffffff;
+            background: #a08060;
             width: 0%;
-            transition: width 0.3s ease;
+            transition: width 0.3s;
+            border-radius: 2px;
         }
 
-        /* Task Info */
+        /* Task info */
         .task-info {
-            background: #050505;
-            padding: 25px;
-            border-left: 2px solid #ffffff;
-            margin-top: 20px;
+            padding: 20px;
+            background: #f5f0eb;
+            border-left: 2px solid #c4a882;
+            margin-top: 15px;
         }
 
         .task-info p {
-            margin: 8px 0;
-            color: #aaaaaa;
+            margin: 6px 0;
+            color: #6b5b4e;
+            font-size: 0.85em;
         }
 
         .task-info strong {
-            color: #ffffff;
-            font-weight: 400;
+            color: #4a3b32;
+            font-weight: 500;
+            margin-right: 10px;
         }
 
-        /* Status Badges */
+        /* Status badges */
         .status-badge {
             display: inline-block;
-            padding: 4px 12px;
-            font-size: 0.75em;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border: 1px solid;
+            padding: 2px 10px;
+            font-size: 0.65em;
+            letter-spacing: 2px;
+            border-radius: 20px;
+            background: #ede5dc;
+            color: #6b5b4e;
         }
 
-        .status-pending {
-            color: #ffc107;
-            border-color: #ffc107;
-        }
+        .status-pending { background: #e8d5b0; color: #6b5b4e; }
+        .status-downloading { background: #b8c4b0; color: #4a5b4a; }
+        .status-completed { background: #c0d4c0; color: #4a6b4a; }
+        .status-failed { background: #e0c0c0; color: #8b5b5b; }
 
-        .status-downloading {
-            color: #4a9eff;
-            border-color: #4a9eff;
-        }
-
-        .status-completed {
-            color: #00ff88;
-            border-color: #00ff88;
-        }
-
-        .status-failed {
-            color: #ff4444;
-            border-color: #ff4444;
-        }
-
-        /* URL Box */
+        /* URL box */
         .url-box {
-            background: #050505;
-            padding: 25px;
-            margin: 25px 0;
-            border: 1px solid #333333;
+            padding: 20px;
+            background: #f5f0eb;
+            margin: 20px 0;
+            border-radius: 3px;
         }
 
         .url-copy-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .url-copy-group input {
@@ -296,168 +298,178 @@
 
         /* Endpoints */
         .endpoint {
-            background: #050505;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 2px solid #ffffff;
-        }
-
-        .endpoint h3 {
-            margin-top: 0;
-            color: #ffffff;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #faf7f4;
+            border-left: 2px solid #c4a882;
         }
 
         .method {
             display: inline-block;
-            padding: 3px 10px;
-            font-size: 0.7em;
+            padding: 2px 8px;
+            font-size: 0.6em;
             letter-spacing: 1px;
-            text-transform: uppercase;
             margin-right: 10px;
-            border: 1px solid;
+            border-radius: 3px;
+            background: #ede5dc;
+            color: #6b5b4e;
         }
 
-        .method.post {
-            color: #00ff88;
-            border-color: #00ff88;
-        }
+        .method.post { background: #c0d4c0; color: #4a6b4a; }
+        .method.get { background: #b8c4d4; color: #4a5b6b; }
 
-        .method.get {
-            color: #4a9eff;
-            border-color: #4a9eff;
-        }
-
-        /* Código */
+        /* Code */
         pre {
-            background: #000000;
-            color: #cccccc;
-            padding: 20px;
-            border: 1px solid #333333;
+            background: #f0ebe6;
+            padding: 18px;
+            border-radius: 3px;
             overflow-x: auto;
-            margin: 20px 0;
-            font-size: 0.9em;
+            margin: 15px 0;
+            font-size: 0.8em;
+            color: #5c4e42;
+            border: 1px solid #e8dfd6;
         }
 
-        /* Stats Grid */
+        /* Stats grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1px;
-            background: #333333;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .stat-card {
-            background: #0a0a0a;
-            padding: 30px;
+            background: #f5f0eb;
+            padding: 20px;
             text-align: center;
+            border-radius: 3px;
         }
 
         .stat-card h3 {
-            font-size: 2.5em;
-            font-weight: 200;
-            color: #ffffff;
-            margin: 0 0 10px;
+            font-size: 2em;
+            font-weight: 300;
+            color: #4a3b32;
+            margin: 0 0 5px;
         }
 
         .stat-card p {
-            color: #666666;
-            font-size: 0.8em;
+            color: #8b7b6b;
+            font-size: 0.6em;
             letter-spacing: 2px;
-            text-transform: uppercase;
         }
 
-        /* Tasks List */
+        /* Tasks list */
         .tasks-list {
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .task-item {
-            padding: 15px;
-            border-bottom: 1px solid #222222;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8dfd6;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: #aaaaaa;
+            font-size: 0.8em;
+            color: #6b5b4e;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 40px 0;
-            color: #666666;
-            font-size: 0.85em;
-            letter-spacing: 2px;
-            border-top: 1px solid #222222;
-            margin-top: 40px;
+            padding: 30px 0;
+            color: #a09080;
+            font-size: 0.7em;
+            letter-spacing: 3px;
+            border-top: 1px solid #e0d4c8;
+            margin-top: 30px;
         }
 
         /* Examples */
         .example-links {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .example-link {
-            background: transparent;
-            padding: 8px 20px;
-            border: 1px solid #444444;
-            color: #999999;
-            font-size: 0.85em;
+            background: #f0ebe6;
+            padding: 6px 16px;
+            color: #7b6b5e;
+            font-size: 0.7em;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
+            border-radius: 20px;
+            border: 1px solid #e0d4c8;
         }
 
         .example-link:hover {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
+            background: #e0d4c8;
+            color: #4a3b32;
         }
 
         /* Lists */
         ul {
             margin-left: 20px;
-            line-height: 2.5;
-            color: #aaaaaa;
+            line-height: 2.2;
+            color: #6b5b4e;
+            font-size: 0.85em;
         }
 
         code {
-            background: #000000;
-            padding: 3px 8px;
-            border: 1px solid #333333;
-            color: #cccccc;
-            font-size: 0.9em;
+            background: #ede5dc;
+            padding: 2px 8px;
+            border-radius: 3px;
+            color: #5c4e42;
+            font-size: 0.85em;
         }
 
-        /* Tab Content */
+        /* Tab content */
         .tab-content {
             display: none;
         }
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: fade 0.4s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Decoración japonesa */
+        .jp-decoration {
+            text-align: center;
+            margin: 15px 0 5px;
+            color: #c4a882;
+            font-size: 0.7em;
+            letter-spacing: 8px;
+        }
+
+        /* Scroll */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0ebe6;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d4c5b5;
+            border-radius: 3px;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2.5em;
+        @media (max-width: 700px) {
+            .logo-main {
+                font-size: 2em;
                 letter-spacing: 4px;
-            }
-            
-            .container {
-                padding: 20px 15px;
             }
             
             .card {
@@ -465,85 +477,79 @@
             }
             
             .tabs {
-                flex-wrap: wrap;
+                gap: 20px;
             }
             
             .tab {
-                padding: 10px 20px;
+                letter-spacing: 2px;
+                font-size: 0.75em;
             }
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #000000;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #333333;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555555;
+        /* Detalles otaku */
+        .kawaii {
+            opacity: 0.5;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">FRIKITUBE</div>
-            <div class="subtitle">API · STREAMING · DOWNLOAD</div>
+            <div class="logo">
+                <span class="logo-main">FRIKITUBE</span>
+                <span class="divider">·</span>
+                <span class="logo-sub">API</span>
+            </div>
+            <div class="jp-text">フリキチューブ · 音楽と動画</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
-                <span id="statusText">VERIFYING</span>
+                <span id="statusText">checking</span>
             </div>
+            <div class="jp-decoration">◈ ◈ ◈</div>
         </header>
         
         <div class="tabs">
-            <button class="tab active" onclick="showTab('downloader')">DOWNLOAD</button>
-            <button class="tab" onclick="showTab('documentation')">DOCS</button>
-            <button class="tab" onclick="showTab('baileys')">BAILEYS</button>
-            <button class="tab" onclick="showTab('stats')">STATS</button>
+            <button class="tab active" onclick="showTab('downloader')">download</button>
+            <button class="tab" onclick="showTab('documentation')">docs</button>
+            <button class="tab" onclick="showTab('baileys')">baileys</button>
+            <button class="tab" onclick="showTab('stats')">stats</button>
         </div>
         
-        <!-- Tab: Download -->
+        <!-- Download Tab -->
         <div id="downloader" class="tab-content active">
             <div class="card">
-                <h2>NEW DOWNLOAD</h2>
+                <h2>// download</h2>
                 
                 <div class="input-group">
-                    <label>URL</label>
+                    <label>url</label>
                     <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=...">
                 </div>
                 
                 <div class="example-links">
-                    <span class="example-link" onclick="setExample('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">EXAMPLE YT</span>
-                    <span class="example-link" onclick="setExample('https://youtu.be/jNQXAC9IVRw')">EXAMPLE VIDEO</span>
+                    <span class="example-link" onclick="setExample('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">example yt</span>
+                    <span class="example-link" onclick="setExample('https://youtu.be/jNQXAC9IVRw')">example video</span>
                 </div>
                 
                 <div class="input-group">
-                    <label>FORMAT</label>
+                    <label>format</label>
                     <select id="format">
-                        <option value="mp3">MP3 · AUDIO</option>
-                        <option value="mp4">MP4 · VIDEO</option>
+                        <option value="mp3">mp3 · audio</option>
+                        <option value="mp4">mp4 · video</option>
                     </select>
                 </div>
                 
                 <div class="input-group">
-                    <label>QUALITY</label>
+                    <label>quality</label>
                     <select id="quality">
-                        <option value="best">BEST</option>
-                        <option value="medium">MEDIUM · 720P</option>
-                        <option value="low">LOW · 480P</option>
+                        <option value="best">best</option>
+                        <option value="medium">medium · 720p</option>
+                        <option value="low">low · 480p</option>
                     </select>
                 </div>
                 
-                <button onclick="startDownload()">INITIATE</button>
-                <button onclick="getInfo()">INFO</button>
+                <button onclick="startDownload()">initiate</button>
+                <button onclick="getInfo()">info</button>
                 
                 <div id="downloadStatus" style="display: none;">
                     <div class="progress-bar">
@@ -553,25 +559,25 @@
                     <div class="task-info" id="taskInfo"></div>
                     
                     <div class="url-box" id="downloadUrlBox" style="display: none;">
-                        <label>DOWNLOAD URL</label>
+                        <label>download url</label>
                         <div class="url-copy-group">
                             <input type="text" id="downloadUrl" readonly onclick="this.select()">
-                            <button onclick="copyUrl()">COPY</button>
+                            <button onclick="copyUrl()">copy</button>
                         </div>
-                        <button onclick="downloadFile()" style="margin-top: 15px;">DOWNLOAD FILE</button>
+                        <button onclick="downloadFile()" style="margin-top: 12px;">download</button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Tab: Documentation -->
+        <!-- Docs Tab -->
         <div id="documentation" class="tab-content">
             <div class="card">
-                <h2>API DOCUMENTATION</h2>
+                <h2>// api docs</h2>
                 
                 <div class="endpoint">
                     <h3><span class="method post">POST</span> /api/download</h3>
-                    <p style="color: #888; margin: 15px 0;">Initiate audio or video download</p>
+                    <p style="color: #8b7b6b; margin: 10px 0; font-size: 0.85em;">start download</p>
                     <pre>{
   "url": "https://youtu.be/...",
   "format": "mp3",
@@ -580,270 +586,241 @@
                 </div>
                 
                 <div class="endpoint">
-                    <h3><span class="method get">GET</span> /api/status/{task_id}</h3>
-                    <p style="color: #888; margin: 15px 0;">Check download status</p>
+                    <h3><span class="method get">GET</span> /api/status/{id}</h3>
+                    <p style="color: #8b7b6b; margin: 10px 0; font-size: 0.85em;">check status</p>
                 </div>
                 
                 <div class="endpoint">
-                    <h3><span class="method get">GET</span> /api/stream/{task_id}</h3>
-                    <p style="color: #888; margin: 15px 0;">Direct streaming for bots</p>
+                    <h3><span class="method get">GET</span> /api/stream/{id}</h3>
+                    <p style="color: #8b7b6b; margin: 10px 0; font-size: 0.85em;">direct stream · ストリーム</p>
                 </div>
                 
                 <div class="endpoint">
                     <h3><span class="method get">GET</span> /api/info?url=URL</h3>
-                    <p style="color: #888; margin: 15px 0;">Get video information</p>
+                    <p style="color: #8b7b6b; margin: 10px 0; font-size: 0.85em;">video info</p>
                 </div>
             </div>
         </div>
         
-        <!-- Tab: Baileys -->
+        <!-- Baileys Tab -->
         <div id="baileys" class="tab-content">
             <div class="card">
-                <h2>BAILEYS INTEGRATION</h2>
+                <h2>// baileys · ワッツアップ</h2>
                 
-                <h3>INSTALLATION</h3>
+                <h3>install</h3>
                 <pre>npm install baileys axios</pre>
                 
-                <h3>CODE</h3>
+                <h3>code · コード</h3>
                 <pre id="baileysCode">const axios = require('axios');
 
-const API_URL = 'https://your-vercel.vercel.app';
+const API = 'https://your-api.vercel.app';
 
-async function downloadAndSend(sock, from, url) {
-    // 1. Start download
-    const res = await axios.post(`${API_URL}/api/download`, {
-        url: url,
-        format: 'mp4',
-        quality: 'medium'
+async function download(sock, from, url) {
+    const res = await axios.post(`${API}/api/download`, {
+        url, format: 'mp4', quality: 'medium'
     });
     
     const taskId = res.data.task_id;
     
-    // 2. Wait for completion
     let status;
     do {
         await new Promise(r => setTimeout(r, 2000));
-        status = await axios.get(`${API_URL}/api/status/${taskId}`);
+        status = await axios.get(`${API}/api/status/${taskId}`);
     } while (status.data.status !== 'completed');
     
-    // 3. Send directly (no local download)
     await sock.sendMessage(from, {
-        video: { url: `${API_URL}/api/stream/${taskId}` },
+        video: { url: `${API}/api/stream/${taskId}` },
         mimetype: 'video/mp4',
         caption: status.data.title
     });
 }</pre>
                 
-                <button onclick="copyBaileysCode()">COPY CODE</button>
+                <button onclick="copyBaileysCode()">copy code</button>
                 
-                <h3 style="margin-top: 30px;">COMMANDS</h3>
+                <h3 style="margin-top: 25px;">commands · コマンド</h3>
                 <ul>
-                    <li><code>.music [url]</code> — Download MP3</li>
-                    <li><code>.video [url]</code> — Download MP4</li>
-                    <li><code>.info [url]</code> — Get video info</li>
+                    <li><code>.music [url]</code> — download mp3</li>
+                    <li><code>.video [url]</code> — download mp4</li>
+                    <li><code>.info [url]</code> — get info</li>
                 </ul>
+                
+                <p style="margin-top: 20px; font-size: 0.8em; color: #a09080;">
+                    <span class="kawaii">✨</span> streaming direct · zero storage <span class="kawaii">✨</span>
+                </p>
             </div>
         </div>
         
-        <!-- Tab: Stats -->
+        <!-- Stats Tab -->
         <div id="stats" class="tab-content">
             <div class="card">
-                <h2>SERVER STATISTICS</h2>
+                <h2>// statistics · 統計</h2>
                 
                 <div class="stats-grid">
-                    <div class="stat-card"><h3 id="totalTasks">-</h3><p>TOTAL</p></div>
-                    <div class="stat-card"><h3 id="pendingTasks">-</h3><p>PENDING</p></div>
-                    <div class="stat-card"><h3 id="downloadingTasks">-</h3><p>ACTIVE</p></div>
-                    <div class="stat-card"><h3 id="completedTasks">-</h3><p>COMPLETED</p></div>
-                    <div class="stat-card"><h3 id="failedTasks">-</h3><p>FAILED</p></div>
+                    <div class="stat-card"><h3 id="totalTasks">-</h3><p>total</p></div>
+                    <div class="stat-card"><h3 id="pendingTasks">-</h3><p>pending</p></div>
+                    <div class="stat-card"><h3 id="downloadingTasks">-</h3><p>active</p></div>
+                    <div class="stat-card"><h3 id="completedTasks">-</h3><p>done</p></div>
+                    <div class="stat-card"><h3 id="failedTasks">-</h3><p>failed</p></div>
                 </div>
                 
-                <h3>ACTIVE TASKS</h3>
-                <div id="tasksList" class="tasks-list">Loading...</div>
+                <h3>active tasks</h3>
+                <div id="tasksList" class="tasks-list">loading...</div>
                 
-                <button onclick="loadStats()">REFRESH</button>
+                <button onclick="loadStats()">refresh</button>
             </div>
         </div>
         
         <footer>
-            <p>FRIKITUBE API · STREAMING DIRECT · ZERO STORAGE</p>
+            <p>frikiTube api · フリキチューブ · streaming</p>
+            <p style="margin-top: 8px; font-size: 0.65em; opacity: 0.6;">◈ 音楽と動画のダウンロード ◈</p>
         </footer>
     </div>
     
     <script>
-        // CONFIGURATION
         const API_URL = '';
-        
         let currentTaskId = null;
         let statusInterval = null;
         
-        // Server Status
         async function checkServerStatus() {
             try {
-                const response = await fetch(`${API_URL}/health`);
-                await response.json();
+                const r = await fetch(`${API_URL}/health`);
+                await r.json();
                 document.getElementById('statusDot').classList.add('online');
                 document.getElementById('statusDot').classList.remove('offline');
-                document.getElementById('statusText').textContent = 'ONLINE';
-            } catch (error) {
+                document.getElementById('statusText').textContent = 'online · オンライン';
+            } catch {
                 document.getElementById('statusDot').classList.add('offline');
                 document.getElementById('statusDot').classList.remove('online');
-                document.getElementById('statusText').textContent = 'OFFLINE';
+                document.getElementById('statusText').textContent = 'offline · オフライン';
             }
         }
         
-        // Tabs
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
+        function showTab(name) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+            document.getElementById(name).classList.add('active');
             event.target.classList.add('active');
-            if (tabName === 'stats') loadStats();
+            if (name === 'stats') loadStats();
         }
         
-        // Set example URL
-        function setExample(url) { 
-            document.getElementById('url').value = url; 
-        }
+        function setExample(u) { document.getElementById('url').value = u; }
         
-        // Start download
         async function startDownload() {
             const url = document.getElementById('url').value;
             const format = document.getElementById('format').value;
             const quality = document.getElementById('quality').value;
-            
-            if (!url) { alert('Please enter a URL'); return; }
+            if (!url) return alert('url required');
             
             try {
-                const response = await fetch(`${API_URL}/api/download`, {
+                const r = await fetch(`${API_URL}/api/download`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url, format, quality })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url, format, quality})
                 });
-                
-                const data = await response.json();
-                currentTaskId = data.task_id;
+                const d = await r.json();
+                currentTaskId = d.task_id;
                 
                 document.getElementById('downloadStatus').style.display = 'block';
                 document.getElementById('downloadUrlBox').style.display = 'none';
                 document.getElementById('taskInfo').innerHTML = `
-                    <p><strong>ID</strong> ${data.task_id}</p>
-                    <p><strong>STATUS</strong> <span class="status-badge status-pending">PENDING</span></p>
-                    <p><strong>MESSAGE</strong> ${data.message}</p>
+                    <p><strong>id</strong> ${d.task_id}</p>
+                    <p><strong>status</strong> <span class="status-badge status-pending">pending</span></p>
+                    <p><strong>message</strong> ${d.message}</p>
                 `;
                 
                 if (statusInterval) clearInterval(statusInterval);
                 statusInterval = setInterval(checkStatus, 2000);
-            } catch (error) {
-                alert('Error: ' + error.message);
+            } catch(e) {
+                alert('Error: ' + e.message);
             }
         }
         
-        // Check status
         async function checkStatus() {
             if (!currentTaskId) return;
-            
             try {
-                const response = await fetch(`${API_URL}/api/status/${currentTaskId}`);
-                const data = await response.json();
+                const r = await fetch(`${API_URL}/api/status/${currentTaskId}`);
+                const d = await r.json();
                 
-                const progressFill = document.getElementById('progressFill');
-                progressFill.style.width = data.progress + '%';
+                document.getElementById('progressFill').style.width = d.progress + '%';
                 
-                let statusClass = 'status-' + data.status;
-                let html = `
-                    <p><strong>ID</strong> ${data.task_id}</p>
-                    <p><strong>STATUS</strong> <span class="status-badge ${statusClass}">${data.status}</span></p>
-                    <p><strong>PROGRESS</strong> ${data.progress}%</p>
+                let c = 'status-' + d.status;
+                let h = `
+                    <p><strong>id</strong> ${d.task_id}</p>
+                    <p><strong>status</strong> <span class="status-badge ${c}">${d.status}</span></p>
+                    <p><strong>progress</strong> ${d.progress}%</p>
                 `;
-                
-                if (data.title) html += `<p><strong>TITLE</strong> ${data.title}</p>`;
-                if (data.duration) {
-                    const m = Math.floor(data.duration / 60);
-                    const s = data.duration % 60;
-                    html += `<p><strong>DURATION</strong> ${m}:${s.toString().padStart(2, '0')}</p>`;
+                if (d.title) h += `<p><strong>title</strong> ${d.title}</p>`;
+                if (d.duration) {
+                    const m = Math.floor(d.duration/60);
+                    const s = d.duration%60;
+                    h += `<p><strong>duration</strong> ${m}:${s.toString().padStart(2,'0')}</p>`;
                 }
+                document.getElementById('taskInfo').innerHTML = h;
                 
-                document.getElementById('taskInfo').innerHTML = html;
-                
-                if (data.status === 'completed') {
+                if (d.status === 'completed') {
                     clearInterval(statusInterval);
-                    const fullUrl = window.location.origin + data.download_url;
-                    document.getElementById('downloadUrl').value = fullUrl;
+                    document.getElementById('downloadUrl').value = window.location.origin + d.download_url;
                     document.getElementById('downloadUrlBox').style.display = 'block';
                 }
-                
-                if (data.status === 'failed') {
+                if (d.status === 'failed') {
                     clearInterval(statusInterval);
-                    document.getElementById('taskInfo').innerHTML += `<p style="color: #ff4444;"><strong>ERROR</strong> ${data.error}</p>`;
+                    document.getElementById('taskInfo').innerHTML += `<p style="color:#c47878;"><strong>error</strong> ${d.error}</p>`;
                 }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            } catch(e) {}
         }
         
-        // Get info
         async function getInfo() {
             const url = document.getElementById('url').value;
-            if (!url) { alert('Please enter a URL'); return; }
-            
+            if (!url) return alert('url required');
             try {
-                const response = await fetch(`${API_URL}/api/info?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
-                alert(`Title: ${data.title}\nUploader: ${data.uploader}\nDuration: ${Math.floor(data.duration/60)}:${(data.duration%60).toString().padStart(2,'0')}`);
-            } catch (error) {
-                alert('Error: ' + error.message);
+                const r = await fetch(`${API_URL}/api/info?url=${encodeURIComponent(url)}`);
+                const d = await r.json();
+                alert(`${d.title}\n${d.uploader}\n${Math.floor(d.duration/60)}:${(d.duration%60).toString().padStart(2,'0')}`);
+            } catch(e) {
+                alert('Error: ' + e.message);
             }
         }
         
-        // Copy URL
         function copyUrl() {
             document.getElementById('downloadUrl').select();
             document.execCommand('copy');
-            alert('URL copied to clipboard');
+            alert('copied · コピーしました');
         }
         
-        // Download file
         function downloadFile() {
-            const url = document.getElementById('downloadUrl').value;
-            navigator.clipboard?.writeText(url);
-            alert('URL copied. Open in new tab to download:\n\n' + url);
-            window.open(url, '_blank');
+            const u = document.getElementById('downloadUrl').value;
+            navigator.clipboard?.writeText(u);
+            alert('copied · open in new tab');
+            window.open(u, '_blank');
         }
         
-        // Copy Baileys code
         function copyBaileysCode() {
             navigator.clipboard?.writeText(document.getElementById('baileysCode').textContent);
-            alert('Code copied to clipboard');
+            alert('copied · コピーしました');
         }
         
-        // Load stats
         async function loadStats() {
             try {
-                const response = await fetch(`${API_URL}/api/tasks`);
-                const data = await response.json();
+                const r = await fetch(`${API_URL}/api/tasks`);
+                const d = await r.json();
+                document.getElementById('totalTasks').textContent = d.total || 0;
+                document.getElementById('pendingTasks').textContent = d.pending || 0;
+                document.getElementById('downloadingTasks').textContent = d.downloading || 0;
+                document.getElementById('completedTasks').textContent = d.completed || 0;
+                document.getElementById('failedTasks').textContent = d.failed || 0;
                 
-                document.getElementById('totalTasks').textContent = data.total || 0;
-                document.getElementById('pendingTasks').textContent = data.pending || 0;
-                document.getElementById('downloadingTasks').textContent = data.downloading || 0;
-                document.getElementById('completedTasks').textContent = data.completed || 0;
-                document.getElementById('failedTasks').textContent = data.failed || 0;
-                
-                let html = '';
-                if (data.tasks && data.tasks.length > 0) {
-                    data.tasks.forEach(task => {
-                        html += `<div class="task-item"><span>${task.task_id?.substr(0,8)}...</span> <span class="status-badge status-${task.status}">${task.status}</span></div>`;
+                let h = '';
+                if (d.tasks?.length) {
+                    d.tasks.forEach(t => {
+                        h += `<div class="task-item"><span>${t.task_id?.substr(0,8)}...</span> <span class="status-badge status-${t.status}">${t.status}</span></div>`;
                     });
                 } else {
-                    html = '<p style="color: #666;">No active tasks</p>';
+                    h = '<p style="color:#a09080;">no active tasks</p>';
                 }
-                document.getElementById('tasksList').innerHTML = html;
-            } catch (error) {
-                console.error('Error:', error);
-            }
+                document.getElementById('tasksList').innerHTML = h;
+            } catch(e) {}
         }
         
-        // Initialize
         checkServerStatus();
         setInterval(checkServerStatus, 30000);
     </script>
