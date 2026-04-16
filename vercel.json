@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/download/:task_id", "destination": "http://64.20.54.50:30325/api/download/:task_id" },
     { "source": "/api/:path*", "destination": "http://64.20.54.50:30325/api/:path*" },
     { "source": "/health", "destination": "http://64.20.54.50:30325/health" }
   ],
