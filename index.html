@@ -279,7 +279,7 @@ async function descargarMusica(url) {
     </div>
     
     <script>
-        // CONFIGURACIÓN - Vercel Proxy (URL vacía = usa la misma URL de Vercel)
+        // CONFIGURACIÓN - Vercel Proxy
         const API_URL = '';
         
         let currentTaskId = null;
@@ -370,8 +370,7 @@ async function descargarMusica(url) {
                 
                 if (data.status === 'completed') {
                     clearInterval(statusInterval);
-                    // URL RELATIVA - Vercel la resolverá automáticamente
-                    const fullUrl = `${data.download_url}`;
+                    const fullUrl = window.location.origin + data.download_url;
                     document.getElementById('downloadUrl').value = fullUrl;
                     document.getElementById('downloadUrlBox').style.display = 'block';
                 }
