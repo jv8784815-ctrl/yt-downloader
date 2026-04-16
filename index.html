@@ -274,18 +274,19 @@ async function descargarMusica(url) {
         </div>
         
         <footer>
-            <p>API: <span id="apiUrlDisplay">http://64.20.54.50:30325</span></p>
+            <p>API conectada vía Vercel Proxy → <span id="apiUrlDisplay">http://64.20.54.50:30325</span></p>
         </footer>
     </div>
     
     <script>
-        // CONFIGURACIÓN
-        const API_URL = 'http://64.20.54.50:30325';
+        // CONFIGURACIÓN - Vercel Proxy
+        const API_URL = '';
+        const BACKEND_IP = 'http://64.20.54.50:30325';
         
         let currentTaskId = null;
         let statusInterval = null;
         
-        document.getElementById('apiUrlDisplay').textContent = API_URL;
+        document.getElementById('apiUrlDisplay').textContent = BACKEND_IP;
         
         async function checkServerStatus() {
             try {
@@ -372,7 +373,7 @@ async function descargarMusica(url) {
                 
                 if (data.status === 'completed') {
                     clearInterval(statusInterval);
-                    const fullUrl = `${API_URL}${data.download_url}`;
+                    const fullUrl = `${BACKEND_IP}${data.download_url}`;
                     document.getElementById('downloadUrl').value = fullUrl;
                     document.getElementById('downloadUrlBox').style.display = 'block';
                 }
