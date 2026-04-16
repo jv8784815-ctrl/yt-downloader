@@ -12,60 +12,44 @@
         }
 
         body {
-            font-family: 'Helvetica Neue', 'Segoe UI', sans-serif;
-            background: #f5f0eb;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0d0d0d;
             min-height: 100vh;
-            color: #2c2c2c;
+            color: #e0e0e0;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 30px 20px;
         }
 
-        /* Header estilo japonés */
+        /* Header */
         header {
             text-align: center;
             padding: 40px 0 30px;
-            border-bottom: 1px solid #d4c5b5;
+            border-bottom: 1px solid #2a2a2a;
             margin-bottom: 30px;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 8px;
+            font-size: 2.5em;
+            font-weight: 500;
+            letter-spacing: 8px;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(255,255,255,0.1);
         }
 
-        .logo-main {
-            font-size: 2.8em;
+        .logo span {
+            color: #ff0050;
             font-weight: 300;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 0.85em;
             letter-spacing: 6px;
-            color: #4a3b32;
-        }
-
-        .logo-sub {
-            font-size: 0.9em;
-            color: #8b7355;
-            font-weight: 300;
-            letter-spacing: 4px;
-            margin-left: 5px;
-        }
-
-        .divider {
-            color: #c4a882;
-            font-size: 1.2em;
-            margin: 0 5px;
-        }
-
-        .jp-text {
-            font-size: 0.8em;
-            color: #a08060;
-            letter-spacing: 3px;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         .server-status {
@@ -73,108 +57,146 @@
             align-items: center;
             gap: 8px;
             margin-top: 20px;
-            padding: 5px 15px;
-            background: #ede5dc;
+            padding: 6px 18px;
+            background: #1a1a1a;
             border-radius: 30px;
+            border: 1px solid #333;
         }
 
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: #c4a882;
+            background: #ffc107;
         }
 
-        .status-dot.online {
-            background: #6b8c6b;
-        }
-
-        .status-dot.offline {
-            background: #c47878;
-        }
+        .status-dot.online { background: #00e676; box-shadow: 0 0 10px #00e67655; }
+        .status-dot.offline { background: #ff4444; }
 
         #statusText {
-            font-size: 0.7em;
-            color: #6b5b4e;
+            font-size: 0.75em;
+            color: #aaa;
             letter-spacing: 2px;
         }
 
-        /* Tabs estilo japonés */
+        /* Navegación principal */
+        .nav-main {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 15px;
+        }
+
+        .nav-btn {
+            padding: 12px 35px;
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 1em;
+            font-weight: 400;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .nav-btn:hover { color: #ccc; }
+        .nav-btn.active { color: #fff; }
+
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -16px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ff0050;
+        }
+
+        /* Páginas completas */
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tabs internas de cada página */
         .tabs {
             display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
-            padding: 0 10px;
+            gap: 25px;
+            margin-bottom: 25px;
+            padding: 0 5px;
         }
 
         .tab {
             padding: 8px 0;
             background: transparent;
             border: none;
-            color: #a09080;
-            font-size: 0.85em;
+            color: #666;
+            font-size: 0.8em;
             letter-spacing: 3px;
             cursor: pointer;
             transition: all 0.3s;
-            position: relative;
-            font-weight: 300;
+            text-transform: uppercase;
         }
 
-        .tab:hover {
-            color: #4a3b32;
+        .tab:hover { color: #aaa; }
+        .tab.active { color: #fff; border-bottom: 1px solid #ff0050; }
+
+        .tab-content {
+            display: none;
         }
 
-        .tab.active {
-            color: #4a3b32;
+        .tab-content.active {
+            display: block;
         }
 
-        .tab.active::after {
-            content: '·';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #c4a882;
-            font-size: 1.2em;
-        }
-
-        /* Cards minimalistas */
+        /* Cards */
         .card {
-            background: #faf7f4;
-            border-radius: 4px;
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
             padding: 35px;
             margin-bottom: 25px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.02);
-            border: 1px solid #e8dfd6;
         }
 
         .card h2 {
-            color: #4a3b32;
-            font-size: 1.4em;
-            font-weight: 300;
-            letter-spacing: 4px;
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: 400;
+            letter-spacing: 2px;
             margin-bottom: 25px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #e0d4c8;
+            border-bottom: 1px solid #2a2a2a;
         }
 
         .card h3 {
-            color: #6b5b4e;
-            font-size: 0.95em;
+            color: #ccc;
+            font-size: 1em;
             font-weight: 400;
             letter-spacing: 2px;
-            margin: 25px 0 12px;
+            margin: 25px 0 15px;
         }
 
-        /* Formularios limpios */
+        /* Formularios */
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
-            color: #8b7b6b;
+            margin-bottom: 8px;
+            color: #888;
             font-size: 0.7em;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -182,114 +204,110 @@
 
         input, select {
             width: 100%;
-            padding: 12px 15px;
-            background: #ffffff;
-            border: 1px solid #e0d4c8;
-            color: #4a3b32;
-            font-size: 0.9em;
-            border-radius: 3px;
+            padding: 14px 16px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 0.95em;
+            border-radius: 8px;
             transition: all 0.2s;
-            font-weight: 300;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #c4a882;
-            box-shadow: 0 0 0 2px rgba(196,168,130,0.1);
+            border-color: #ff0050;
+            background: #0f0f0f;
         }
 
-        input::placeholder {
-            color: #c0b0a0;
-            font-weight: 300;
-        }
+        input::placeholder { color: #555; }
 
-        /* Botones sutiles */
+        /* Botones */
         button {
-            background: #ede5dc;
-            color: #5c4e42;
-            border: none;
-            padding: 10px 25px;
-            font-size: 0.75em;
-            letter-spacing: 3px;
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 12px 28px;
+            font-size: 0.8em;
+            letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.3s;
-            margin-right: 8px;
-            margin-bottom: 8px;
-            border-radius: 3px;
-            font-weight: 400;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
             text-transform: uppercase;
-            border: 1px solid #e0d4c8;
         }
 
         button:hover {
-            background: #e0d4c8;
-            color: #3a2e25;
+            background: #ff0050;
+            border-color: #ff0050;
+            color: #fff;
         }
 
-        /* Progress bar minimal */
+        /* Progress */
         .progress-bar {
             width: 100%;
-            height: 3px;
-            background: #e8dfd6;
+            height: 4px;
+            background: #2a2a2a;
+            border-radius: 4px;
             margin: 25px 0;
-            border-radius: 2px;
         }
 
         .progress-fill {
             height: 100%;
-            background: #a08060;
+            background: linear-gradient(90deg, #ff0050, #ff3366);
             width: 0%;
             transition: width 0.3s;
-            border-radius: 2px;
+            border-radius: 4px;
         }
 
         /* Task info */
         .task-info {
             padding: 20px;
-            background: #f5f0eb;
-            border-left: 2px solid #c4a882;
+            background: #0a0a0a;
+            border-radius: 8px;
+            border-left: 3px solid #ff0050;
             margin-top: 15px;
         }
 
         .task-info p {
             margin: 6px 0;
-            color: #6b5b4e;
-            font-size: 0.85em;
+            color: #aaa;
+            font-size: 0.9em;
         }
 
         .task-info strong {
-            color: #4a3b32;
+            color: #fff;
             font-weight: 500;
-            margin-right: 10px;
+            margin-right: 12px;
         }
 
         /* Status badges */
         .status-badge {
             display: inline-block;
-            padding: 2px 10px;
+            padding: 3px 12px;
             font-size: 0.65em;
             letter-spacing: 2px;
             border-radius: 20px;
-            background: #ede5dc;
-            color: #6b5b4e;
+            background: #2a2a2a;
+            color: #ccc;
         }
 
-        .status-pending { background: #e8d5b0; color: #6b5b4e; }
-        .status-downloading { background: #b8c4b0; color: #4a5b4a; }
-        .status-completed { background: #c0d4c0; color: #4a6b4a; }
-        .status-failed { background: #e0c0c0; color: #8b5b5b; }
+        .status-pending { background: #ffc10722; color: #ffc107; border: 1px solid #ffc10733; }
+        .status-downloading { background: #2196f322; color: #2196f3; border: 1px solid #2196f333; }
+        .status-completed { background: #00e67622; color: #00e676; border: 1px solid #00e67633; }
+        .status-failed { background: #ff444422; color: #ff4444; border: 1px solid #ff444433; }
 
         /* URL box */
         .url-box {
             padding: 20px;
-            background: #f5f0eb;
+            background: #0a0a0a;
+            border-radius: 8px;
             margin: 20px 0;
-            border-radius: 3px;
         }
 
         .url-copy-group {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         .url-copy-group input {
@@ -300,61 +318,63 @@
         .endpoint {
             padding: 20px;
             margin-bottom: 15px;
-            background: #faf7f4;
-            border-left: 2px solid #c4a882;
+            background: #0a0a0a;
+            border-radius: 8px;
+            border-left: 3px solid #ff0050;
         }
 
         .method {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 3px 10px;
             font-size: 0.6em;
             letter-spacing: 1px;
+            border-radius: 4px;
             margin-right: 10px;
-            border-radius: 3px;
-            background: #ede5dc;
-            color: #6b5b4e;
+            background: #2a2a2a;
+            color: #ccc;
         }
 
-        .method.post { background: #c0d4c0; color: #4a6b4a; }
-        .method.get { background: #b8c4d4; color: #4a5b6b; }
+        .method.post { background: #00e67622; color: #00e676; }
+        .method.get { background: #2196f322; color: #2196f3; }
 
         /* Code */
         pre {
-            background: #f0ebe6;
+            background: #050505;
             padding: 18px;
-            border-radius: 3px;
+            border-radius: 8px;
             overflow-x: auto;
             margin: 15px 0;
-            font-size: 0.8em;
-            color: #5c4e42;
-            border: 1px solid #e8dfd6;
+            font-size: 0.85em;
+            color: #ccc;
+            border: 1px solid #2a2a2a;
         }
 
         /* Stats grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 12px;
             margin-bottom: 25px;
         }
 
         .stat-card {
-            background: #f5f0eb;
+            background: #0a0a0a;
             padding: 20px;
             text-align: center;
-            border-radius: 3px;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
         }
 
         .stat-card h3 {
-            font-size: 2em;
-            font-weight: 300;
-            color: #4a3b32;
+            font-size: 2.2em;
+            font-weight: 400;
+            color: #fff;
             margin: 0 0 5px;
         }
 
         .stat-card p {
-            color: #8b7b6b;
-            font-size: 0.6em;
+            color: #666;
+            font-size: 0.65em;
             letter-spacing: 2px;
         }
 
@@ -366,23 +386,22 @@
         }
 
         .task-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #e8dfd6;
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2a2a;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 0.8em;
-            color: #6b5b4e;
+            font-size: 0.85em;
         }
 
         /* Footer */
         footer {
             text-align: center;
             padding: 30px 0;
-            color: #a09080;
+            color: #555;
             font-size: 0.7em;
             letter-spacing: 3px;
-            border-top: 1px solid #e0d4c8;
+            border-top: 1px solid #2a2a2a;
             margin-top: 30px;
         }
 
@@ -395,224 +414,180 @@
         }
 
         .example-link {
-            background: #f0ebe6;
-            padding: 6px 16px;
-            color: #7b6b5e;
-            font-size: 0.7em;
+            background: #1a1a1a;
+            padding: 8px 18px;
+            border: 1px solid #333;
+            border-radius: 30px;
+            color: #aaa;
+            font-size: 0.75em;
             letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.2s;
-            border-radius: 20px;
-            border: 1px solid #e0d4c8;
         }
 
         .example-link:hover {
-            background: #e0d4c8;
-            color: #4a3b32;
+            background: #ff0050;
+            border-color: #ff0050;
+            color: #fff;
         }
 
-        /* Lists */
+        /* Listas */
         ul {
             margin-left: 20px;
             line-height: 2.2;
-            color: #6b5b4e;
-            font-size: 0.85em;
+            color: #aaa;
+            font-size: 0.9em;
         }
 
         code {
-            background: #ede5dc;
+            background: #1a1a1a;
             padding: 2px 8px;
-            border-radius: 3px;
-            color: #5c4e42;
-            font-size: 0.85em;
+            border-radius: 4px;
+            color: #ff0050;
         }
 
-        /* Tab content */
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fade 0.4s ease;
-        }
-
-        @keyframes fade {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Decoración japonesa */
-        .jp-decoration {
-            text-align: center;
-            margin: 15px 0 5px;
-            color: #c4a882;
+        /* Decoración */
+        .platform-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            background: #ff005022;
+            color: #ff0050;
+            border-radius: 4px;
             font-size: 0.7em;
-            letter-spacing: 8px;
+            letter-spacing: 2px;
+            margin-left: 10px;
         }
 
         /* Scroll */
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 
-        ::-webkit-scrollbar-track {
-            background: #f0ebe6;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #d4c5b5;
-            border-radius: 3px;
-        }
-
-        /* Responsive */
         @media (max-width: 700px) {
-            .logo-main {
-                font-size: 2em;
-                letter-spacing: 4px;
-            }
-            
-            .card {
-                padding: 25px;
-            }
-            
-            .tabs {
-                gap: 20px;
-            }
-            
-            .tab {
-                letter-spacing: 2px;
-                font-size: 0.75em;
-            }
-        }
-
-        /* Detalles otaku */
-        .kawaii {
-            opacity: 0.5;
-            font-size: 0.9em;
+            .logo { font-size: 1.8em; letter-spacing: 4px; }
+            .card { padding: 20px; }
+            .nav-btn { padding: 10px 20px; letter-spacing: 2px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">
-                <span class="logo-main">FRIKITUBE</span>
-                <span class="divider">·</span>
-                <span class="logo-sub">API</span>
-            </div>
-            <div class="jp-text">フリキチューブ · 音楽と動画</div>
+            <div class="logo">FRIKI<span>TUBE</span></div>
+            <div class="subtitle">API · STREAMING</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
-                <span id="statusText">checking</span>
+                <span id="statusText">CHECKING</span>
             </div>
-            <div class="jp-decoration">◈ ◈ ◈</div>
         </header>
         
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('downloader')">download</button>
-            <button class="tab" onclick="showTab('documentation')">docs</button>
-            <button class="tab" onclick="showTab('baileys')">baileys</button>
-            <button class="tab" onclick="showTab('stats')">stats</button>
+        <!-- Navegación principal (Páginas completas) -->
+        <div class="nav-main">
+            <button class="nav-btn active" onclick="showPage('youtube')">YouTube</button>
+            <button class="nav-btn" onclick="showPage('tiktok')">TikTok</button>
         </div>
         
-        <!-- Download Tab -->
-        <div id="downloader" class="tab-content active">
-            <div class="card">
-                <h2>// download</h2>
-                
-                <div class="input-group">
-                    <label>url</label>
-                    <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=...">
-                </div>
-                
-                <div class="example-links">
-                    <span class="example-link" onclick="setExample('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">example yt</span>
-                    <span class="example-link" onclick="setExample('https://youtu.be/jNQXAC9IVRw')">example video</span>
-                </div>
-                
-                <div class="input-group">
-                    <label>format</label>
-                    <select id="format">
-                        <option value="mp3">mp3 · audio</option>
-                        <option value="mp4">mp4 · video</option>
-                    </select>
-                </div>
-                
-                <div class="input-group">
-                    <label>quality</label>
-                    <select id="quality">
-                        <option value="best">best</option>
-                        <option value="medium">medium · 720p</option>
-                        <option value="low">low · 480p</option>
-                    </select>
-                </div>
-                
-                <button onclick="startDownload()">initiate</button>
-                <button onclick="getInfo()">info</button>
-                
-                <div id="downloadStatus" style="display: none;">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
+        <!-- ============================================ -->
+        <!-- PÁGINA: YOUTUBE -->
+        <!-- ============================================ -->
+        <div id="youtube" class="page active">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('yt-download', 'youtube')">Download</button>
+                <button class="tab" onclick="showTab('yt-docs', 'youtube')">Docs</button>
+                <button class="tab" onclick="showTab('yt-baileys', 'youtube')">Baileys</button>
+                <button class="tab" onclick="showTab('yt-stats', 'youtube')">Stats</button>
+            </div>
+            
+            <!-- YouTube Download -->
+            <div id="yt-download" class="tab-content active">
+                <div class="card">
+                    <h2>YouTube Download</h2>
+                    
+                    <div class="input-group">
+                        <label>URL</label>
+                        <input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=...">
                     </div>
                     
-                    <div class="task-info" id="taskInfo"></div>
+                    <div class="example-links">
+                        <span class="example-link" onclick="setExample('yt', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')">Example YT</span>
+                        <span class="example-link" onclick="setExample('yt', 'https://youtu.be/jNQXAC9IVRw')">Example Video</span>
+                    </div>
                     
-                    <div class="url-box" id="downloadUrlBox" style="display: none;">
-                        <label>download url</label>
-                        <div class="url-copy-group">
-                            <input type="text" id="downloadUrl" readonly onclick="this.select()">
-                            <button onclick="copyUrl()">copy</button>
+                    <div class="input-group">
+                        <label>Format</label>
+                        <select id="yt-format">
+                            <option value="mp3">MP3 · Audio</option>
+                            <option value="mp4">MP4 · Video</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Quality</label>
+                        <select id="yt-quality">
+                            <option value="best">Best</option>
+                            <option value="medium">Medium · 720p</option>
+                            <option value="low">Low · 480p</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="startDownload('yt')">Download</button>
+                    <button onclick="getInfo('yt')">Info</button>
+                    
+                    <div id="yt-downloadStatus" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="yt-progressFill"></div>
                         </div>
-                        <button onclick="downloadFile()" style="margin-top: 12px;">download</button>
+                        <div class="task-info" id="yt-taskInfo"></div>
+                        <div class="url-box" id="yt-downloadUrlBox" style="display: none;">
+                            <label>Download URL</label>
+                            <div class="url-copy-group">
+                                <input type="text" id="yt-downloadUrl" readonly onclick="this.select()">
+                                <button onclick="copyUrl('yt')">Copy</button>
+                            </div>
+                            <button onclick="downloadFile('yt')" style="margin-top: 12px;">Download File</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Docs Tab -->
-        <div id="documentation" class="tab-content">
-            <div class="card">
-                <h2>// api docs</h2>
-                
-                <div class="endpoint">
-                    <h3><span class="method post">POST</span> /api/download</h3>
-                    <p style="color: #8b7b6b; margin: 10px 0; font-size: 0.85em;">start download</p>
-                    <pre>{
+            
+            <!-- YouTube Docs -->
+            <div id="yt-docs" class="tab-content">
+                <div class="card">
+                    <h2>API Documentation</h2>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/download</h3>
+                        <p style="color: #888; margin: 10px 0;">Start YouTube download</p>
+                        <pre>{
   "url": "https://youtu.be/...",
   "format": "mp3",
   "quality": "best"
 }</pre>
-                </div>
-                
-                <div class="endpoint">
-                    <h3><span class="method get">GET</span> /api/status/{id}</h3>
-                    <p style="color: #8b7b6b; margin: 10px 0; font-size: 0.85em;">check status</p>
-                </div>
-                
-                <div class="endpoint">
-                    <h3><span class="method get">GET</span> /api/stream/{id}</h3>
-                    <p style="color: #8b7b6b; margin: 10px 0; font-size: 0.85em;">direct stream · ストリーム</p>
-                </div>
-                
-                <div class="endpoint">
-                    <h3><span class="method get">GET</span> /api/info?url=URL</h3>
-                    <p style="color: #8b7b6b; margin: 10px 0; font-size: 0.85em;">video info</p>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/status/{id}</h3>
+                        <p style="color: #888; margin: 10px 0;">Check download status</p>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/stream/{id}</h3>
+                        <p style="color: #888; margin: 10px 0;">Direct streaming</p>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/info?url=URL</h3>
+                        <p style="color: #888; margin: 10px 0;">Get video info</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Baileys Tab -->
-        <div id="baileys" class="tab-content">
-            <div class="card">
-                <h2>// baileys · ワッツアップ</h2>
-                
-                <h3>install</h3>
-                <pre>npm install baileys axios</pre>
-                
-                <h3>code · コード</h3>
-                <pre id="baileysCode">const axios = require('axios');
-
+            
+            <!-- YouTube Baileys -->
+            <div id="yt-baileys" class="tab-content">
+                <div class="card">
+                    <h2>Baileys Integration</h2>
+                    <h3>Code</h3>
+                    <pre id="yt-baileysCode">const axios = require('axios');
 const API = 'https://your-api.vercel.app';
 
 async function download(sock, from, url) {
@@ -634,195 +609,395 @@ async function download(sock, from, url) {
         caption: status.data.title
     });
 }</pre>
-                
-                <button onclick="copyBaileysCode()">copy code</button>
-                
-                <h3 style="margin-top: 25px;">commands · コマンド</h3>
-                <ul>
-                    <li><code>.music [url]</code> — download mp3</li>
-                    <li><code>.video [url]</code> — download mp4</li>
-                    <li><code>.info [url]</code> — get info</li>
-                </ul>
-                
-                <p style="margin-top: 20px; font-size: 0.8em; color: #a09080;">
-                    <span class="kawaii">✨</span> streaming direct · zero storage <span class="kawaii">✨</span>
-                </p>
+                    <button onclick="copyCode('yt-baileysCode')">Copy Code</button>
+                    
+                    <h3 style="margin-top: 25px;">Commands</h3>
+                    <ul>
+                        <li><code>.music [url]</code> — Download MP3</li>
+                        <li><code>.video [url]</code> — Download MP4</li>
+                        <li><code>.info [url]</code> — Get info</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- YouTube Stats -->
+            <div id="yt-stats" class="tab-content">
+                <div class="card">
+                    <h2>Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card"><h3 id="yt-totalTasks">-</h3><p>Total</p></div>
+                        <div class="stat-card"><h3 id="yt-pendingTasks">-</h3><p>Pending</p></div>
+                        <div class="stat-card"><h3 id="yt-downloadingTasks">-</h3><p>Active</p></div>
+                        <div class="stat-card"><h3 id="yt-completedTasks">-</h3><p>Done</p></div>
+                        <div class="stat-card"><h3 id="yt-failedTasks">-</h3><p>Failed</p></div>
+                    </div>
+                    <h3>Active Tasks</h3>
+                    <div id="yt-tasksList" class="tasks-list">Loading...</div>
+                    <button onclick="loadStats()">Refresh</button>
+                </div>
             </div>
         </div>
         
-        <!-- Stats Tab -->
-        <div id="stats" class="tab-content">
-            <div class="card">
-                <h2>// statistics · 統計</h2>
-                
-                <div class="stats-grid">
-                    <div class="stat-card"><h3 id="totalTasks">-</h3><p>total</p></div>
-                    <div class="stat-card"><h3 id="pendingTasks">-</h3><p>pending</p></div>
-                    <div class="stat-card"><h3 id="downloadingTasks">-</h3><p>active</p></div>
-                    <div class="stat-card"><h3 id="completedTasks">-</h3><p>done</p></div>
-                    <div class="stat-card"><h3 id="failedTasks">-</h3><p>failed</p></div>
+        <!-- ============================================ -->
+        <!-- PÁGINA: TIKTOK (PANTALLA COMPLETA) -->
+        <!-- ============================================ -->
+        <div id="tiktok" class="page">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Download</button>
+                <button class="tab" onclick="showTab('tt-docs', 'tiktok')">Docs</button>
+                <button class="tab" onclick="showTab('tt-baileys', 'tiktok')">Baileys</button>
+                <button class="tab" onclick="showTab('tt-stats', 'tiktok')">Stats</button>
+            </div>
+            
+            <!-- TikTok Download -->
+            <div id="tt-download" class="tab-content active">
+                <div class="card">
+                    <h2>TikTok Download <span class="platform-badge">NO WATERMARK</span></h2>
+                    
+                    <div class="input-group">
+                        <label>URL</label>
+                        <input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/...">
+                    </div>
+                    
+                    <div class="example-links">
+                        <span class="example-link" onclick="setExample('tt', 'https://www.tiktok.com/@tiktok/video/7106592662294203694')">Example TT</span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Watermark</label>
+                        <select id="tt-watermark">
+                            <option value="false">Without Watermark (Clean)</option>
+                            <option value="true">With Watermark</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="startDownload('tt')">Download</button>
+                    <button onclick="getInfo('tt')">Info</button>
+                    
+                    <div id="tt-downloadStatus" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="tt-progressFill"></div>
+                        </div>
+                        <div class="task-info" id="tt-taskInfo"></div>
+                        <div class="url-box" id="tt-downloadUrlBox" style="display: none;">
+                            <label>Download URL</label>
+                            <div class="url-copy-group">
+                                <input type="text" id="tt-downloadUrl" readonly onclick="this.select()">
+                                <button onclick="copyUrl('tt')">Copy</button>
+                            </div>
+                            <button onclick="downloadFile('tt')" style="margin-top: 12px;">Download File</button>
+                        </div>
+                    </div>
                 </div>
-                
-                <h3>active tasks</h3>
-                <div id="tasksList" class="tasks-list">loading...</div>
-                
-                <button onclick="loadStats()">refresh</button>
+            </div>
+            
+            <!-- TikTok Docs -->
+            <div id="tt-docs" class="tab-content">
+                <div class="card">
+                    <h2>TikTok API Documentation</h2>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/tiktok</h3>
+                        <p style="color: #888; margin: 10px 0;">Start TikTok download</p>
+                        <pre>{
+  "url": "https://www.tiktok.com/@user/video/...",
+  "watermark": false
+}</pre>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/status/{id}</h3>
+                        <p style="color: #888; margin: 10px 0;">Check download status</p>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/stream/{id}</h3>
+                        <p style="color: #888; margin: 10px 0;">Direct streaming (no watermark)</p>
+                    </div>
+                    
+                    <p style="margin-top: 20px; color: #888; font-size: 0.85em;">
+                        <span style="color: #ff0050;">✨</span> Videos download without watermark by default
+                    </p>
+                </div>
+            </div>
+            
+            <!-- TikTok Baileys -->
+            <div id="tt-baileys" class="tab-content">
+                <div class="card">
+                    <h2>TikTok + Baileys</h2>
+                    <h3>Code</h3>
+                    <pre id="tt-baileysCode">const axios = require('axios');
+const API = 'https://your-api.vercel.app';
+
+async function downloadTikTok(sock, from, url) {
+    const res = await axios.post(`${API}/api/tiktok`, {
+        url: url,
+        watermark: false  // Sin marca de agua
+    });
+    
+    const taskId = res.data.task_id;
+    
+    let status;
+    do {
+        await new Promise(r => setTimeout(r, 2000));
+        status = await axios.get(`${API}/api/status/${taskId}`);
+    } while (status.data.status !== 'completed');
+    
+    await sock.sendMessage(from, {
+        video: { url: `${API}/api/stream/${taskId}` },
+        mimetype: 'video/mp4',
+        caption: `🎬 ${status.data.title || 'TikTok'}\n👤 ${status.data.uploader || 'User'}`
+    });
+}</pre>
+                    <button onclick="copyCode('tt-baileysCode')">Copy Code</button>
+                    
+                    <h3 style="margin-top: 25px;">Commands</h3>
+                    <ul>
+                        <li><code>.tt [url]</code> — Download TikTok</li>
+                        <li><code>.tiktok [url]</code> — Download TikTok</li>
+                    </ul>
+                    
+                    <p style="margin-top: 20px; color: #00e676; font-size: 0.8em;">
+                        ✓ Zero storage · Direct streaming
+                    </p>
+                </div>
+            </div>
+            
+            <!-- TikTok Stats -->
+            <div id="tt-stats" class="tab-content">
+                <div class="card">
+                    <h2>TikTok Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card"><h3 id="tt-totalTasks">-</h3><p>Total</p></div>
+                        <div class="stat-card"><h3 id="tt-pendingTasks">-</h3><p>Pending</p></div>
+                        <div class="stat-card"><h3 id="tt-downloadingTasks">-</h3><p>Active</p></div>
+                        <div class="stat-card"><h3 id="tt-completedTasks">-</h3><p>Done</p></div>
+                        <div class="stat-card"><h3 id="tt-failedTasks">-</h3><p>Failed</p></div>
+                    </div>
+                    <h3>Active Tasks</h3>
+                    <div id="tt-tasksList" class="tasks-list">Loading...</div>
+                    <button onclick="loadStats()">Refresh</button>
+                </div>
             </div>
         </div>
         
         <footer>
-            <p>frikiTube api · フリキチューブ · streaming</p>
-            <p style="margin-top: 8px; font-size: 0.65em; opacity: 0.6;">◈ 音楽と動画のダウンロード ◈</p>
+            <p>FRIKITUBE API · YOUTUBE · TIKTOK · STREAMING</p>
         </footer>
     </div>
     
     <script>
         const API_URL = '';
-        let currentTaskId = null;
-        let statusInterval = null;
         
+        let ytTaskId = null, ttTaskId = null;
+        let ytInterval = null, ttInterval = null;
+        
+        // ============================================
+        // SERVER STATUS
+        // ============================================
         async function checkServerStatus() {
             try {
-                const r = await fetch(`${API_URL}/health`);
-                await r.json();
+                await fetch(`${API_URL}/health`);
                 document.getElementById('statusDot').classList.add('online');
                 document.getElementById('statusDot').classList.remove('offline');
-                document.getElementById('statusText').textContent = 'online · オンライン';
+                document.getElementById('statusText').textContent = 'ONLINE';
             } catch {
                 document.getElementById('statusDot').classList.add('offline');
                 document.getElementById('statusDot').classList.remove('online');
-                document.getElementById('statusText').textContent = 'offline · オフライン';
+                document.getElementById('statusText').textContent = 'OFFLINE';
             }
         }
         
-        function showTab(name) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-            document.getElementById(name).classList.add('active');
+        // ============================================
+        // NAVEGACIÓN PRINCIPAL (Páginas completas)
+        // ============================================
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(page).classList.add('active');
             event.target.classList.add('active');
-            if (name === 'stats') loadStats();
+            loadStats();
         }
         
-        function setExample(u) { document.getElementById('url').value = u; }
+        // ============================================
+        // TABS INTERNAS
+        // ============================================
+        function showTab(tab, page) {
+            const pageEl = document.getElementById(page);
+            pageEl.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            pageEl.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+            if (tab.includes('stats')) loadStats();
+        }
         
-        async function startDownload() {
-            const url = document.getElementById('url').value;
-            const format = document.getElementById('format').value;
-            const quality = document.getElementById('quality').value;
-            if (!url) return alert('url required');
+        // ============================================
+        // UTILIDADES
+        // ============================================
+        function setExample(platform, url) {
+            document.getElementById(`${platform}-url`).value = url;
+        }
+        
+        function copyCode(id) {
+            navigator.clipboard?.writeText(document.getElementById(id).textContent);
+            alert('Code copied!');
+        }
+        
+        // ============================================
+        // DESCARGAR (YouTube/TikTok)
+        // ============================================
+        async function startDownload(platform) {
+            const url = document.getElementById(`${platform}-url`).value;
+            if (!url) return alert('URL required');
+            
+            let endpoint, body;
+            
+            if (platform === 'yt') {
+                endpoint = '/api/download';
+                body = {
+                    url: url,
+                    format: document.getElementById('yt-format').value,
+                    quality: document.getElementById('yt-quality').value
+                };
+            } else {
+                endpoint = '/api/tiktok';
+                body = {
+                    url: url,
+                    watermark: document.getElementById('tt-watermark').value === 'true'
+                };
+            }
             
             try {
-                const r = await fetch(`${API_URL}/api/download`, {
+                const res = await fetch(`${API_URL}${endpoint}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({url, format, quality})
+                    body: JSON.stringify(body)
                 });
-                const d = await r.json();
-                currentTaskId = d.task_id;
+                const data = await res.json();
                 
-                document.getElementById('downloadStatus').style.display = 'block';
-                document.getElementById('downloadUrlBox').style.display = 'none';
-                document.getElementById('taskInfo').innerHTML = `
-                    <p><strong>id</strong> ${d.task_id}</p>
-                    <p><strong>status</strong> <span class="status-badge status-pending">pending</span></p>
-                    <p><strong>message</strong> ${d.message}</p>
+                if (platform === 'yt') {
+                    ytTaskId = data.task_id;
+                    if (ytInterval) clearInterval(ytInterval);
+                    ytInterval = setInterval(() => checkStatus('yt'), 2000);
+                } else {
+                    ttTaskId = data.task_id;
+                    if (ttInterval) clearInterval(ttInterval);
+                    ttInterval = setInterval(() => checkStatus('tt'), 2000);
+                }
+                
+                document.getElementById(`${platform}-downloadStatus`).style.display = 'block';
+                document.getElementById(`${platform}-downloadUrlBox`).style.display = 'none';
+                document.getElementById(`${platform}-taskInfo`).innerHTML = `
+                    <p><strong>ID</strong> ${data.task_id}</p>
+                    <p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>
+                    <p><strong>Message</strong> ${data.message}</p>
                 `;
-                
-                if (statusInterval) clearInterval(statusInterval);
-                statusInterval = setInterval(checkStatus, 2000);
             } catch(e) {
                 alert('Error: ' + e.message);
             }
         }
         
-        async function checkStatus() {
-            if (!currentTaskId) return;
+        async function checkStatus(platform) {
+            const taskId = platform === 'yt' ? ytTaskId : ttTaskId;
+            if (!taskId) return;
+            
             try {
-                const r = await fetch(`${API_URL}/api/status/${currentTaskId}`);
-                const d = await r.json();
+                const res = await fetch(`${API_URL}/api/status/${taskId}`);
+                const data = await res.json();
                 
-                document.getElementById('progressFill').style.width = d.progress + '%';
+                document.getElementById(`${platform}-progressFill`).style.width = data.progress + '%';
                 
-                let c = 'status-' + d.status;
-                let h = `
-                    <p><strong>id</strong> ${d.task_id}</p>
-                    <p><strong>status</strong> <span class="status-badge ${c}">${d.status}</span></p>
-                    <p><strong>progress</strong> ${d.progress}%</p>
+                let cls = 'status-' + data.status;
+                let html = `
+                    <p><strong>ID</strong> ${data.task_id}</p>
+                    <p><strong>Status</strong> <span class="status-badge ${cls}">${data.status}</span></p>
+                    <p><strong>Progress</strong> ${data.progress}%</p>
                 `;
-                if (d.title) h += `<p><strong>title</strong> ${d.title}</p>`;
-                if (d.duration) {
-                    const m = Math.floor(d.duration/60);
-                    const s = d.duration%60;
-                    h += `<p><strong>duration</strong> ${m}:${s.toString().padStart(2,'0')}</p>`;
-                }
-                document.getElementById('taskInfo').innerHTML = h;
+                if (data.title) html += `<p><strong>Title</strong> ${data.title}</p>`;
+                if (data.uploader) html += `<p><strong>Uploader</strong> ${data.uploader}</p>`;
                 
-                if (d.status === 'completed') {
-                    clearInterval(statusInterval);
-                    document.getElementById('downloadUrl').value = window.location.origin + d.download_url;
-                    document.getElementById('downloadUrlBox').style.display = 'block';
+                document.getElementById(`${platform}-taskInfo`).innerHTML = html;
+                
+                if (data.status === 'completed') {
+                    if (platform === 'yt') clearInterval(ytInterval);
+                    else clearInterval(ttInterval);
+                    
+                    document.getElementById(`${platform}-downloadUrl`).value = window.location.origin + data.stream_url;
+                    document.getElementById(`${platform}-downloadUrlBox`).style.display = 'block';
                 }
-                if (d.status === 'failed') {
-                    clearInterval(statusInterval);
-                    document.getElementById('taskInfo').innerHTML += `<p style="color:#c47878;"><strong>error</strong> ${d.error}</p>`;
+                
+                if (data.status === 'failed') {
+                    if (platform === 'yt') clearInterval(ytInterval);
+                    else clearInterval(ttInterval);
+                    document.getElementById(`${platform}-taskInfo`).innerHTML += `<p style="color:#ff4444;"><strong>Error</strong> ${data.error}</p>`;
                 }
             } catch(e) {}
         }
         
-        async function getInfo() {
-            const url = document.getElementById('url').value;
-            if (!url) return alert('url required');
+        // ============================================
+        // INFO
+        // ============================================
+        async function getInfo(platform) {
+            const url = document.getElementById(`${platform}-url`).value;
+            if (!url) return alert('URL required');
+            
             try {
-                const r = await fetch(`${API_URL}/api/info?url=${encodeURIComponent(url)}`);
-                const d = await r.json();
-                alert(`${d.title}\n${d.uploader}\n${Math.floor(d.duration/60)}:${(d.duration%60).toString().padStart(2,'0')}`);
+                const res = await fetch(`${API_URL}/api/info?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                alert(`${data.title}\n${data.uploader}\n${Math.floor(data.duration/60)}:${(data.duration%60).toString().padStart(2,'0')}`);
             } catch(e) {
                 alert('Error: ' + e.message);
             }
         }
         
-        function copyUrl() {
-            document.getElementById('downloadUrl').select();
+        // ============================================
+        // COPIAR / DESCARGAR
+        // ============================================
+        function copyUrl(platform) {
+            document.getElementById(`${platform}-downloadUrl`).select();
             document.execCommand('copy');
-            alert('copied · コピーしました');
+            alert('URL copied!');
         }
         
-        function downloadFile() {
-            const u = document.getElementById('downloadUrl').value;
-            navigator.clipboard?.writeText(u);
-            alert('copied · open in new tab');
-            window.open(u, '_blank');
+        function downloadFile(platform) {
+            const url = document.getElementById(`${platform}-downloadUrl`).value;
+            navigator.clipboard?.writeText(url);
+            alert('URL copied. Open in new tab.');
+            window.open(url, '_blank');
         }
         
-        function copyBaileysCode() {
-            navigator.clipboard?.writeText(document.getElementById('baileysCode').textContent);
-            alert('copied · コピーしました');
-        }
-        
+        // ============================================
+        // ESTADÍSTICAS
+        // ============================================
         async function loadStats() {
             try {
-                const r = await fetch(`${API_URL}/api/tasks`);
-                const d = await r.json();
-                document.getElementById('totalTasks').textContent = d.total || 0;
-                document.getElementById('pendingTasks').textContent = d.pending || 0;
-                document.getElementById('downloadingTasks').textContent = d.downloading || 0;
-                document.getElementById('completedTasks').textContent = d.completed || 0;
-                document.getElementById('failedTasks').textContent = d.failed || 0;
+                const res = await fetch(`${API_URL}/api/tasks`);
+                const data = await res.json();
                 
-                let h = '';
-                if (d.tasks?.length) {
-                    d.tasks.forEach(t => {
-                        h += `<div class="task-item"><span>${t.task_id?.substr(0,8)}...</span> <span class="status-badge status-${t.status}">${t.status}</span></div>`;
-                    });
-                } else {
-                    h = '<p style="color:#a09080;">no active tasks</p>';
-                }
-                document.getElementById('tasksList').innerHTML = h;
+                ['yt', 'tt'].forEach(p => {
+                    document.getElementById(`${p}-totalTasks`).textContent = data.total || 0;
+                    document.getElementById(`${p}-pendingTasks`).textContent = data.pending || 0;
+                    document.getElementById(`${p}-downloadingTasks`).textContent = data.downloading || 0;
+                    document.getElementById(`${p}-completedTasks`).textContent = data.completed || 0;
+                    document.getElementById(`${p}-failedTasks`).textContent = data.failed || 0;
+                    
+                    let html = '';
+                    if (data.tasks?.length) {
+                        data.tasks.forEach(t => {
+                            html += `<div class="task-item"><span>${t.task_id?.substr(0,8)}...</span> <span class="status-badge status-${t.status}">${t.status}</span></div>`;
+                        });
+                    } else {
+                        html = '<p style="color:#666;">No active tasks</p>';
+                    }
+                    document.getElementById(`${p}-tasksList`).innerHTML = html;
+                });
             } catch(e) {}
         }
         
+        // Init
         checkServerStatus();
         setInterval(checkServerStatus, 30000);
+        loadStats();
     </script>
 </body>
 </html>
