@@ -227,7 +227,7 @@
                 <h3>🔧 Código para tu bot</h3>
                 <pre id="baileysCode">const axios = require('axios');
 
-const API_URL = 'https://TU_VERCEL.vercel.app';
+const API_URL = 'http://64.20.54.50:30325';
 
 async function descargarMusica(url) {
     const response = await axios.post(`${API_URL}/api/download`, {
@@ -274,28 +274,29 @@ async function descargarMusica(url) {
         </div>
         
         <footer>
-            <p>API puente Vercel → <span id="apiUrlDisplay">http://64.20.54.50:30325</span></p>
+            <p>API: <span id="apiUrlDisplay">http://64.20.54.50:30325</span></p>
         </footer>
     </div>
     
     <script>
-        // CONFIGURACIÓN - Vercel hace de puente
-        const API_URL = '';  // Vacío = usa la misma URL de Vercel
-        const BACKEND_IP = 'http://64.20.54.50:30325';
+        // CONFIGURACIÓN
+        const API_URL = 'http://64.20.54.50:30325';
         
         let currentTaskId = null;
         let statusInterval = null;
         
-        document.getElementById('apiUrlDisplay').textContent = BACKEND_IP;
+        document.getElementById('apiUrlDisplay').textContent = API_URL;
         
         async function checkServerStatus() {
             try {
-                const response = await fetch(`${API_URL}/api/health`);
+                const response = await fetch(`${API_URL}/health`);
                 await response.json();
                 document.getElementById('statusDot').classList.add('online');
+                document.getElementById('statusDot').classList.remove('offline');
                 document.getElementById('statusText').textContent = 'Servidor Online ✅';
             } catch (error) {
                 document.getElementById('statusDot').classList.add('offline');
+                document.getElementById('statusDot').classList.remove('online');
                 document.getElementById('statusText').textContent = 'Servidor Offline ❌';
             }
         }
@@ -328,6 +329,7 @@ async function descargarMusica(url) {
                 currentTaskId = data.task_id;
                 
                 document.getElementById('downloadStatus').style.display = 'block';
+                document.getElementById('downloadUrlBox').style.display = 'none';
                 document.getElementById('taskInfo').innerHTML = `
                     <p><strong>ID:</strong> ${data.task_id}</p>
                     <p><strong>Estado:</strong> <span class="status-badge status-pending">Pendiente</span></p>
@@ -345,7 +347,7 @@ async function descargarMusica(url) {
             if (!currentTaskId) return;
             
             try {
-                const response = await fetch(`${API_URL}/api/status?task_id=${currentTaskId}`);
+                const response = await fetch(`${API_URL}/api/status/${currentTaskId}`);
                 const data = await response.json();
                 
                 const progressFill = document.getElementById('progressFill');
@@ -370,7 +372,7 @@ async function descargarMusica(url) {
                 
                 if (data.status === 'completed') {
                     clearInterval(statusInterval);
-                    const fullUrl = data.download_url.startsWith('http') ? data.download_url : `${BACKEND_IP}${data.download_url}`;
+                    const fullUrl = `${API_URL}${data.download_url}`;
                     document.getElementById('downloadUrl').value = fullUrl;
                     document.getElementById('downloadUrlBox').style.display = 'block';
                 }
@@ -404,7 +406,13 @@ async function descargarMusica(url) {
         }
         
         function downloadFile() {
-            window.open(document.getElementById('downloadUrl').value, '_blank');
+            const url = document.getElementById('downloadUrl').value;
+            navigator.clipboard?.writeText(url).then(() => {
+                console.log('Link copiado');
+            }).catch(() => {});
+            
+            alert('📋 Link copiado! Pégalo en una nueva pestaña para descargar:\n\n' + url);
+            window.open(url, '_blank');
         }
         
         function copyBaileysCode() {
