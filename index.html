@@ -1,4 +1,4 @@
-ñ<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -569,7 +569,7 @@
                 <div class="card">
                     <h2>Baileys Integration</h2>
                     <pre id="yt-baileysCode">const axios = require('axios');
-const API = 'https://your-api.vercel.app';
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function download(sock, from, url) {
     const res = await axios.post(`${API}/api/download`, {
@@ -674,7 +674,7 @@ async function download(sock, from, url) {
                 <div class="card">
                     <h2>TikTok + Baileys</h2>
                     <pre id="tt-baileysCode">const axios = require('axios');
-const API = 'https://your-api.vercel.app';
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function downloadTikTok(sock, from, url) {
     const res = await axios.post(`${API}/api/tiktok`, {
@@ -709,7 +709,6 @@ async function downloadTikTok(sock, from, url) {
                 <button class="tab" onclick="showTab('ly-baileys', 'lyrics')">Baileys</button>
             </div>
             
-            <!-- Lyrics Search -->
             <div id="ly-download" class="tab-content active">
                 <div class="card">
                     <h2>FrikiTube Lyrics</h2>
@@ -734,7 +733,6 @@ async function downloadTikTok(sock, from, url) {
                 </div>
             </div>
             
-            <!-- Lyrics Docs -->
             <div id="ly-docs" class="tab-content">
                 <div class="card">
                     <h2>Lyrics API Documentation</h2>
@@ -764,14 +762,13 @@ async function downloadTikTok(sock, from, url) {
                 </div>
             </div>
             
-            <!-- Lyrics Baileys -->
             <div id="ly-baileys" class="tab-content">
                 <div class="card">
                     <h2>Baileys Integration - Lyrics</h2>
                     
                     <h3>Command: .lyrics</h3>
                     <pre id="ly-baileysCode">const axios = require('axios');
-const API = 'https://your-api.vercel.app';
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 // Comando: .lyrics Fleetwood Mac - The Chain
 async function lyricsCommand(sock, from, query) {
@@ -782,7 +779,6 @@ async function lyricsCommand(sock, from, query) {
         if (data.success) {
             let message = `🎵 *${data.title}*\n👤 *${data.artist}*\n\n`;
             
-            // Truncar si es muy largo
             let lyrics = data.lyrics;
             if (lyrics.length > 1000) {
                 lyrics = lyrics.substring(0, 1000) + '...';
@@ -803,7 +799,7 @@ async function lyricsCommand(sock, from, query) {
     }
 }
 
-// Ejemplo de uso en handler
+// En tu handler:
 if (text.startsWith('.lyrics ')) {
     const query = text.replace('.lyrics ', '');
     await lyricsCommand(sock, from, query);
@@ -816,10 +812,6 @@ if (text.startsWith('.lyrics ')) {
                         <li><code>.lyrics Bad Bunny Me Porto Bonito</code></li>
                         <li><code>.lyrics Milo J Rara Vez</code></li>
                     </ul>
-                    
-                    <p style="margin-top: 20px; color: #00e676; font-size: 0.8em;">
-                        ✓ Returns synced lyrics when available
-                    </p>
                 </div>
             </div>
         </div>
