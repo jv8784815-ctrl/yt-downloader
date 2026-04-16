@@ -546,25 +546,21 @@
             <div id="yt-docs" class="tab-content">
                 <div class="card">
                     <h2>API Documentation</h2>
-                    
                     <div class="endpoint">
                         <h3><span class="method post">POST</span> /api/download</h3>
-                        <p style="color: #888; margin: 10px 0;">Start YouTube download</p>
                         <pre>{
   "url": "https://youtu.be/...",
   "format": "mp3",
   "quality": "best"
 }</pre>
                     </div>
-                    
                     <div class="endpoint">
                         <h3><span class="method get">GET</span> /api/status/{id}</h3>
-                        <p style="color: #888; margin: 10px 0;">Check download status</p>
+                        <p style="color: #888;">Check download status</p>
                     </div>
-                    
                     <div class="endpoint">
                         <h3><span class="method get">GET</span> /api/stream/{id}</h3>
-                        <p style="color: #888; margin: 10px 0;">Direct streaming</p>
+                        <p style="color: #888;">Direct streaming</p>
                     </div>
                 </div>
             </div>
@@ -708,10 +704,10 @@ async function downloadTikTok(sock, from, url) {
         <!-- PÁGINA LYRICS -->
         <div id="lyrics" class="page">
             <div class="card">
-                <h2>Lyrics Finder <span class="platform-badge">BETA</span></h2>
+                <h2>Lyrics Finder <span class="platform-badge">JSON</span></h2>
                 
                 <div class="input-group">
-                    <label>Song Name or Artist + Title</label>
+                    <label>Song Name (Artist + Title)</label>
                     <input type="text" id="lyrics-query" placeholder="Bad Bunny Me Porto Bonito">
                 </div>
                 
@@ -786,18 +782,29 @@ async function downloadTikTok(sock, from, url) {
             const query = document.getElementById('lyrics-query').value;
             if (!query) return alert('Enter a song name');
             
+            document.getElementById('lyricsResult').style.display = 'block';
+            document.getElementById('lyricsInfo').innerHTML = '<p><strong>Searching...</strong></p>';
+            document.getElementById('lyricsContent').textContent = 'Loading...';
+            
             try {
                 const res = await fetch(`${API_URL}/api/lyrics?q=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 
-                document.getElementById('lyricsResult').style.display = 'block';
                 document.getElementById('lyricsInfo').innerHTML = `
-                    <p><strong>Query</strong> ${data.query}</p>
-                    <p><strong>Source</strong> ${data.source}</p>
+                    <p><strong>Query</strong> ${data.query || query}</p>
+                    <p><strong>Source</strong> ${data.source || 'unknown'}</p>
+                    ${data.artist ? `<p><strong>Artist</strong> ${data.artist}</p>` : ''}
+                    ${data.title ? `<p><strong>Title</strong> ${data.title}</p>` : ''}
                 `;
-                document.getElementById('lyricsContent').textContent = data.lyrics || 'Lyrics not found';
+                
+                if (data.lyrics) {
+                    document.getElementById('lyricsContent').textContent = data.lyrics;
+                } else {
+                    document.getElementById('lyricsContent').textContent = 'No lyrics found for this song.';
+                }
             } catch(e) {
-                alert('Error: ' + e.message);
+                document.getElementById('lyricsInfo').innerHTML = '<p style="color: #ff4444;"><strong>Error</strong> Failed to fetch lyrics</p>';
+                document.getElementById('lyricsContent').textContent = 'Error loading lyrics. Please try again.';
             }
         }
         
