@@ -455,6 +455,16 @@
             margin-left: 10px;
         }
 
+        .lyrics-source {
+            display: inline-block;
+            padding: 2px 10px;
+            background: #ff005022;
+            color: #ff0050;
+            border-radius: 4px;
+            font-size: 0.7em;
+            letter-spacing: 1px;
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
@@ -704,17 +714,17 @@ async function downloadTikTok(sock, from, url) {
         <!-- PÁGINA LYRICS -->
         <div id="lyrics" class="page">
             <div class="card">
-                <h2>Lyrics Finder <span class="platform-badge">JSON</span></h2>
+                <h2>FrikiTube Lyrics</h2>
                 
                 <div class="input-group">
-                    <label>Song Name (Artist + Title)</label>
-                    <input type="text" id="lyrics-query" placeholder="Bad Bunny Me Porto Bonito">
+                    <label>Song Name (Artist - Title)</label>
+                    <input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain">
                 </div>
                 
                 <div class="example-links">
-                    <span class="example-link" onclick="setLyricsExample('Bad Bunny Tití Me Preguntó')">Bad Bunny</span>
-                    <span class="example-link" onclick="setLyricsExample('Quevedo Bzrp Music Sessions')">Quevedo</span>
-                    <span class="example-link" onclick="setLyricsExample('Milo J Rara Vez')">Milo J</span>
+                    <span class="example-link" onclick="setLyricsExample('Fleetwood Mac - The Chain')">Fleetwood Mac</span>
+                    <span class="example-link" onclick="setLyricsExample('Bad Bunny - Me Porto Bonito')">Bad Bunny</span>
+                    <span class="example-link" onclick="setLyricsExample('Milo J - Rara Vez')">Milo J</span>
                 </div>
                 
                 <button onclick="searchLyrics()">Search Lyrics</button>
@@ -791,10 +801,9 @@ async function downloadTikTok(sock, from, url) {
                 const data = await res.json();
                 
                 document.getElementById('lyricsInfo').innerHTML = `
-                    <p><strong>Query</strong> ${data.query || query}</p>
-                    <p><strong>Source</strong> ${data.source || 'unknown'}</p>
                     ${data.artist ? `<p><strong>Artist</strong> ${data.artist}</p>` : ''}
                     ${data.title ? `<p><strong>Title</strong> ${data.title}</p>` : ''}
+                    ${data.synced ? '<p><span class="platform-badge">🎤 Synced</span></p>' : ''}
                 `;
                 
                 if (data.lyrics) {
