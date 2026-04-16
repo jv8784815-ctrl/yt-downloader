@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ñ<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -455,16 +455,6 @@
             margin-left: 10px;
         }
 
-        .lyrics-source {
-            display: inline-block;
-            padding: 2px 10px;
-            background: #ff005022;
-            color: #ff0050;
-            border-radius: 4px;
-            font-size: 0.7em;
-            letter-spacing: 1px;
-        }
-
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
@@ -713,25 +703,123 @@ async function downloadTikTok(sock, from, url) {
         
         <!-- PÁGINA LYRICS -->
         <div id="lyrics" class="page">
-            <div class="card">
-                <h2>FrikiTube Lyrics</h2>
-                
-                <div class="input-group">
-                    <label>Song Name (Artist - Title)</label>
-                    <input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('ly-download', 'lyrics')">Search</button>
+                <button class="tab" onclick="showTab('ly-docs', 'lyrics')">Docs</button>
+                <button class="tab" onclick="showTab('ly-baileys', 'lyrics')">Baileys</button>
+            </div>
+            
+            <!-- Lyrics Search -->
+            <div id="ly-download" class="tab-content active">
+                <div class="card">
+                    <h2>FrikiTube Lyrics</h2>
+                    
+                    <div class="input-group">
+                        <label>Song Name (Artist - Title)</label>
+                        <input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain">
+                    </div>
+                    
+                    <div class="example-links">
+                        <span class="example-link" onclick="setLyricsExample('Fleetwood Mac - The Chain')">Fleetwood Mac</span>
+                        <span class="example-link" onclick="setLyricsExample('Bad Bunny - Me Porto Bonito')">Bad Bunny</span>
+                        <span class="example-link" onclick="setLyricsExample('Milo J - Rara Vez')">Milo J</span>
+                    </div>
+                    
+                    <button onclick="searchLyrics()">Search Lyrics</button>
+                    
+                    <div id="lyricsResult" style="display: none;">
+                        <div class="task-info" id="lyricsInfo"></div>
+                        <div class="lyrics-box" id="lyricsContent"></div>
+                    </div>
                 </div>
-                
-                <div class="example-links">
-                    <span class="example-link" onclick="setLyricsExample('Fleetwood Mac - The Chain')">Fleetwood Mac</span>
-                    <span class="example-link" onclick="setLyricsExample('Bad Bunny - Me Porto Bonito')">Bad Bunny</span>
-                    <span class="example-link" onclick="setLyricsExample('Milo J - Rara Vez')">Milo J</span>
+            </div>
+            
+            <!-- Lyrics Docs -->
+            <div id="ly-docs" class="tab-content">
+                <div class="card">
+                    <h2>Lyrics API Documentation</h2>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/lyrics</h3>
+                        <p style="color: #888; margin: 10px 0;">Search lyrics by artist and title</p>
+                        <pre>GET /api/lyrics?q=Fleetwood Mac - The Chain</pre>
+                        <p style="color: #888; margin: 15px 0 5px;">Response:</p>
+                        <pre>{
+  "success": true,
+  "artist": "Fleetwood Mac",
+  "title": "The Chain",
+  "lyrics": "Listen to the wind blow...",
+  "synced": false
+}</pre>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/lyrics (Synced)</h3>
+                        <p style="color: #888; margin: 10px 0;">Returns synced lyrics if available</p>
+                        <pre>{
+  "synced": true,
+  "lyrics": "[00:15.00] Listen to the wind blow..."
+}</pre>
+                    </div>
                 </div>
-                
-                <button onclick="searchLyrics()">Search Lyrics</button>
-                
-                <div id="lyricsResult" style="display: none;">
-                    <div class="task-info" id="lyricsInfo"></div>
-                    <div class="lyrics-box" id="lyricsContent"></div>
+            </div>
+            
+            <!-- Lyrics Baileys -->
+            <div id="ly-baileys" class="tab-content">
+                <div class="card">
+                    <h2>Baileys Integration - Lyrics</h2>
+                    
+                    <h3>Command: .lyrics</h3>
+                    <pre id="ly-baileysCode">const axios = require('axios');
+const API = 'https://your-api.vercel.app';
+
+// Comando: .lyrics Fleetwood Mac - The Chain
+async function lyricsCommand(sock, from, query) {
+    try {
+        const res = await axios.get(`${API}/api/lyrics?q=${encodeURIComponent(query)}`);
+        const data = res.data;
+        
+        if (data.success) {
+            let message = `🎵 *${data.title}*\n👤 *${data.artist}*\n\n`;
+            
+            // Truncar si es muy largo
+            let lyrics = data.lyrics;
+            if (lyrics.length > 1000) {
+                lyrics = lyrics.substring(0, 1000) + '...';
+            }
+            
+            message += lyrics;
+            
+            await sock.sendMessage(from, { text: message });
+        } else {
+            await sock.sendMessage(from, { 
+                text: `❌ No lyrics found for: ${query}` 
+            });
+        }
+    } catch (error) {
+        await sock.sendMessage(from, { 
+            text: '❌ Error fetching lyrics' 
+        });
+    }
+}
+
+// Ejemplo de uso en handler
+if (text.startsWith('.lyrics ')) {
+    const query = text.replace('.lyrics ', '');
+    await lyricsCommand(sock, from, query);
+}</pre>
+                    <button onclick="copyCode('ly-baileysCode')">Copy Code</button>
+                    
+                    <h3 style="margin-top: 25px;">Command Examples</h3>
+                    <ul>
+                        <li><code>.lyrics Fleetwood Mac - The Chain</code></li>
+                        <li><code>.lyrics Bad Bunny Me Porto Bonito</code></li>
+                        <li><code>.lyrics Milo J Rara Vez</code></li>
+                    </ul>
+                    
+                    <p style="margin-top: 20px; color: #00e676; font-size: 0.8em;">
+                        ✓ Returns synced lyrics when available
+                    </p>
                 </div>
             </div>
         </div>
@@ -809,11 +897,11 @@ async function downloadTikTok(sock, from, url) {
                 if (data.lyrics) {
                     document.getElementById('lyricsContent').textContent = data.lyrics;
                 } else {
-                    document.getElementById('lyricsContent').textContent = 'No lyrics found for this song.';
+                    document.getElementById('lyricsContent').textContent = 'No lyrics found.';
                 }
             } catch(e) {
-                document.getElementById('lyricsInfo').innerHTML = '<p style="color: #ff4444;"><strong>Error</strong> Failed to fetch lyrics</p>';
-                document.getElementById('lyricsContent').textContent = 'Error loading lyrics. Please try again.';
+                document.getElementById('lyricsInfo').innerHTML = '<p style="color: #ff4444;">Error</p>';
+                document.getElementById('lyricsContent').textContent = 'Error loading lyrics.';
             }
         }
         
