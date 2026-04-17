@@ -5,472 +5,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FrikiTube · API</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #0d0d0d;
             min-height: 100vh;
             color: #e0e0e0;
         }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        header {
-            text-align: center;
-            padding: 40px 0 30px;
-            border-bottom: 1px solid #2a2a2a;
-            margin-bottom: 30px;
-        }
-
-        .logo {
-            font-size: 2.5em;
-            font-weight: 500;
-            letter-spacing: 8px;
-            color: #ffffff;
-            text-shadow: 0 0 30px rgba(255,255,255,0.1);
-        }
-
-        .logo span {
-            color: #ff0050;
-            font-weight: 300;
-        }
-
-        .subtitle {
-            color: #888;
-            font-size: 0.85em;
-            letter-spacing: 6px;
-            margin-top: 8px;
-        }
-
+        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+        header { text-align: center; padding: 40px 0 30px; border-bottom: 1px solid #2a2a2a; margin-bottom: 30px; }
+        .logo { font-size: 2.5em; font-weight: 500; letter-spacing: 8px; color: #ffffff; text-shadow: 0 0 30px rgba(255,255,255,0.1); }
+        .logo span { color: #ff0050; font-weight: 300; }
+        .subtitle { color: #888; font-size: 0.85em; letter-spacing: 6px; margin-top: 8px; }
         .server-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 20px;
-            padding: 6px 18px;
-            background: #1a1a1a;
-            border-radius: 30px;
-            border: 1px solid #333;
+            display: inline-flex; align-items: center; gap: 8px; margin-top: 20px;
+            padding: 6px 18px; background: #1a1a1a; border-radius: 30px; border: 1px solid #333;
         }
-
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #ffc107;
-        }
-
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #ffc107; }
         .status-dot.online { background: #00e676; box-shadow: 0 0 10px #00e67655; }
         .status-dot.offline { background: #ff4444; }
-
-        #statusText {
-            font-size: 0.75em;
-            color: #aaa;
-            letter-spacing: 2px;
-        }
-
+        #statusText { font-size: 0.75em; color: #aaa; letter-spacing: 2px; }
         .nav-main {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #2a2a2a;
-            padding-bottom: 15px;
+            display: flex; gap: 5px; margin-bottom: 30px;
+            border-bottom: 1px solid #2a2a2a; padding-bottom: 15px;
         }
-
         .nav-btn {
-            padding: 12px 35px;
-            background: transparent;
-            border: none;
-            color: #666;
-            font-size: 1em;
-            font-weight: 400;
-            letter-spacing: 3px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            text-transform: uppercase;
+            padding: 12px 35px; background: transparent; border: none; color: #666;
+            font-size: 1em; font-weight: 400; letter-spacing: 3px; cursor: pointer;
+            transition: all 0.3s; position: relative; text-transform: uppercase;
         }
-
         .nav-btn:hover { color: #ccc; }
         .nav-btn.active { color: #fff; }
-
         .nav-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -16px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #ff0050;
+            content: ''; position: absolute; bottom: -16px; left: 0; right: 0;
+            height: 2px; background: #ff0050;
         }
-
-        .page {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .page.active {
-            display: block;
-        }
-
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .tabs {
-            display: flex;
-            gap: 25px;
-            margin-bottom: 25px;
-            padding: 0 5px;
-        }
-
+        .tabs { display: flex; gap: 25px; margin-bottom: 25px; padding: 0 5px; }
         .tab {
-            padding: 8px 0;
-            background: transparent;
-            border: none;
-            color: #666;
-            font-size: 0.8em;
-            letter-spacing: 3px;
-            cursor: pointer;
-            transition: all 0.3s;
+            padding: 8px 0; background: transparent; border: none; color: #666;
+            font-size: 0.8em; letter-spacing: 3px; cursor: pointer; transition: all 0.3s;
             text-transform: uppercase;
         }
-
         .tab:hover { color: #aaa; }
         .tab.active { color: #fff; border-bottom: 1px solid #ff0050; }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
         .card {
-            background: #121212;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 35px;
-            margin-bottom: 25px;
+            background: #121212; border: 1px solid #2a2a2a; border-radius: 12px;
+            padding: 35px; margin-bottom: 25px;
         }
-
         .card h2 {
-            color: #fff;
-            font-size: 1.5em;
-            font-weight: 400;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #2a2a2a;
+            color: #fff; font-size: 1.5em; font-weight: 400; letter-spacing: 2px;
+            margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid #2a2a2a;
         }
-
-        .card h3 {
-            color: #ccc;
-            font-size: 1em;
-            font-weight: 400;
-            letter-spacing: 2px;
-            margin: 25px 0 15px;
-        }
-
-        .input-group {
-            margin-bottom: 22px;
-        }
-
+        .card h3 { color: #ccc; font-size: 1em; font-weight: 400; letter-spacing: 2px; margin: 25px 0 15px; }
+        .input-group { margin-bottom: 22px; }
         label {
-            display: block;
-            margin-bottom: 8px;
-            color: #888;
-            font-size: 0.7em;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+            display: block; margin-bottom: 8px; color: #888; font-size: 0.7em;
+            letter-spacing: 3px; text-transform: uppercase;
         }
-
         input, select, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            background: #0a0a0a;
-            border: 1px solid #333;
-            color: #fff;
-            font-size: 0.95em;
-            border-radius: 8px;
-            transition: all 0.2s;
+            width: 100%; padding: 14px 16px; background: #0a0a0a; border: 1px solid #333;
+            color: #fff; font-size: 0.95em; border-radius: 8px; transition: all 0.2s;
         }
-
         input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #ff0050;
-            background: #0f0f0f;
+            outline: none; border-color: #ff0050; background: #0f0f0f;
         }
-
         input::placeholder { color: #555; }
-
         button {
-            background: #1a1a1a;
-            color: #fff;
-            border: 1px solid #333;
-            padding: 12px 28px;
-            font-size: 0.8em;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            text-transform: uppercase;
+            background: #1a1a1a; color: #fff; border: 1px solid #333; padding: 12px 28px;
+            font-size: 0.8em; letter-spacing: 2px; cursor: pointer; transition: all 0.3s;
+            margin-right: 10px; margin-bottom: 10px; border-radius: 8px; text-transform: uppercase;
         }
-
-        button:hover {
-            background: #ff0050;
-            border-color: #ff0050;
-            color: #fff;
-        }
-
+        button:hover { background: #ff0050; border-color: #ff0050; color: #fff; }
         .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #2a2a2a;
-            border-radius: 4px;
-            margin: 25px 0;
+            width: 100%; height: 4px; background: #2a2a2a; border-radius: 4px; margin: 25px 0;
         }
-
         .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff0050, #ff3366);
-            width: 0%;
-            transition: width 0.3s;
-            border-radius: 4px;
+            height: 100%; background: linear-gradient(90deg, #ff0050, #ff3366);
+            width: 0%; transition: width 0.3s; border-radius: 4px;
         }
-
         .task-info {
-            padding: 20px;
-            background: #0a0a0a;
-            border-radius: 8px;
-            border-left: 3px solid #ff0050;
-            margin-top: 15px;
+            padding: 20px; background: #0a0a0a; border-radius: 8px;
+            border-left: 3px solid #ff0050; margin-top: 15px;
         }
-
-        .task-info p {
-            margin: 6px 0;
-            color: #aaa;
-            font-size: 0.9em;
-        }
-
-        .task-info strong {
-            color: #fff;
-            font-weight: 500;
-            margin-right: 12px;
-        }
-
+        .task-info p { margin: 6px 0; color: #aaa; font-size: 0.9em; }
+        .task-info strong { color: #fff; font-weight: 500; margin-right: 12px; }
         .status-badge {
-            display: inline-block;
-            padding: 3px 12px;
-            font-size: 0.65em;
-            letter-spacing: 2px;
-            border-radius: 20px;
-            background: #2a2a2a;
-            color: #ccc;
+            display: inline-block; padding: 3px 12px; font-size: 0.65em;
+            letter-spacing: 2px; border-radius: 20px; background: #2a2a2a; color: #ccc;
         }
-
         .status-pending { background: #ffc10722; color: #ffc107; border: 1px solid #ffc10733; }
         .status-downloading { background: #2196f322; color: #2196f3; border: 1px solid #2196f333; }
         .status-completed { background: #00e67622; color: #00e676; border: 1px solid #00e67633; }
         .status-failed { background: #ff444422; color: #ff4444; border: 1px solid #ff444433; }
-
         .url-box {
-            padding: 20px;
-            background: #0a0a0a;
-            border-radius: 8px;
-            margin: 20px 0;
+            padding: 20px; background: #0a0a0a; border-radius: 8px; margin: 20px 0;
         }
-
-        .url-copy-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .url-copy-group input {
-            flex: 1;
-        }
-
+        .url-copy-group { display: flex; gap: 10px; }
+        .url-copy-group input { flex: 1; }
         .endpoint {
-            padding: 20px;
-            margin-bottom: 15px;
-            background: #0a0a0a;
-            border-radius: 8px;
-            border-left: 3px solid #ff0050;
+            padding: 20px; margin-bottom: 15px; background: #0a0a0a;
+            border-radius: 8px; border-left: 3px solid #ff0050;
         }
-
         .method {
-            display: inline-block;
-            padding: 3px 10px;
-            font-size: 0.6em;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            margin-right: 10px;
-            background: #2a2a2a;
-            color: #ccc;
+            display: inline-block; padding: 3px 10px; font-size: 0.6em; letter-spacing: 1px;
+            border-radius: 4px; margin-right: 10px; background: #2a2a2a; color: #ccc;
         }
-
         .method.post { background: #00e67622; color: #00e676; }
         .method.get { background: #2196f322; color: #2196f3; }
-
         pre {
-            background: #050505;
-            padding: 18px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 15px 0;
-            font-size: 0.85em;
-            color: #ccc;
-            border: 1px solid #2a2a2a;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            background: #050505; padding: 18px; border-radius: 8px; overflow-x: auto;
+            margin: 15px 0; font-size: 0.85em; color: #ccc; border: 1px solid #2a2a2a;
+            white-space: pre-wrap; word-wrap: break-word;
         }
-
         .lyrics-box {
-            background: #050505;
-            padding: 25px;
-            border-radius: 8px;
-            border: 1px solid #2a2a2a;
-            margin-top: 20px;
-            max-height: 500px;
-            overflow-y: auto;
-            white-space: pre-line;
-            line-height: 1.8;
-            color: #ccc;
-            font-size: 0.95em;
+            background: #050505; padding: 25px; border-radius: 8px; border: 1px solid #2a2a2a;
+            margin-top: 20px; max-height: 500px; overflow-y: auto; white-space: pre-line;
+            line-height: 1.8; color: #ccc; font-size: 0.95em;
         }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
+        .image-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px; margin: 15px 0;
         }
-
-        .stat-card {
-            background: #0a0a0a;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            border: 1px solid #2a2a2a;
+        .image-item {
+            background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
+            padding: 10px; text-align: center; cursor: pointer; transition: all 0.2s;
         }
-
-        .stat-card h3 {
-            font-size: 2.2em;
-            font-weight: 400;
-            color: #fff;
-            margin: 0 0 5px;
+        .image-item.selected {
+            border-color: #ff0050; background: #ff005022;
         }
-
-        .stat-card p {
-            color: #666;
-            font-size: 0.65em;
-            letter-spacing: 2px;
-        }
-
-        .tasks-list {
-            max-height: 350px;
-            overflow-y: auto;
-            margin: 15px 0;
-        }
-
-        .task-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #2a2a2a;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.85em;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            color: #555;
-            font-size: 0.7em;
-            letter-spacing: 3px;
-            border-top: 1px solid #2a2a2a;
-            margin-top: 30px;
-        }
-
-        .example-links {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin: 15px 0;
-        }
-
-        .example-link {
-            background: #1a1a1a;
-            padding: 8px 18px;
-            border: 1px solid #333;
-            border-radius: 30px;
-            color: #aaa;
-            font-size: 0.75em;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .example-link:hover {
-            background: #ff0050;
-            border-color: #ff0050;
-            color: #fff;
-        }
-
-        ul {
-            margin-left: 20px;
-            line-height: 2.2;
-            color: #aaa;
-            font-size: 0.9em;
-        }
-
-        code {
-            background: #1a1a1a;
-            padding: 2px 8px;
-            border-radius: 4px;
-            color: #ff0050;
-        }
-
+        .image-item input { margin-right: 5px; }
         .platform-badge {
-            display: inline-block;
-            padding: 2px 10px;
-            background: #ff005022;
-            color: #ff0050;
-            border-radius: 4px;
-            font-size: 0.7em;
-            letter-spacing: 2px;
+            display: inline-block; padding: 2px 10px; background: #ff005022;
+            color: #ff0050; border-radius: 4px; font-size: 0.7em; letter-spacing: 2px;
             margin-left: 10px;
         }
-
+        footer {
+            text-align: center; padding: 30px 0; color: #555; font-size: 0.7em;
+            letter-spacing: 3px; border-top: 1px solid #2a2a2a; margin-top: 30px;
+        }
+        .example-links { display: flex; gap: 12px; flex-wrap: wrap; margin: 15px 0; }
+        .example-link {
+            background: #1a1a1a; padding: 8px 18px; border: 1px solid #333;
+            border-radius: 30px; color: #aaa; font-size: 0.75em; letter-spacing: 1px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .example-link:hover { background: #ff0050; border-color: #ff0050; color: #fff; }
+        ul { margin-left: 20px; line-height: 2.2; color: #aaa; font-size: 0.9em; }
+        code { background: #1a1a1a; padding: 2px 8px; border-radius: 4px; color: #ff0050; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
         @media (max-width: 700px) {
             .logo { font-size: 1.8em; letter-spacing: 4px; }
             .card { padding: 20px; }
             .nav-btn { padding: 10px 20px; letter-spacing: 2px; }
         }
+        .checkbox-group { display: flex; align-items: center; gap: 20px; margin: 15px 0; }
+        .checkbox-group label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .checkbox-group input[type="checkbox"] { width: auto; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>TUBE</span></div>
-            <div class="subtitle">API · STREAMING · LYRICS</div>
+            <div class="subtitle">API · STREAMING · LYRICS · CARRUSEL</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">CHECKING</span>
@@ -480,6 +187,7 @@
         <div class="nav-main">
             <button class="nav-btn active" onclick="showPage('youtube')">YouTube</button>
             <button class="nav-btn" onclick="showPage('tiktok')">TikTok</button>
+            <button class="nav-btn" onclick="showPage('carousel')">Carousel</button>
             <button class="nav-btn" onclick="showPage('lyrics')">Lyrics</button>
         </div>
         
@@ -489,23 +197,19 @@
                 <button class="tab active" onclick="showTab('yt-download', 'youtube')">Download</button>
                 <button class="tab" onclick="showTab('yt-docs', 'youtube')">Docs</button>
                 <button class="tab" onclick="showTab('yt-baileys', 'youtube')">Baileys</button>
-                <button class="tab" onclick="showTab('yt-stats', 'youtube')">Stats</button>
             </div>
             
             <div id="yt-download" class="tab-content active">
                 <div class="card">
                     <h2>YouTube Download</h2>
-                    
                     <div class="input-group">
                         <label>URL</label>
                         <input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=...">
                     </div>
-                    
                     <div class="example-links">
                         <span class="example-link" onclick="setExample('yt', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')">Example YT</span>
                         <span class="example-link" onclick="setExample('yt', 'https://youtu.be/jNQXAC9IVRw')">Example Video</span>
                     </div>
-                    
                     <div class="input-group">
                         <label>Format</label>
                         <select id="yt-format">
@@ -513,7 +217,6 @@
                             <option value="mp4">MP4 · Video</option>
                         </select>
                     </div>
-                    
                     <div class="input-group">
                         <label>Quality</label>
                         <select id="yt-quality">
@@ -522,14 +225,9 @@
                             <option value="low">Low · 480p</option>
                         </select>
                     </div>
-                    
                     <button onclick="startDownload('yt')">Download</button>
-                    <button onclick="getInfo('yt')">Info</button>
-                    
                     <div id="yt-downloadStatus" style="display: none;">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="yt-progressFill"></div>
-                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="yt-progressFill"></div></div>
                         <div class="task-info" id="yt-taskInfo"></div>
                         <div class="url-box" id="yt-downloadUrlBox" style="display: none;">
                             <label>Download URL</label>
@@ -537,7 +235,7 @@
                                 <input type="text" id="yt-downloadUrl" readonly onclick="this.select()">
                                 <button onclick="copyUrl('yt')">Copy</button>
                             </div>
-                            <button onclick="downloadFile('yt')" style="margin-top: 12px;">Download File</button>
+                            <button onclick="downloadFile('yt')" style="margin-top: 12px;">Download</button>
                         </div>
                     </div>
                 </div>
@@ -554,14 +252,6 @@
   "quality": "best"
 }</pre>
                     </div>
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/status/{id}</h3>
-                        <p style="color: #888;">Check download status</p>
-                    </div>
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/stream/{id}</h3>
-                        <p style="color: #888;">Direct streaming</p>
-                    </div>
                 </div>
             </div>
             
@@ -575,36 +265,18 @@ async function download(sock, from, url) {
     const res = await axios.post(`${API}/api/download`, {
         url, format: 'mp4', quality: 'medium'
     });
-    
     const taskId = res.data.task_id;
-    
     let status;
     do {
         await new Promise(r => setTimeout(r, 2000));
         status = await axios.get(`${API}/api/status/${taskId}`);
     } while (status.data.status !== 'completed');
-    
     await sock.sendMessage(from, {
         video: { url: `${API}/api/stream/${taskId}` },
-        mimetype: 'video/mp4',
-        caption: status.data.title
+        mimetype: 'video/mp4'
     });
 }</pre>
                     <button onclick="copyCode('yt-baileysCode')">Copy Code</button>
-                </div>
-            </div>
-            
-            <div id="yt-stats" class="tab-content">
-                <div class="card">
-                    <h2>Statistics</h2>
-                    <div class="stats-grid">
-                        <div class="stat-card"><h3 id="yt-totalTasks">-</h3><p>Total</p></div>
-                        <div class="stat-card"><h3 id="yt-pendingTasks">-</h3><p>Pending</p></div>
-                        <div class="stat-card"><h3 id="yt-downloadingTasks">-</h3><p>Active</p></div>
-                        <div class="stat-card"><h3 id="yt-completedTasks">-</h3><p>Done</p></div>
-                        <div class="stat-card"><h3 id="yt-failedTasks">-</h3><p>Failed</p></div>
-                    </div>
-                    <button onclick="loadStats()">Refresh</button>
                 </div>
             </div>
         </div>
@@ -612,24 +284,21 @@ async function download(sock, from, url) {
         <!-- PÁGINA TIKTOK -->
         <div id="tiktok" class="page">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Download</button>
+                <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Video</button>
                 <button class="tab" onclick="showTab('tt-docs', 'tiktok')">Docs</button>
                 <button class="tab" onclick="showTab('tt-baileys', 'tiktok')">Baileys</button>
             </div>
             
             <div id="tt-download" class="tab-content active">
                 <div class="card">
-                    <h2>TikTok Download <span class="platform-badge">HD</span></h2>
-                    
+                    <h2>TikTok Video <span class="platform-badge">HD</span></h2>
                     <div class="input-group">
                         <label>URL</label>
                         <input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/...">
                     </div>
-                    
                     <div class="example-links">
                         <span class="example-link" onclick="setExample('tt', 'https://www.tiktok.com/@tiktok/video/7106592662294203694')">Example TT</span>
                     </div>
-                    
                     <div class="input-group">
                         <label>Watermark</label>
                         <select id="tt-watermark">
@@ -637,13 +306,9 @@ async function download(sock, from, url) {
                             <option value="true">With Watermark</option>
                         </select>
                     </div>
-                    
                     <button onclick="startDownload('tt')">Download</button>
-                    
                     <div id="tt-downloadStatus" style="display: none;">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="tt-progressFill"></div>
-                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="tt-progressFill"></div></div>
                         <div class="task-info" id="tt-taskInfo"></div>
                         <div class="url-box" id="tt-downloadUrlBox" style="display: none;">
                             <label>Download URL</label>
@@ -651,7 +316,7 @@ async function download(sock, from, url) {
                                 <input type="text" id="tt-downloadUrl" readonly onclick="this.select()">
                                 <button onclick="copyUrl('tt')">Copy</button>
                             </div>
-                            <button onclick="downloadFile('tt')" style="margin-top: 12px;">Download File</button>
+                            <button onclick="downloadFile('tt')" style="margin-top: 12px;">Download</button>
                         </div>
                     </div>
                 </div>
@@ -663,7 +328,7 @@ async function download(sock, from, url) {
                     <div class="endpoint">
                         <h3><span class="method post">POST</span> /api/tiktok</h3>
                         <pre>{
-  "url": "https://www.tiktok.com/@user/video/...",
+  "url": "https://www.tiktok.com/...",
   "watermark": false
 }</pre>
                     </div>
@@ -678,22 +343,17 @@ const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function downloadTikTok(sock, from, url) {
     const res = await axios.post(`${API}/api/tiktok`, {
-        url: url,
-        watermark: false
+        url, watermark: false
     });
-    
     const taskId = res.data.task_id;
-    
     let status;
     do {
         await new Promise(r => setTimeout(r, 2000));
         status = await axios.get(`${API}/api/status/${taskId}`);
     } while (status.data.status !== 'completed');
-    
     await sock.sendMessage(from, {
         video: { url: `${API}/api/stream/${taskId}` },
-        mimetype: 'video/mp4',
-        caption: status.data.title
+        mimetype: 'video/mp4'
     });
 }</pre>
                     <button onclick="copyCode('tt-baileysCode')">Copy Code</button>
@@ -701,131 +361,140 @@ async function downloadTikTok(sock, from, url) {
             </div>
         </div>
         
-        <!-- PÁGINA LYRICS -->
-        <div id="lyrics" class="page">
+        <!-- PÁGINA CARRUSEL -->
+        <div id="carousel" class="page">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('ly-download', 'lyrics')">Search</button>
-                <button class="tab" onclick="showTab('ly-docs', 'lyrics')">Docs</button>
-                <button class="tab" onclick="showTab('ly-baileys', 'lyrics')">Baileys</button>
+                <button class="tab active" onclick="showTab('car-download', 'carousel')">Download</button>
+                <button class="tab" onclick="showTab('car-docs', 'carousel')">Docs</button>
+                <button class="tab" onclick="showTab('car-baileys', 'carousel')">Baileys</button>
             </div>
             
-            <div id="ly-download" class="tab-content active">
+            <div id="car-download" class="tab-content active">
                 <div class="card">
-                    <h2>FrikiTube Lyrics</h2>
+                    <h2>TikTok Carousel <span class="platform-badge">PHOTOS + AUDIO</span></h2>
                     
                     <div class="input-group">
-                        <label>Song Name (Artist - Title)</label>
-                        <input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain">
+                        <label>URL</label>
+                        <input type="text" id="car-url" placeholder="https://www.tiktok.com/@user/photo/...">
                     </div>
                     
                     <div class="example-links">
-                        <span class="example-link" onclick="setLyricsExample('Fleetwood Mac - The Chain')">Fleetwood Mac</span>
-                        <span class="example-link" onclick="setLyricsExample('Bad Bunny - Me Porto Bonito')">Bad Bunny</span>
-                        <span class="example-link" onclick="setLyricsExample('Milo J - Rara Vez')">Milo J</span>
+                        <span class="example-link" onclick="setExample('car', 'https://www.tiktok.com/@tiktok/photo/123456')">Example Carousel</span>
                     </div>
                     
-                    <button onclick="searchLyrics()">Search Lyrics</button>
+                    <button onclick="getCarouselInfo()">📊 Get Info</button>
+                    <button onclick="startCarouselDownload()">⬇️ Download</button>
                     
-                    <div id="lyricsResult" style="display: none;">
-                        <div class="task-info" id="lyricsInfo"></div>
-                        <div class="lyrics-box" id="lyricsContent"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="ly-docs" class="tab-content">
-                <div class="card">
-                    <h2>Lyrics API Documentation</h2>
-                    
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/lyrics</h3>
-                        <p style="color: #888; margin: 10px 0;">Search lyrics by artist and title</p>
-                        <pre>GET /api/lyrics?q=Fleetwood Mac - The Chain</pre>
-                        <p style="color: #888; margin: 15px 0 5px;">Response:</p>
-                        <pre>{
-  "success": true,
-  "artist": "Fleetwood Mac",
-  "title": "The Chain",
-  "lyrics": "Listen to the wind blow...",
-  "synced": false
-}</pre>
+                    <div id="car-infoBox" style="display: none;" class="task-info">
+                        <p><strong>Title:</strong> <span id="car-title">-</span></p>
+                        <p><strong>Uploader:</strong> <span id="car-uploader">-</span></p>
+                        <p><strong>Total Images:</strong> <span id="car-total">-</span></p>
+                        <p><strong>Has Audio:</strong> <span id="car-audio">-</span></p>
                     </div>
                     
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/lyrics (Synced)</h3>
-                        <p style="color: #888; margin: 10px 0;">Returns synced lyrics if available</p>
-                        <pre>{
-  "synced": true,
-  "lyrics": "[00:15.00] Listen to the wind blow..."
-}</pre>
+                    <div id="car-imagesBox" style="display: none;">
+                        <label>Select Images:</label>
+                        <div class="image-grid" id="car-imagesGrid"></div>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="car-selectAll" checked> Select All
+                            </label>
+                            <label>
+                                <input type="checkbox" id="car-downloadAudio" checked> Download Audio
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="car-downloadStatus" style="display: none;">
+                        <div class="progress-bar"><div class="progress-fill" id="car-progressFill"></div></div>
+                        <div class="task-info" id="car-taskInfo"></div>
+                        <div class="url-box" id="car-downloadUrlBox" style="display: none;">
+                            <label>Download URL</label>
+                            <div class="url-copy-group">
+                                <input type="text" id="car-downloadUrl" readonly onclick="this.select()">
+                                <button onclick="copyUrl('car')">Copy</button>
+                            </div>
+                            <button onclick="downloadFile('car')" style="margin-top: 12px;">Download</button>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <div id="ly-baileys" class="tab-content">
+            <div id="car-docs" class="tab-content">
                 <div class="card">
-                    <h2>Baileys Integration - Lyrics</h2>
-                    
-                    <h3>Command: .lyrics</h3>
-                    <pre id="ly-baileysCode">const axios = require('axios');
+                    <h2>Carousel API</h2>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/tiktok/carousel/info</h3>
+                        <pre>{
+  "url": "https://www.tiktok.com/@user/photo/..."
+}</pre>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/tiktok/carousel</h3>
+                        <pre>{
+  "url": "https://www.tiktok.com/...",
+  "image_indexes": [0, 2],
+  "download_audio": true
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="car-baileys" class="tab-content">
+                <div class="card">
+                    <h2>Carousel + Baileys</h2>
+                    <pre id="car-baileysCode">const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
-// Comando: .lyrics Fleetwood Mac - The Chain
-async function lyricsCommand(sock, from, query) {
-    try {
-        const res = await axios.get(`${API}/api/lyrics?q=${encodeURIComponent(query)}`);
-        const data = res.data;
-        
-        if (data.success) {
-            let message = `🎵 *${data.title}*\n👤 *${data.artist}*\n\n`;
-            
-            let lyrics = data.lyrics;
-            if (lyrics.length > 1000) {
-                lyrics = lyrics.substring(0, 1000) + '...';
-            }
-            
-            message += lyrics;
-            
-            await sock.sendMessage(from, { text: message });
-        } else {
-            await sock.sendMessage(from, { 
-                text: `❌ No lyrics found for: ${query}` 
-            });
-        }
-    } catch (error) {
-        await sock.sendMessage(from, { 
-            text: '❌ Error fetching lyrics' 
-        });
-    }
-}
+// 1. Obtener info
+const info = await axios.post(`${API}/api/tiktok/carousel/info`, {
+    url: "https://vt.tiktok.com/..."
+});
+// info.data = { total_images: 5, has_audio: true }
 
-// En tu handler:
-if (text.startsWith('.lyrics ')) {
-    const query = text.replace('.lyrics ', '');
-    await lyricsCommand(sock, from, query);
-}</pre>
-                    <button onclick="copyCode('ly-baileysCode')">Copy Code</button>
-                    
-                    <h3 style="margin-top: 25px;">Command Examples</h3>
-                    <ul>
-                        <li><code>.lyrics Fleetwood Mac - The Chain</code></li>
-                        <li><code>.lyrics Bad Bunny Me Porto Bonito</code></li>
-                        <li><code>.lyrics Milo J Rara Vez</code></li>
-                    </ul>
+// 2. Descargar
+const download = await axios.post(`${API}/api/tiktok/carousel`, {
+    url: "https://vt.tiktok.com/...",
+    image_indexes: [0, 2],  // Solo primera y tercera
+    download_audio: true
+});
+// Devuelve ZIP con imágenes + audio</pre>
+                    <button onclick="copyCode('car-baileysCode')">Copy Code</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PÁGINA LYRICS -->
+        <div id="lyrics" class="page">
+            <div class="card">
+                <h2>FrikiTube Lyrics</h2>
+                <div class="input-group">
+                    <label>Song Name (Artist - Title)</label>
+                    <input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain">
+                </div>
+                <div class="example-links">
+                    <span class="example-link" onclick="setLyricsExample('Fleetwood Mac - The Chain')">Fleetwood Mac</span>
+                    <span class="example-link" onclick="setLyricsExample('Bad Bunny - Me Porto Bonito')">Bad Bunny</span>
+                    <span class="example-link" onclick="setLyricsExample('Milo J - Rara Vez')">Milo J</span>
+                </div>
+                <button onclick="searchLyrics()">Search Lyrics</button>
+                <div id="lyricsResult" style="display: none;">
+                    <div class="task-info" id="lyricsInfo"></div>
+                    <div class="lyrics-box" id="lyricsContent"></div>
                 </div>
             </div>
         </div>
         
         <footer>
-            <p>FRIKITUBE API · YOUTUBE · TIKTOK · LYRICS</p>
+            <p>FRIKITUBE API · YOUTUBE · TIKTOK · CARRUSEL · LYRICS</p>
         </footer>
     </div>
     
     <script>
         const API_URL = '';
-        
-        let ytTaskId = null, ttTaskId = null;
-        let ytInterval = null, ttInterval = null;
+        let ytTaskId = null, ttTaskId = null, carTaskId = null;
+        let ytInterval = null, ttInterval = null, carInterval = null;
+        let carouselImages = [];
         
         async function checkServerStatus() {
             try {
@@ -868,52 +537,163 @@ if (text.startsWith('.lyrics ')) {
             alert('Code copied!');
         }
         
-        async function searchLyrics() {
-            const query = document.getElementById('lyrics-query').value;
-            if (!query) return alert('Enter a song name');
-            
-            document.getElementById('lyricsResult').style.display = 'block';
-            document.getElementById('lyricsInfo').innerHTML = '<p><strong>Searching...</strong></p>';
-            document.getElementById('lyricsContent').textContent = 'Loading...';
+        // ============================================
+        // CARRUSEL
+        // ============================================
+        async function getCarouselInfo() {
+            const url = document.getElementById('car-url').value;
+            if (!url) return alert('URL required');
             
             try {
-                const res = await fetch(`${API_URL}/api/lyrics?q=${encodeURIComponent(query)}`);
+                const res = await fetch(`${API_URL}/api/tiktok/carousel/info`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url})
+                });
                 const data = await res.json();
                 
-                document.getElementById('lyricsInfo').innerHTML = `
-                    ${data.artist ? `<p><strong>Artist</strong> ${data.artist}</p>` : ''}
-                    ${data.title ? `<p><strong>Title</strong> ${data.title}</p>` : ''}
-                    ${data.synced ? '<p><span class="platform-badge">🎤 Synced</span></p>' : ''}
-                `;
-                
-                if (data.lyrics) {
-                    document.getElementById('lyricsContent').textContent = data.lyrics;
+                if (data.success) {
+                    carouselImages = data.images || [];
+                    
+                    document.getElementById('car-infoBox').style.display = 'block';
+                    document.getElementById('car-title').textContent = data.title || '-';
+                    document.getElementById('car-uploader').textContent = data.uploader || '-';
+                    document.getElementById('car-total').textContent = data.total_images || 0;
+                    document.getElementById('car-audio').textContent = data.has_audio ? '✅ Yes' : '❌ No';
+                    
+                    if (data.total_images > 0) {
+                        document.getElementById('car-imagesBox').style.display = 'block';
+                        renderImageGrid();
+                    }
                 } else {
-                    document.getElementById('lyricsContent').textContent = 'No lyrics found.';
+                    alert('Error: ' + (data.error || 'Unknown error'));
                 }
             } catch(e) {
-                document.getElementById('lyricsInfo').innerHTML = '<p style="color: #ff4444;">Error</p>';
-                document.getElementById('lyricsContent').textContent = 'Error loading lyrics.';
+                alert('Error: ' + e.message);
             }
         }
         
+        function renderImageGrid() {
+            const grid = document.getElementById('car-imagesGrid');
+            const total = carouselImages.length;
+            
+            let html = '';
+            for (let i = 0; i < total; i++) {
+                html += `
+                    <div class="image-item selected" onclick="toggleImage(${i})">
+                        <input type="checkbox" id="img-${i}" checked> Image ${i + 1}
+                    </div>
+                `;
+            }
+            grid.innerHTML = html;
+            
+            document.getElementById('car-selectAll').onchange = (e) => {
+                const checked = e.target.checked;
+                document.querySelectorAll('.image-item').forEach((item, i) => {
+                    if (checked) {
+                        item.classList.add('selected');
+                        document.getElementById(`img-${i}`).checked = true;
+                    } else {
+                        item.classList.remove('selected');
+                        document.getElementById(`img-${i}`).checked = false;
+                    }
+                });
+            };
+        }
+        
+        function toggleImage(index) {
+            const item = document.querySelectorAll('.image-item')[index];
+            const checkbox = document.getElementById(`img-${index}`);
+            item.classList.toggle('selected');
+            checkbox.checked = !checkbox.checked;
+        }
+        
+        async function startCarouselDownload() {
+            const url = document.getElementById('car-url').value;
+            if (!url) return alert('URL required');
+            
+            const selectedIndexes = [];
+            document.querySelectorAll('.image-item').forEach((item, i) => {
+                if (item.classList.contains('selected')) {
+                    selectedIndexes.push(i);
+                }
+            });
+            
+            const downloadAudio = document.getElementById('car-downloadAudio').checked;
+            
+            try {
+                const res = await fetch(`${API_URL}/api/tiktok/carousel`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        url,
+                        image_indexes: selectedIndexes.length > 0 ? selectedIndexes : null,
+                        download_audio: downloadAudio
+                    })
+                });
+                const data = await res.json();
+                
+                carTaskId = data.task_id;
+                if (carInterval) clearInterval(carInterval);
+                carInterval = setInterval(checkCarouselStatus, 2000);
+                
+                document.getElementById('car-downloadStatus').style.display = 'block';
+                document.getElementById('car-downloadUrlBox').style.display = 'none';
+                document.getElementById('car-taskInfo').innerHTML = `
+                    <p><strong>ID</strong> ${data.task_id}</p>
+                    <p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>
+                `;
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
+        }
+        
+        async function checkCarouselStatus() {
+            if (!carTaskId) return;
+            try {
+                const res = await fetch(`${API_URL}/api/status/${carTaskId}`);
+                const data = await res.json();
+                
+                document.getElementById('car-progressFill').style.width = data.progress + '%';
+                
+                let cls = 'status-' + data.status;
+                let html = `
+                    <p><strong>Status</strong> <span class="status-badge ${cls}">${data.status}</span></p>
+                    <p><strong>Progress</strong> ${data.progress}%</p>
+                `;
+                if (data.title) html += `<p><strong>Title</strong> ${data.title}</p>`;
+                if (data.total_images) html += `<p><strong>Images</strong> ${data.total_images}</p>`;
+                if (data.has_audio) html += `<p><strong>Audio</strong> ✅</p>`;
+                
+                document.getElementById('car-taskInfo').innerHTML = html;
+                
+                if (data.status === 'completed') {
+                    clearInterval(carInterval);
+                    document.getElementById('car-downloadUrl').value = window.location.origin + data.stream_url;
+                    document.getElementById('car-downloadUrlBox').style.display = 'block';
+                }
+            } catch(e) {}
+        }
+        
+        // ============================================
+        // YOUTUBE
+        // ============================================
         async function startDownload(platform) {
             const url = document.getElementById(`${platform}-url`).value;
             if (!url) return alert('URL required');
             
             let endpoint, body;
-            
             if (platform === 'yt') {
                 endpoint = '/api/download';
                 body = {
-                    url: url,
+                    url,
                     format: document.getElementById('yt-format').value,
                     quality: document.getElementById('yt-quality').value
                 };
             } else {
                 endpoint = '/api/tiktok';
                 body = {
-                    url: url,
+                    url,
                     watermark: document.getElementById('tt-watermark').value === 'true'
                 };
             }
@@ -966,7 +746,6 @@ if (text.startsWith('.lyrics ')) {
                 if (data.uploader) html += `<p><strong>Uploader</strong> ${data.uploader}</p>`;
                 if (data.duration_str) html += `<p><strong>Duration</strong> ${data.duration_str}</p>`;
                 if (data.file_size_str) html += `<p><strong>Size</strong> ${data.file_size_str}</p>`;
-                if (data.resolution) html += `<p><strong>Resolution</strong> ${data.resolution}</p>`;
                 
                 document.getElementById(`${platform}-taskInfo`).innerHTML = html;
                 
@@ -977,25 +756,7 @@ if (text.startsWith('.lyrics ')) {
                     document.getElementById(`${platform}-downloadUrl`).value = window.location.origin + data.stream_url;
                     document.getElementById(`${platform}-downloadUrlBox`).style.display = 'block';
                 }
-                
-                if (data.status === 'failed') {
-                    if (platform === 'yt') clearInterval(ytInterval);
-                    else clearInterval(ttInterval);
-                }
             } catch(e) {}
-        }
-        
-        async function getInfo(platform) {
-            const url = document.getElementById(`${platform}-url`).value;
-            if (!url) return alert('URL required');
-            
-            try {
-                const res = await fetch(`${API_URL}/api/info?url=${encodeURIComponent(url)}`);
-                const data = await res.json();
-                alert(`${data.title}\n${data.uploader}\n${data.duration_str}\n${data.file_size_str}`);
-            } catch(e) {
-                alert('Error: ' + e.message);
-            }
         }
         
         function copyUrl(platform) {
@@ -1009,16 +770,36 @@ if (text.startsWith('.lyrics ')) {
             window.open(url, '_blank');
         }
         
-        async function loadStats() {
+        // ============================================
+        // LYRICS
+        // ============================================
+        async function searchLyrics() {
+            const query = document.getElementById('lyrics-query').value;
+            if (!query) return alert('Enter a song name');
+            
+            document.getElementById('lyricsResult').style.display = 'block';
+            document.getElementById('lyricsInfo').innerHTML = '<p><strong>Searching...</strong></p>';
+            document.getElementById('lyricsContent').textContent = 'Loading...';
+            
             try {
-                const res = await fetch(`${API_URL}/api/tasks`);
+                const res = await fetch(`${API_URL}/api/lyrics?q=${encodeURIComponent(query)}`);
                 const data = await res.json();
-                document.getElementById('yt-totalTasks').textContent = data.total || 0;
-                document.getElementById('yt-pendingTasks').textContent = data.pending || 0;
-                document.getElementById('yt-downloadingTasks').textContent = data.downloading || 0;
-                document.getElementById('yt-completedTasks').textContent = data.completed || 0;
-                document.getElementById('yt-failedTasks').textContent = data.failed || 0;
-            } catch(e) {}
+                
+                document.getElementById('lyricsInfo').innerHTML = `
+                    ${data.artist ? `<p><strong>Artist</strong> ${data.artist}</p>` : ''}
+                    ${data.title ? `<p><strong>Title</strong> ${data.title}</p>` : ''}
+                    ${data.synced ? '<p><span class="platform-badge">🎤 Synced</span></p>' : ''}
+                `;
+                
+                if (data.lyrics) {
+                    document.getElementById('lyricsContent').textContent = data.lyrics;
+                } else {
+                    document.getElementById('lyricsContent').textContent = 'No lyrics found.';
+                }
+            } catch(e) {
+                document.getElementById('lyricsInfo').innerHTML = '<p style="color: #ff4444;">Error</p>';
+                document.getElementById('lyricsContent').textContent = 'Error loading lyrics.';
+            }
         }
         
         checkServerStatus();
