@@ -195,57 +195,27 @@
             <div class="tabs">
                 <button class="tab active" onclick="showTab('yt-download', 'youtube')">Download</button>
                 <button class="tab" onclick="showTab('yt-docs', 'youtube')">Docs</button>
-                <button class="tab" onclick="showTab('yt-baileys', 'youtube')">Baileys</button>
             </div>
             
             <div id="yt-download" class="tab-content active">
                 <div class="card">
                     <h2>YouTube Download</h2>
-                    <div class="input-group">
-                        <label>URL</label>
-                        <input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=...">
-                    </div>
-                    <div class="example-links">
-                        <span class="example-link" onclick="setExample('yt', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')">Example YT</span>
-                    </div>
-                    <div class="input-group">
-                        <label>Format</label>
-                        <select id="yt-format">
-                            <option value="mp3">MP3 · Audio</option>
-                            <option value="mp4">MP4 · Video</option>
-                        </select>
-                    </div>
+                    <div class="input-group"><label>URL</label><input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..."></div>
+                    <div class="input-group"><label>Format</label><select id="yt-format"><option value="mp3">MP3 · Audio</option><option value="mp4">MP4 · Video</option></select></div>
                     <button onclick="startDownload('yt')">Download</button>
                     <div id="yt-downloadStatus" style="display: none;">
                         <div class="progress-bar"><div class="progress-fill" id="yt-progressFill"></div></div>
                         <div class="task-info" id="yt-taskInfo"></div>
                         <div class="url-box" id="yt-downloadUrlBox" style="display: none;">
                             <label>Download URL</label>
-                            <div class="url-copy-group">
-                                <input type="text" id="yt-downloadUrl" readonly onclick="this.select()">
-                                <button onclick="copyUrl('yt')">Copy</button>
-                            </div>
+                            <div class="url-copy-group"><input type="text" id="yt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('yt')">Copy</button></div>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div id="yt-docs" class="tab-content">
-                <div class="card">
-                    <h2>API Documentation</h2>
-                    <div class="endpoint">
-                        <h3><span class="method post">POST</span> /api/download</h3>
-                        <pre>{"url": "https://youtu.be/...", "format": "mp3"}</pre>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="yt-baileys" class="tab-content">
-                <div class="card">
-                    <h2>Baileys Integration</h2>
-                    <pre>const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
-const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
-                </div>
+                <div class="card"><h2>API Documentation</h2><div class="endpoint"><h3><span class="method post">POST</span> /api/download</h3><pre>{"url": "...", "format": "mp3"}</pre></div></div>
             </div>
         </div>
         
@@ -259,44 +229,26 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             <div id="tt-download" class="tab-content active">
                 <div class="card">
                     <h2>TikTok Video</h2>
-                    <div class="input-group">
-                        <label>URL</label>
-                        <input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/...">
-                    </div>
-                    <div class="input-group">
-                        <label>Watermark</label>
-                        <select id="tt-watermark">
-                            <option value="false">Without Watermark</option>
-                            <option value="true">With Watermark</option>
-                        </select>
-                    </div>
+                    <div class="input-group"><label>URL</label><input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/..."></div>
+                    <div class="input-group"><label>Watermark</label><select id="tt-watermark"><option value="false">Without</option><option value="true">With</option></select></div>
                     <button onclick="startDownload('tt')">Download</button>
                     <div id="tt-downloadStatus" style="display: none;">
                         <div class="progress-bar"><div class="progress-fill" id="tt-progressFill"></div></div>
                         <div class="task-info" id="tt-taskInfo"></div>
                         <div class="url-box" id="tt-downloadUrlBox" style="display: none;">
                             <label>Download URL</label>
-                            <div class="url-copy-group">
-                                <input type="text" id="tt-downloadUrl" readonly onclick="this.select()">
-                                <button onclick="copyUrl('tt')">Copy</button>
-                            </div>
+                            <div class="url-copy-group"><input type="text" id="tt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('tt')">Copy</button></div>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div id="tt-docs" class="tab-content">
-                <div class="card">
-                    <h2>TikTok API</h2>
-                    <div class="endpoint">
-                        <h3><span class="method post">POST</span> /api/tiktok</h3>
-                        <pre>{"url": "...", "watermark": false}</pre>
-                    </div>
-                </div>
+                <div class="card"><h2>TikTok API</h2><div class="endpoint"><h3><span class="method post">POST</span> /api/tiktok</h3><pre>{"url": "...", "watermark": false}</pre></div></div>
             </div>
         </div>
         
-        <!-- PÁGINA TIKTOK IMAGES (NUEVA) -->
+        <!-- PÁGINA TIKTOK IMAGES -->
         <div id="tiktok-images" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('img-download', 'tiktok-images')">Download</button>
@@ -305,13 +257,8 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             
             <div id="img-download" class="tab-content active">
                 <div class="card">
-                    <h2>TikTok Images <span class="platform-badge">HD QUALITY</span></h2>
-                    
-                    <div class="input-group">
-                        <label>URL</label>
-                        <input type="text" id="img-url" placeholder="https://www.tiktok.com/@user/photo/...">
-                    </div>
-                    
+                    <h2>TikTok Images <span class="platform-badge">HD</span></h2>
+                    <div class="input-group"><label>URL</label><input type="text" id="img-url" placeholder="https://www.tiktok.com/@user/photo/..."></div>
                     <button onclick="getImagesInfo()">📊 Get Info</button>
                     <button onclick="startImagesDownload()">⬇️ Download</button>
                     
@@ -324,9 +271,7 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
                     <div id="img-imagesBox" style="display: none;">
                         <label>Select Images:</label>
                         <div class="image-grid" id="img-imagesGrid"></div>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" id="img-selectAll" checked> Select All</label>
-                        </div>
+                        <div class="checkbox-group"><label><input type="checkbox" id="img-selectAll" checked> Select All</label></div>
                     </div>
                     
                     <div id="img-downloadStatus" style="display: none;">
@@ -334,27 +279,17 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
                         <div class="task-info" id="img-taskInfo"></div>
                         <div class="url-box" id="img-downloadUrlBox" style="display: none;">
                             <label>Download URL</label>
-                            <div class="url-copy-group">
-                                <input type="text" id="img-downloadUrl" readonly onclick="this.select()">
-                                <button onclick="copyUrl('img')">Copy</button>
-                            </div>
-                            <button onclick="downloadFile('img')" style="margin-top: 12px;">Download</button>
+                            <div class="url-copy-group"><input type="text" id="img-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('img')">Copy</button></div>
+                            <button onclick="downloadFile('img')" style="margin-top:12px;">Download</button>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div id="img-docs" class="tab-content">
-                <div class="card">
-                    <h2>Images API</h2>
-                    <div class="endpoint">
-                        <h3><span class="method post">POST</span> /api/tiktok/images/info</h3>
-                        <pre>{"url": "https://www.tiktok.com/@user/photo/..."}</pre>
-                    </div>
-                    <div class="endpoint">
-                        <h3><span class="method post">POST</span> /api/tiktok/images</h3>
-                        <pre>{"url": "...", "image_indexes": [0, 2]}</pre>
-                    </div>
+                <div class="card"><h2>Images API</h2>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/tiktok/images/info</h3><pre>{"url": "..."}</pre></div>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/tiktok/images</h3><pre>{"url": "...", "image_indexes": [0,2]}</pre></div>
                 </div>
             </div>
         </div>
@@ -363,15 +298,8 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
         <div id="lyrics" class="page">
             <div class="card">
                 <h2>FrikiTube Lyrics</h2>
-                <div class="input-group">
-                    <label>Song Name</label>
-                    <input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain">
-                </div>
-                <div class="example-links">
-                    <span class="example-link" onclick="setLyricsExample('Fleetwood Mac - The Chain')">Fleetwood Mac</span>
-                    <span class="example-link" onclick="setLyricsExample('Bad Bunny - Me Porto Bonito')">Bad Bunny</span>
-                </div>
-                <button onclick="searchLyrics()">Search Lyrics</button>
+                <div class="input-group"><label>Song Name</label><input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain"></div>
+                <button onclick="searchLyrics()">Search</button>
                 <div id="lyricsResult" style="display: none;">
                     <div class="task-info" id="lyricsInfo"></div>
                     <div class="lyrics-box" id="lyricsContent"></div>
@@ -379,9 +307,7 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             </div>
         </div>
         
-        <footer>
-            <p>FRIKITUBE API · YOUTUBE · TIKTOK · IMAGES · LYRICS</p>
-        </footer>
+        <footer><p>FRIKITUBE API · YOUTUBE · TIKTOK · IMAGES · LYRICS</p></footer>
     </div>
     
     <script>
@@ -416,17 +342,7 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             event.target.classList.add('active');
         }
         
-        function setExample(platform, url) {
-            document.getElementById(`${platform}-url`).value = url;
-        }
-        
-        function setLyricsExample(query) {
-            document.getElementById('lyrics-query').value = query;
-        }
-        
-        // ============================================
-        // TIKTOK IMAGES
-        // ============================================
+        // ========== TIKTOK IMAGES ==========
         async function getImagesInfo() {
             const url = document.getElementById('img-url').value;
             if (!url) return alert('URL required');
@@ -450,58 +366,44 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
                     
                     if (data.total_images > 0) {
                         document.getElementById('img-imagesBox').style.display = 'block';
-                        renderImageGrid();
+                        let html = '';
+                        for (let i = 0; i < currentImages.length; i++) {
+                            html += `<div class="image-item selected" onclick="toggleImage(${i})">📷 Image ${i+1}</div>`;
+                        }
+                        document.getElementById('img-imagesGrid').innerHTML = html;
+                        document.getElementById('img-selectAll').onchange = (e) => {
+                            document.querySelectorAll('#img-imagesGrid .image-item').forEach(item => {
+                                if (e.target.checked) item.classList.add('selected');
+                                else item.classList.remove('selected');
+                            });
+                        };
                     }
                 } else {
-                    if (data.is_video) {
-                        alert('⚠️ Este TikTok es un VIDEO. Usa la pestaña "TikTok" para descargar.');
-                    } else {
-                        alert('❌ Error: ' + (data.error || 'Unknown error'));
-                    }
+                    alert('❌ ' + (data.error || 'Error'));
                 }
             } catch(e) {
                 alert('Error: ' + e.message);
             }
         }
         
-        function renderImageGrid() {
-            const grid = document.getElementById('img-imagesGrid');
-            let html = '';
-            for (let i = 0; i < currentImages.length; i++) {
-                html += `<div class="image-item selected" onclick="toggleImage(${i})">📷 Image ${i + 1}</div>`;
-            }
-            grid.innerHTML = html;
-            
-            document.getElementById('img-selectAll').onchange = (e) => {
-                document.querySelectorAll('#img-imagesGrid .image-item').forEach((item, i) => {
-                    if (e.target.checked) {
-                        item.classList.add('selected');
-                    } else {
-                        item.classList.remove('selected');
-                    }
-                });
-            };
-        }
-        
         function toggleImage(index) {
-            const item = document.querySelectorAll('#img-imagesGrid .image-item')[index];
-            item.classList.toggle('selected');
+            document.querySelectorAll('#img-imagesGrid .image-item')[index].classList.toggle('selected');
         }
         
         async function startImagesDownload() {
             const url = document.getElementById('img-url').value;
             if (!url) return alert('URL required');
             
-            const selectedIndexes = [];
+            const selected = [];
             document.querySelectorAll('#img-imagesGrid .image-item').forEach((item, i) => {
-                if (item.classList.contains('selected')) selectedIndexes.push(i);
+                if (item.classList.contains('selected')) selected.push(i);
             });
             
             try {
                 const res = await fetch(`${API_URL}/api/tiktok/images`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({url, image_indexes: selectedIndexes})
+                    body: JSON.stringify({url, image_indexes: selected})
                 });
                 const data = await res.json();
                 
@@ -510,11 +412,8 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
                 imgInterval = setInterval(checkImagesStatus, 2000);
                 
                 document.getElementById('img-downloadStatus').style.display = 'block';
-                document.getElementById('img-downloadUrlBox').style.display = 'none';
                 document.getElementById('img-taskInfo').innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>`;
-            } catch(e) {
-                alert('Error: ' + e.message);
-            }
+            } catch(e) { alert('Error: ' + e.message); }
         }
         
         async function checkImagesStatus() {
@@ -522,15 +421,12 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             try {
                 const res = await fetch(`${API_URL}/api/status/${imgTaskId}`);
                 const data = await res.json();
-                
                 document.getElementById('img-progressFill').style.width = data.progress + '%';
-                
                 let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>
                             <p><strong>Progress</strong> ${data.progress}%</p>`;
                 if (data.title) html += `<p><strong>Title</strong> ${data.title}</p>`;
                 if (data.total_images) html += `<p><strong>Images</strong> ${data.total_images}</p>`;
-                if (data.error) html += `<p style="color: #ff4444;"><strong>Error</strong> ${data.error}</p>`;
-                
+                if (data.error) html += `<p style="color:#ff4444;"><strong>Error</strong> ${data.error}</p>`;
                 document.getElementById('img-taskInfo').innerHTML = html;
                 
                 if (data.status === 'completed') {
@@ -542,9 +438,7 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             } catch(e) {}
         }
         
-        // ============================================
-        // YOUTUBE & TIKTOK
-        // ============================================
+        // ========== YOUTUBE & TIKTOK ==========
         async function startDownload(platform) {
             const url = document.getElementById(`${platform}-url`).value;
             if (!url) return alert('URL required');
@@ -587,7 +481,6 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             try {
                 const res = await fetch(`${API_URL}/api/status/${taskId}`);
                 const data = await res.json();
-                
                 document.getElementById(`${platform}-progressFill`).style.width = data.progress + '%';
                 let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
                 if (data.title) html += `<p><strong>Title</strong> ${data.title}</p>`;
@@ -604,19 +497,17 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
         function copyUrl(platform) {
             document.getElementById(`${platform}-downloadUrl`).select();
             document.execCommand('copy');
-            alert('URL copied!');
+            alert('Copied!');
         }
         
         function downloadFile(platform) {
             window.open(document.getElementById(`${platform}-downloadUrl`).value, '_blank');
         }
         
-        // ============================================
-        // LYRICS
-        // ============================================
+        // ========== LYRICS ==========
         async function searchLyrics() {
             const query = document.getElementById('lyrics-query').value;
-            if (!query) return alert('Enter a song name');
+            if (!query) return alert('Enter song');
             
             document.getElementById('lyricsResult').style.display = 'block';
             document.getElementById('lyricsContent').textContent = 'Loading...';
@@ -624,11 +515,10 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             try {
                 const res = await fetch(`${API_URL}/api/lyrics?q=${encodeURIComponent(query)}`);
                 const data = await res.json();
-                
                 document.getElementById('lyricsInfo').innerHTML = data.artist ? `<p><strong>${data.artist}</strong> - ${data.title}</p>` : '';
-                document.getElementById('lyricsContent').textContent = data.lyrics || 'No lyrics found.';
+                document.getElementById('lyricsContent').textContent = data.lyrics || 'Not found.';
             } catch(e) {
-                document.getElementById('lyricsContent').textContent = 'Error loading lyrics.';
+                document.getElementById('lyricsContent').textContent = 'Error.';
             }
         }
         
