@@ -80,6 +80,15 @@
             margin-right: 10px; margin-bottom: 10px; border-radius: 6px; text-transform: uppercase;
         }
         button:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
+        .btn-18 {
+            background: #ff0050 !important;
+            border-color: #ff0050 !important;
+        }
+        .btn-18:hover {
+            background: #ff3366 !important;
+            border-color: #ff3366 !important;
+            color: #ffffff !important;
+        }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -112,6 +121,8 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
         ::-webkit-scrollbar-thumb { background: #444444; }
+        .button-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .button-group button { flex: 1; margin-right: 0; }
     </style>
 </head>
 <body>
@@ -214,7 +225,7 @@ async function downloadTT(sock, from, url) {
             </div>
         </div>
         
-        <!-- GOOGLE IMAGES (CORREGIDO) -->
+        <!-- GOOGLE IMAGES (CON BOTÓN +18) -->
         <div id="images" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('img-search', 'images')">Search</button>
@@ -224,7 +235,11 @@ async function downloadTT(sock, from, url) {
                 <div class="card">
                     <h2>Google Images</h2>
                     <div class="input-group"><label>Search</label><input type="text" id="img-query" placeholder="gato gracioso..."></div>
-                    <button onclick="searchImage()">🔍 Search</button>
+                    
+                    <div class="button-group">
+                        <button onclick="searchImage()">🔍 Search</button>
+                        <button onclick="searchImage18()" class="btn-18">🔞 +18</button>
+                    </div>
                     <button onclick="downloadImage()">⬇️ Download</button>
                     
                     <div id="img-preview" style="display: none; text-align: center; margin: 20px 0;">
@@ -304,7 +319,7 @@ async function getImage(sock, from, query) {
         
         function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('Copied!'); }
         
-        // ========== GOOGLE IMAGES (CORREGIDO) ==========
+        // ========== GOOGLE IMAGES ==========
         async function searchImage() {
             const query = document.getElementById('img-query').value;
             if (!query) return alert('Enter search query');
@@ -321,6 +336,38 @@ async function getImage(sock, from, query) {
                     document.getElementById('img-preview').style.display = 'block';
                     document.getElementById('img-preview-img').src = data.image_url;
                     document.getElementById('img-source').textContent = `Source: ${data.source || 'Google Images'}`;
+                } else {
+                    alert('No image found');
+                }
+            } catch(e) { alert('Error: ' + e.message); }
+        }
+        
+        async function searchImage18() {
+            let query = document.getElementById('img-query').value;
+            if (!query) return alert('Enter search query');
+            
+            // Añadir palabras clave para contenido +18
+            const keywords = ['porn', 'xxx', 'hentai', 'nsfw', 'explicit', 'adult', '18+'];
+            const randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];
+            
+            // 50% probabilidad de ser animado o real
+            const isAnimated = Math.random() > 0.5;
+            const typeKeyword = isAnimated ? 'anime hentai' : 'real';
+            
+            query = `${query} ${typeKeyword} ${randomKeyword}`;
+            
+            try {
+                const res = await fetch(`${API_URL}/api/image/search`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({query})
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('img-preview').style.display = 'block';
+                    document.getElementById('img-preview-img').src = data.image_url;
+                    document.getElementById('img-source').textContent = `Source: ${data.source || 'Google Images'} | 🔞 +18`;
                 } else {
                     alert('No image found');
                 }
