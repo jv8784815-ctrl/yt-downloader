@@ -147,6 +147,23 @@
         .example-link:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
         ul { margin-left: 20px; line-height: 2.2; color: #aaaaaa; font-size: 0.9em; }
         code { background: #111111; padding: 2px 8px; border-radius: 4px; color: #ffffff; }
+        .api-url-badge {
+            background: #111111; border: 1px solid #444444; border-radius: 6px;
+            padding: 12px 20px; margin: 20px 0; font-family: monospace; font-size: 0.9em;
+            color: #ffffff; word-break: break-all;
+        }
+        .search-results {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px; margin: 20px 0;
+        }
+        .search-item {
+            background: #050505; border: 1px solid #333333; border-radius: 8px;
+            padding: 15px; cursor: pointer; transition: all 0.2s;
+        }
+        .search-item:hover { border-color: #ffffff; background: #0a0a0a; }
+        .search-item img { width: 100%; border-radius: 6px; margin-bottom: 10px; }
+        .search-item p { font-size: 0.8em; color: #aaaaaa; margin: 5px 0; }
+        .search-item strong { color: #ffffff; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
         ::-webkit-scrollbar-thumb { background: #444444; border-radius: 3px; }
@@ -155,22 +172,13 @@
             .card { padding: 20px; }
             .nav-btn { padding: 10px 20px; letter-spacing: 2px; }
         }
-        .api-url-badge {
-            background: #111111; border: 1px solid #444444; border-radius: 6px;
-            padding: 12px 20px; margin: 20px 0; font-family: monospace; font-size: 0.9em;
-            color: #ffffff; word-break: break-all;
-        }
-        .copy-btn {
-            background: #ffffff; color: #000000; border: none; padding: 8px 16px;
-            font-size: 0.7em; margin-left: 10px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>TUBE</span></div>
-            <div class="subtitle">API · STREAMING · LYRICS</div>
+            <div class="subtitle">API · STREAMING · LYRICS · SEARCH</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">CHECKING</span>
@@ -183,7 +191,7 @@
             <button class="nav-btn" onclick="showPage('lyrics')">Lyrics</button>
         </div>
         
-        <!-- ========== YOUTUBE ========== -->
+        <!-- YOUTUBE -->
         <div id="youtube" class="page active">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('yt-download', 'youtube')">Download</button>
@@ -195,9 +203,6 @@
                 <div class="card">
                     <h2>YouTube Download</h2>
                     <div class="input-group"><label>URL</label><input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..."></div>
-                    <div class="example-links">
-                        <span class="example-link" onclick="setExample('yt', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')">Example</span>
-                    </div>
                     <div class="input-group"><label>Format</label><select id="yt-format"><option value="mp3">MP3 · Audio</option><option value="mp4">MP4 · Video</option></select></div>
                     <button onclick="startDownload('yt')">Download</button>
                     <div id="yt-downloadStatus" style="display: none;">
@@ -214,45 +219,33 @@
             <div id="yt-docs" class="tab-content">
                 <div class="card"><h2>API Documentation</h2>
                     <div class="endpoint"><h3><span class="method post">POST</span> /api/download</h3><pre>{"url": "...", "format": "mp3"}</pre></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/status/{id}</h3></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/stream/{id}</h3></div>
                 </div>
             </div>
             
             <div id="yt-baileys" class="tab-content">
                 <div class="card"><h2>Baileys Integration</h2>
-                    <div class="api-url-badge">
-                        const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
-                    </div>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
                     <pre id="yt-baileysCode">const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function downloadYT(sock, from, url) {
-    const res = await axios.post(`${API}/api/download`, {
-        url, format: 'mp4', quality: 'medium'
-    });
+    const res = await axios.post(`${API}/api/download`, {url, format: 'mp4', quality: 'medium'});
     const taskId = res.data.task_id;
     let status;
-    do {
-        await new Promise(r => setTimeout(r, 2000));
-        status = await axios.get(`${API}/api/status/${taskId}`);
-    } while (status.data.status !== 'completed');
-    await sock.sendMessage(from, {
-        video: { url: `${API}/api/stream/${taskId}` },
-        mimetype: 'video/mp4', caption: status.data.title
-    });
+    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
+    while (status.data.status !== 'completed');
+    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4', caption: status.data.title });
 }</pre>
                     <button onclick="copyCode('yt-baileysCode')">Copy Code</button>
-                    <h3 style="margin-top:25px;">Commands</h3>
-                    <ul><li><code>.ytmp3 [url]</code> — Download MP3</li><li><code>.ytmp4 [url]</code> — Download MP4</li></ul>
                 </div>
             </div>
         </div>
         
-        <!-- ========== TIKTOK ========== -->
+        <!-- TIKTOK (CON BUSCADOR) -->
         <div id="tiktok" class="page">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Video</button>
+                <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Download</button>
+                <button class="tab" onclick="showTab('tt-search', 'tiktok')">Search</button>
                 <button class="tab" onclick="showTab('tt-docs', 'tiktok')">Docs</button>
                 <button class="tab" onclick="showTab('tt-baileys', 'tiktok')">Baileys</button>
             </div>
@@ -274,43 +267,55 @@ async function downloadYT(sock, from, url) {
                 </div>
             </div>
             
+            <div id="tt-search" class="tab-content">
+                <div class="card">
+                    <h2>Search TikTok <span class="platform-badge">POPULAR</span></h2>
+                    <div class="input-group"><label>Search</label><input type="text" id="tt-search-query" placeholder="gatos graciosos..."></div>
+                    <div class="input-group"><label>Limit</label><select id="tt-search-limit"><option value="5">5 results</option><option value="10" selected>10 results</option><option value="15">15 results</option></select></div>
+                    <button onclick="searchTikTok()">🔍 Search</button>
+                    <button onclick="randomTikTok()">🎲 Random</button>
+                    <div id="tt-searchResults" style="display: none;">
+                        <h3>Results</h3>
+                        <div class="search-results" id="tt-resultsGrid"></div>
+                    </div>
+                </div>
+            </div>
+            
             <div id="tt-docs" class="tab-content">
                 <div class="card"><h2>TikTok API</h2>
                     <div class="endpoint"><h3><span class="method post">POST</span> /api/tiktok</h3><pre>{"url": "...", "watermark": false}</pre></div>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/tiktok/search</h3><pre>{"query": "gatos", "limit": 10}</pre></div>
+                    <div class="endpoint"><h3><span class="method get">GET</span> /api/tiktok/random?q=...</h3></div>
                 </div>
             </div>
             
             <div id="tt-baileys" class="tab-content">
                 <div class="card"><h2>TikTok + Baileys</h2>
-                    <div class="api-url-badge">
-                        const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
-                    </div>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
                     <pre id="tt-baileysCode">const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
+// Buscar TikToks
+const search = await axios.post(`${API}/api/tiktok/search`, {query: "gatos", limit: 5});
+
+// Obtener uno aleatorio
+const random = await axios.get(`${API}/api/tiktok/random?q=gatos`);
+
+// Descargar
 async function downloadTT(sock, from, url) {
-    const res = await axios.post(`${API}/api/tiktok`, {
-        url, watermark: false
-    });
+    const res = await axios.post(`${API}/api/tiktok`, {url, watermark: false});
     const taskId = res.data.task_id;
     let status;
-    do {
-        await new Promise(r => setTimeout(r, 2000));
-        status = await axios.get(`${API}/api/status/${taskId}`);
-    } while (status.data.status !== 'completed');
-    await sock.sendMessage(from, {
-        video: { url: `${API}/api/stream/${taskId}` },
-        mimetype: 'video/mp4', caption: status.data.title
-    });
+    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
+    while (status.data.status !== 'completed');
+    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4', caption: status.data.title });
 }</pre>
                     <button onclick="copyCode('tt-baileysCode')">Copy Code</button>
-                    <h3 style="margin-top:25px;">Commands</h3>
-                    <ul><li><code>.tt [url]</code> — Download TikTok</li></ul>
                 </div>
             </div>
         </div>
         
-        <!-- ========== LYRICS ========== -->
+        <!-- LYRICS -->
         <div id="lyrics" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('ly-search', 'lyrics')">Search</button>
@@ -322,10 +327,6 @@ async function downloadTT(sock, from, url) {
                 <div class="card">
                     <h2>FrikiTube Lyrics</h2>
                     <div class="input-group"><label>Song Name</label><input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain"></div>
-                    <div class="example-links">
-                        <span class="example-link" onclick="setLyricsExample('Fleetwood Mac - The Chain')">Fleetwood Mac</span>
-                        <span class="example-link" onclick="setLyricsExample('Bad Bunny - Me Porto Bonito')">Bad Bunny</span>
-                    </div>
                     <button onclick="searchLyrics()">Search</button>
                     <div id="lyricsResult" style="display: none;">
                         <div class="task-info" id="lyricsInfo"></div>
@@ -342,9 +343,7 @@ async function downloadTT(sock, from, url) {
             
             <div id="ly-baileys" class="tab-content">
                 <div class="card"><h2>Lyrics + Baileys</h2>
-                    <div class="api-url-badge">
-                        const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
-                    </div>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
                     <pre id="ly-baileysCode">const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
@@ -352,15 +351,10 @@ async function getLyrics(sock, from, query) {
     const res = await axios.get(`${API}/api/lyrics?q=${encodeURIComponent(query)}`);
     const data = res.data;
     if (data.success) {
-        let msg = `🎵 *${data.title}*\n👤 *${data.artist}*\n\n${data.lyrics.substring(0, 1000)}`;
-        await sock.sendMessage(from, { text: msg });
-    } else {
-        await sock.sendMessage(from, { text: '❌ Lyrics not found' });
+        await sock.sendMessage(from, { text: `🎵 *${data.title}*\n👤 *${data.artist}*\n\n${data.lyrics.substring(0, 1000)}` });
     }
 }</pre>
                     <button onclick="copyCode('ly-baileysCode')">Copy Code</button>
-                    <h3 style="margin-top:25px;">Commands</h3>
-                    <ul><li><code>.lyrics [song]</code> — Search lyrics</li></ul>
                 </div>
             </div>
         </div>
@@ -374,14 +368,8 @@ async function getLyrics(sock, from, query) {
         let ytInterval = null, ttInterval = null;
         
         async function checkServerStatus() {
-            try {
-                await fetch(`${API_URL}/health`);
-                document.getElementById('statusDot').classList.add('online');
-                document.getElementById('statusText').textContent = 'ONLINE';
-            } catch {
-                document.getElementById('statusDot').classList.add('offline');
-                document.getElementById('statusText').textContent = 'OFFLINE';
-            }
+            try { await fetch(`${API_URL}/health`); document.getElementById('statusDot').classList.add('online'); document.getElementById('statusText').textContent = 'ONLINE'; }
+            catch { document.getElementById('statusDot').classList.add('offline'); document.getElementById('statusText').textContent = 'OFFLINE'; }
         }
         
         function showPage(page) {
@@ -399,19 +387,62 @@ async function getLyrics(sock, from, query) {
             event.target.classList.add('active');
         }
         
-        function setExample(platform, url) {
-            document.getElementById(`${platform}-url`).value = url;
+        function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('Code copied!'); }
+        
+        // ========== TIKTOK SEARCH ==========
+        async function searchTikTok() {
+            const query = document.getElementById('tt-search-query').value;
+            const limit = parseInt(document.getElementById('tt-search-limit').value);
+            if (!query) return alert('Enter search query');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/tiktok/search`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({query, limit})
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('tt-searchResults').style.display = 'block';
+                    let html = '';
+                    data.results.forEach(v => {
+                        html += `<div class="search-item" onclick="setTikTokUrl('${v.url}')">
+                            <p><strong>${v.title?.substring(0, 30)}...</strong></p>
+                            <p>👤 ${v.uploader}</p>
+                            <p>⏱️ ${v.duration_str}</p>
+                        </div>`;
+                    });
+                    document.getElementById('tt-resultsGrid').innerHTML = html;
+                } else {
+                    alert('No results found');
+                }
+            } catch(e) { alert('Error: ' + e.message); }
         }
         
-        function setLyricsExample(query) {
-            document.getElementById('lyrics-query').value = query;
+        async function randomTikTok() {
+            const query = document.getElementById('tt-search-query').value;
+            if (!query) return alert('Enter search query');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/tiktok/random?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                
+                if (data.success) {
+                    setTikTokUrl(data.url);
+                    alert(`🎲 Random TikTok:\n${data.title}\n👤 ${data.uploader}\n⏱️ ${data.duration_str}`);
+                } else {
+                    alert('No results found');
+                }
+            } catch(e) { alert('Error: ' + e.message); }
         }
         
-        function copyCode(id) {
-            navigator.clipboard?.writeText(document.getElementById(id).textContent);
-            alert('Code copied!');
+        function setTikTokUrl(url) {
+            document.getElementById('tt-url').value = url;
+            showTab('tt-download', 'tiktok');
         }
         
+        // ========== DOWNLOAD ==========
         async function startDownload(platform) {
             const url = document.getElementById(`${platform}-url`).value;
             if (!url) return alert('URL required');
@@ -426,22 +457,11 @@ async function getLyrics(sock, from, query) {
             }
             
             try {
-                const res = await fetch(`${API_URL}${endpoint}`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(body)
-                });
+                const res = await fetch(`${API_URL}${endpoint}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
                 const data = await res.json();
                 
-                if (platform === 'yt') {
-                    ytTaskId = data.task_id;
-                    if (ytInterval) clearInterval(ytInterval);
-                    ytInterval = setInterval(() => checkStatus('yt'), 2000);
-                } else {
-                    ttTaskId = data.task_id;
-                    if (ttInterval) clearInterval(ttInterval);
-                    ttInterval = setInterval(() => checkStatus('tt'), 2000);
-                }
+                if (platform === 'yt') { ytTaskId = data.task_id; if (ytInterval) clearInterval(ytInterval); ytInterval = setInterval(() => checkStatus('yt'), 2000); }
+                else { ttTaskId = data.task_id; if (ttInterval) clearInterval(ttInterval); ttInterval = setInterval(() => checkStatus('tt'), 2000); }
                 
                 document.getElementById(`${platform}-downloadStatus`).style.display = 'block';
                 document.getElementById(`${platform}-downloadUrlBox`).style.display = 'none';
@@ -467,12 +487,9 @@ async function getLyrics(sock, from, query) {
             } catch(e) {}
         }
         
-        function copyUrl(platform) {
-            document.getElementById(`${platform}-downloadUrl`).select();
-            document.execCommand('copy');
-            alert('Copied!');
-        }
+        function copyUrl(platform) { document.getElementById(`${platform}-downloadUrl`).select(); document.execCommand('copy'); alert('Copied!'); }
         
+        // ========== LYRICS ==========
         async function searchLyrics() {
             const query = document.getElementById('lyrics-query').value;
             if (!query) return alert('Enter song');
