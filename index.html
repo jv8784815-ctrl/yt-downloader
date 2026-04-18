@@ -176,7 +176,7 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>TUBE</span></div>
-            <div class="subtitle">API · STREAMING · LYRICS · CARRUSEL</div>
+            <div class="subtitle">API · STREAMING · LYRICS · IMAGES</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">CHECKING</span>
@@ -186,7 +186,7 @@
         <div class="nav-main">
             <button class="nav-btn active" onclick="showPage('youtube')">YouTube</button>
             <button class="nav-btn" onclick="showPage('tiktok')">TikTok</button>
-            <button class="nav-btn" onclick="showPage('carousel')">Carousel</button>
+            <button class="nav-btn" onclick="showPage('tiktok-images')">TikTok Images</button>
             <button class="nav-btn" onclick="showPage('lyrics')">Lyrics</button>
         </div>
         
@@ -249,7 +249,7 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             </div>
         </div>
         
-        <!-- PÁGINA TIKTOK -->
+        <!-- PÁGINA TIKTOK VIDEO -->
         <div id="tiktok" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Video</button>
@@ -296,66 +296,64 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
             </div>
         </div>
         
-        <!-- PÁGINA CARRUSEL (CORREGIDA) -->
-        <div id="carousel" class="page">
+        <!-- PÁGINA TIKTOK IMAGES (NUEVA) -->
+        <div id="tiktok-images" class="page">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('car-download', 'carousel')">Download</button>
-                <button class="tab" onclick="showTab('car-docs', 'carousel')">Docs</button>
+                <button class="tab active" onclick="showTab('img-download', 'tiktok-images')">Download</button>
+                <button class="tab" onclick="showTab('img-docs', 'tiktok-images')">Docs</button>
             </div>
             
-            <div id="car-download" class="tab-content active">
+            <div id="img-download" class="tab-content active">
                 <div class="card">
-                    <h2>TikTok Carousel <span class="platform-badge">PHOTOS + AUDIO</span></h2>
+                    <h2>TikTok Images <span class="platform-badge">HD QUALITY</span></h2>
                     
                     <div class="input-group">
                         <label>URL</label>
-                        <input type="text" id="car-url" placeholder="https://www.tiktok.com/@user/photo/...">
+                        <input type="text" id="img-url" placeholder="https://www.tiktok.com/@user/photo/...">
                     </div>
                     
-                    <button onclick="getCarouselInfo()">📊 Get Info</button>
-                    <button onclick="startCarouselDownload()">⬇️ Download</button>
+                    <button onclick="getImagesInfo()">📊 Get Info</button>
+                    <button onclick="startImagesDownload()">⬇️ Download</button>
                     
-                    <div id="car-infoBox" style="display: none;" class="task-info">
-                        <p><strong>Title:</strong> <span id="car-title">-</span></p>
-                        <p><strong>Uploader:</strong> <span id="car-uploader">-</span></p>
-                        <p><strong>Total Images:</strong> <span id="car-total">-</span></p>
-                        <p><strong>Has Audio:</strong> <span id="car-audio">-</span></p>
+                    <div id="img-infoBox" style="display: none;" class="task-info">
+                        <p><strong>Title:</strong> <span id="img-title">-</span></p>
+                        <p><strong>Uploader:</strong> <span id="img-uploader">-</span></p>
+                        <p><strong>Total Images:</strong> <span id="img-total">-</span></p>
                     </div>
                     
-                    <div id="car-imagesBox" style="display: none;">
+                    <div id="img-imagesBox" style="display: none;">
                         <label>Select Images:</label>
-                        <div class="image-grid" id="car-imagesGrid"></div>
+                        <div class="image-grid" id="img-imagesGrid"></div>
                         <div class="checkbox-group">
-                            <label><input type="checkbox" id="car-selectAll" checked> Select All</label>
-                            <label><input type="checkbox" id="car-downloadAudio" checked> Download Audio</label>
+                            <label><input type="checkbox" id="img-selectAll" checked> Select All</label>
                         </div>
                     </div>
                     
-                    <div id="car-downloadStatus" style="display: none;">
-                        <div class="progress-bar"><div class="progress-fill" id="car-progressFill"></div></div>
-                        <div class="task-info" id="car-taskInfo"></div>
-                        <div class="url-box" id="car-downloadUrlBox" style="display: none;">
+                    <div id="img-downloadStatus" style="display: none;">
+                        <div class="progress-bar"><div class="progress-fill" id="img-progressFill"></div></div>
+                        <div class="task-info" id="img-taskInfo"></div>
+                        <div class="url-box" id="img-downloadUrlBox" style="display: none;">
                             <label>Download URL</label>
                             <div class="url-copy-group">
-                                <input type="text" id="car-downloadUrl" readonly onclick="this.select()">
-                                <button onclick="copyUrl('car')">Copy</button>
+                                <input type="text" id="img-downloadUrl" readonly onclick="this.select()">
+                                <button onclick="copyUrl('img')">Copy</button>
                             </div>
-                            <button onclick="downloadFile('car')" style="margin-top: 12px;">Download</button>
+                            <button onclick="downloadFile('img')" style="margin-top: 12px;">Download</button>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div id="car-docs" class="tab-content">
+            <div id="img-docs" class="tab-content">
                 <div class="card">
-                    <h2>Carousel API</h2>
+                    <h2>Images API</h2>
                     <div class="endpoint">
-                        <h3><span class="method post">POST</span> /api/tiktok/carousel/info</h3>
+                        <h3><span class="method post">POST</span> /api/tiktok/images/info</h3>
                         <pre>{"url": "https://www.tiktok.com/@user/photo/..."}</pre>
                     </div>
                     <div class="endpoint">
-                        <h3><span class="method post">POST</span> /api/tiktok/carousel</h3>
-                        <pre>{"url": "...", "image_indexes": [0, 2], "download_audio": true}</pre>
+                        <h3><span class="method post">POST</span> /api/tiktok/images</h3>
+                        <pre>{"url": "...", "image_indexes": [0, 2]}</pre>
                     </div>
                 </div>
             </div>
@@ -382,15 +380,15 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
         </div>
         
         <footer>
-            <p>FRIKITUBE API · YOUTUBE · TIKTOK · CARRUSEL · LYRICS</p>
+            <p>FRIKITUBE API · YOUTUBE · TIKTOK · IMAGES · LYRICS</p>
         </footer>
     </div>
     
     <script>
         const API_URL = '';
-        let ytTaskId = null, ttTaskId = null, carTaskId = null;
-        let ytInterval = null, ttInterval = null, carInterval = null;
-        let carouselImages = [];
+        let ytTaskId = null, ttTaskId = null, imgTaskId = null;
+        let ytInterval = null, ttInterval = null, imgInterval = null;
+        let currentImages = [];
         
         async function checkServerStatus() {
             try {
@@ -427,69 +425,55 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
         }
         
         // ============================================
-        // CARRUSEL - FUNCIONES CORREGIDAS
+        // TIKTOK IMAGES
         // ============================================
-        async function getCarouselInfo() {
-            const url = document.getElementById('car-url').value;
+        async function getImagesInfo() {
+            const url = document.getElementById('img-url').value;
             if (!url) return alert('URL required');
             
-            document.getElementById('car-infoBox').style.display = 'block';
-            document.getElementById('car-title').textContent = 'Cargando...';
-            document.getElementById('car-uploader').textContent = '-';
-            document.getElementById('car-total').textContent = '-';
-            document.getElementById('car-audio').textContent = '-';
+            document.getElementById('img-infoBox').style.display = 'block';
+            document.getElementById('img-title').textContent = 'Loading...';
             
             try {
-                const res = await fetch(`${API_URL}/api/tiktok/carousel/info`, {
+                const res = await fetch(`${API_URL}/api/tiktok/images/info`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({url})
                 });
-                
-                const contentType = res.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    alert('Error: El servidor devolvió una respuesta inválida.');
-                    document.getElementById('car-infoBox').style.display = 'none';
-                    return;
-                }
-                
                 const data = await res.json();
                 
                 if (data.success) {
-                    carouselImages = data.images || [];
-                    document.getElementById('car-title').textContent = data.title || '-';
-                    document.getElementById('car-uploader').textContent = data.uploader || '-';
-                    document.getElementById('car-total').textContent = data.total_images || 0;
-                    document.getElementById('car-audio').textContent = data.has_audio ? '✅ Yes' : '❌ No';
+                    currentImages = data.images || [];
+                    document.getElementById('img-title').textContent = data.title || '-';
+                    document.getElementById('img-uploader').textContent = data.uploader || '-';
+                    document.getElementById('img-total').textContent = data.total_images || 0;
                     
                     if (data.total_images > 0) {
-                        document.getElementById('car-imagesBox').style.display = 'block';
+                        document.getElementById('img-imagesBox').style.display = 'block';
                         renderImageGrid();
                     }
                 } else {
                     if (data.is_video) {
-                        alert('⚠️ Este TikTok es un VIDEO normal, no un carrusel.\nUsa la pestaña "TikTok" para descargar videos.');
+                        alert('⚠️ Este TikTok es un VIDEO. Usa la pestaña "TikTok" para descargar.');
                     } else {
-                        alert('❌ Error: ' + (data.error || 'Error desconocido'));
+                        alert('❌ Error: ' + (data.error || 'Unknown error'));
                     }
-                    document.getElementById('car-infoBox').style.display = 'none';
                 }
             } catch(e) {
-                alert('Error de conexión: ' + e.message);
-                document.getElementById('car-infoBox').style.display = 'none';
+                alert('Error: ' + e.message);
             }
         }
         
         function renderImageGrid() {
-            const grid = document.getElementById('car-imagesGrid');
+            const grid = document.getElementById('img-imagesGrid');
             let html = '';
-            for (let i = 0; i < carouselImages.length; i++) {
+            for (let i = 0; i < currentImages.length; i++) {
                 html += `<div class="image-item selected" onclick="toggleImage(${i})">📷 Image ${i + 1}</div>`;
             }
             grid.innerHTML = html;
             
-            document.getElementById('car-selectAll').onchange = (e) => {
-                document.querySelectorAll('.image-item').forEach((item, i) => {
+            document.getElementById('img-selectAll').onchange = (e) => {
+                document.querySelectorAll('#img-imagesGrid .image-item').forEach((item, i) => {
                     if (e.target.checked) {
                         item.classList.add('selected');
                     } else {
@@ -500,62 +484,46 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
         }
         
         function toggleImage(index) {
-            const item = document.querySelectorAll('.image-item')[index];
+            const item = document.querySelectorAll('#img-imagesGrid .image-item')[index];
             item.classList.toggle('selected');
         }
         
-        async function startCarouselDownload() {
-            const url = document.getElementById('car-url').value;
+        async function startImagesDownload() {
+            const url = document.getElementById('img-url').value;
             if (!url) return alert('URL required');
             
             const selectedIndexes = [];
-            document.querySelectorAll('.image-item').forEach((item, i) => {
+            document.querySelectorAll('#img-imagesGrid .image-item').forEach((item, i) => {
                 if (item.classList.contains('selected')) selectedIndexes.push(i);
             });
             
-            const downloadAudio = document.getElementById('car-downloadAudio').checked;
-            
             try {
-                const res = await fetch(`${API_URL}/api/tiktok/carousel`, {
+                const res = await fetch(`${API_URL}/api/tiktok/images`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({url, image_indexes: selectedIndexes, download_audio: downloadAudio})
+                    body: JSON.stringify({url, image_indexes: selectedIndexes})
                 });
-                
-                const contentType = res.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    alert('Error: Respuesta inválida del servidor');
-                    return;
-                }
-                
                 const data = await res.json();
                 
-                if (data.task_id) {
-                    carTaskId = data.task_id;
-                    if (carInterval) clearInterval(carInterval);
-                    carInterval = setInterval(checkCarouselStatus, 2000);
-                    
-                    document.getElementById('car-downloadStatus').style.display = 'block';
-                    document.getElementById('car-downloadUrlBox').style.display = 'none';
-                    document.getElementById('car-taskInfo').innerHTML = `
-                        <p><strong>ID</strong> ${data.task_id}</p>
-                        <p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>
-                    `;
-                } else {
-                    alert('Error al iniciar descarga');
-                }
+                imgTaskId = data.task_id;
+                if (imgInterval) clearInterval(imgInterval);
+                imgInterval = setInterval(checkImagesStatus, 2000);
+                
+                document.getElementById('img-downloadStatus').style.display = 'block';
+                document.getElementById('img-downloadUrlBox').style.display = 'none';
+                document.getElementById('img-taskInfo').innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>`;
             } catch(e) {
                 alert('Error: ' + e.message);
             }
         }
         
-        async function checkCarouselStatus() {
-            if (!carTaskId) return;
+        async function checkImagesStatus() {
+            if (!imgTaskId) return;
             try {
-                const res = await fetch(`${API_URL}/api/status/${carTaskId}`);
+                const res = await fetch(`${API_URL}/api/status/${imgTaskId}`);
                 const data = await res.json();
                 
-                document.getElementById('car-progressFill').style.width = data.progress + '%';
+                document.getElementById('img-progressFill').style.width = data.progress + '%';
                 
                 let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>
                             <p><strong>Progress</strong> ${data.progress}%</p>`;
@@ -563,16 +531,14 @@ const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});</pre>
                 if (data.total_images) html += `<p><strong>Images</strong> ${data.total_images}</p>`;
                 if (data.error) html += `<p style="color: #ff4444;"><strong>Error</strong> ${data.error}</p>`;
                 
-                document.getElementById('car-taskInfo').innerHTML = html;
+                document.getElementById('img-taskInfo').innerHTML = html;
                 
                 if (data.status === 'completed') {
-                    clearInterval(carInterval);
-                    document.getElementById('car-downloadUrl').value = window.location.origin + data.stream_url;
-                    document.getElementById('car-downloadUrlBox').style.display = 'block';
+                    clearInterval(imgInterval);
+                    document.getElementById('img-downloadUrl').value = window.location.origin + data.stream_url;
+                    document.getElementById('img-downloadUrlBox').style.display = 'block';
                 }
-                if (data.status === 'failed') {
-                    clearInterval(carInterval);
-                }
+                if (data.status === 'failed') clearInterval(imgInterval);
             } catch(e) {}
         }
         
