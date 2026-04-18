@@ -214,7 +214,7 @@ async function downloadTT(sock, from, url) {
             </div>
         </div>
         
-        <!-- GOOGLE IMAGES -->
+        <!-- GOOGLE IMAGES (CORREGIDO) -->
         <div id="images" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('img-search', 'images')">Search</button>
@@ -226,9 +226,12 @@ async function downloadTT(sock, from, url) {
                     <div class="input-group"><label>Search</label><input type="text" id="img-query" placeholder="gato gracioso..."></div>
                     <button onclick="searchImage()">🔍 Search</button>
                     <button onclick="downloadImage()">⬇️ Download</button>
-                    <div id="img-preview" style="display: none;" class="image-preview">
-                        <img id="img-preview-img" src="" alt="Preview">
+                    
+                    <div id="img-preview" style="display: none; text-align: center; margin: 20px 0;">
+                        <p style="color: #888; margin-bottom: 10px;"><span id="img-source"></span></p>
+                        <img id="img-preview-img" src="" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
                     </div>
+                    
                     <div id="img-downloadStatus" style="display: none;">
                         <div class="progress-bar"><div class="progress-fill" id="img-progressFill"></div></div>
                         <div class="task-info" id="img-taskInfo"></div>
@@ -266,7 +269,7 @@ async function getImage(sock, from, query) {
                 <button onclick="searchLyrics()">Search</button>
                 <div id="lyricsResult" style="display: none;">
                     <div class="task-info" id="lyricsInfo"></div>
-                    <div class="lyrics-box" id="lyricsContent" style="max-height:400px; overflow-y:auto; white-space:pre-line;"></div>
+                    <div class="lyrics-box" id="lyricsContent" style="max-height:400px; overflow-y:auto; white-space:pre-line; background:#050505; padding:20px; border-radius:6px; margin-top:15px;"></div>
                 </div>
             </div>
         </div>
@@ -301,7 +304,7 @@ async function getImage(sock, from, query) {
         
         function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('Copied!'); }
         
-        // ========== GOOGLE IMAGES ==========
+        // ========== GOOGLE IMAGES (CORREGIDO) ==========
         async function searchImage() {
             const query = document.getElementById('img-query').value;
             if (!query) return alert('Enter search query');
@@ -317,6 +320,7 @@ async function getImage(sock, from, query) {
                 if (data.success) {
                     document.getElementById('img-preview').style.display = 'block';
                     document.getElementById('img-preview-img').src = data.image_url;
+                    document.getElementById('img-source').textContent = `Source: ${data.source || 'Google Images'}`;
                 } else {
                     alert('No image found');
                 }
@@ -340,7 +344,8 @@ async function getImage(sock, from, query) {
                 imgInterval = setInterval(checkImageStatus, 2000);
                 
                 document.getElementById('img-downloadStatus').style.display = 'block';
-                document.getElementById('img-taskInfo').innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>`;
+                document.getElementById('img-downloadUrlBox').style.display = 'none';
+                document.getElementById('img-taskInfo').innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p><p><strong>Query</strong> ${query}</p>`;
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -353,12 +358,17 @@ async function getImage(sock, from, query) {
                 let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
                 if (data.title) html += `<p><strong>Query</strong> ${data.title}</p>`;
                 if (data.file_size_str) html += `<p><strong>Size</strong> ${data.file_size_str}</p>`;
+                if (data.source) html += `<p><strong>Source</strong> ${data.source}</p>`;
                 document.getElementById('img-taskInfo').innerHTML = html;
                 
                 if (data.status === 'completed') {
                     clearInterval(imgInterval);
                     document.getElementById('img-downloadUrl').value = window.location.origin + data.stream_url;
                     document.getElementById('img-downloadUrlBox').style.display = 'block';
+                }
+                if (data.status === 'failed') {
+                    clearInterval(imgInterval);
+                    document.getElementById('img-taskInfo').innerHTML += `<p style="color: #ff4444;"><strong>Error</strong> ${data.error || 'Unknown'}</p>`;
                 }
             } catch(e) {}
         }
