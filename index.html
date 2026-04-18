@@ -70,11 +70,11 @@
             display: block; margin-bottom: 8px; color: #888; font-size: 0.7em;
             letter-spacing: 3px; text-transform: uppercase;
         }
-        input, select, textarea {
+        input, select {
             width: 100%; padding: 14px 16px; background: #0a0a0a; border: 1px solid #333;
             color: #fff; font-size: 0.95em; border-radius: 8px; transition: all 0.2s;
         }
-        input:focus, select:focus, textarea:focus {
+        input:focus, select:focus {
             outline: none; border-color: #ff0050; background: #0f0f0f;
         }
         input::placeholder { color: #555; }
@@ -141,6 +141,9 @@
         .image-item.selected {
             border-color: #ff0050; background: #ff005022;
         }
+        .image-item input[type="checkbox"] {
+            display: none;
+        }
         .platform-badge {
             display: inline-block; padding: 2px 10px; background: #ff005022;
             color: #ff0050; border-radius: 4px; font-size: 0.7em; letter-spacing: 2px;
@@ -190,13 +193,12 @@
             <button class="nav-btn" onclick="showPage('lyrics')">Lyrics</button>
         </div>
         
-        <!-- PÁGINA YOUTUBE -->
+        <!-- YOUTUBE -->
         <div id="youtube" class="page active">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('yt-download', 'youtube')">Download</button>
                 <button class="tab" onclick="showTab('yt-docs', 'youtube')">Docs</button>
             </div>
-            
             <div id="yt-download" class="tab-content active">
                 <div class="card">
                     <h2>YouTube Download</h2>
@@ -213,19 +215,17 @@
                     </div>
                 </div>
             </div>
-            
             <div id="yt-docs" class="tab-content">
                 <div class="card"><h2>API Documentation</h2><div class="endpoint"><h3><span class="method post">POST</span> /api/download</h3><pre>{"url": "...", "format": "mp3"}</pre></div></div>
             </div>
         </div>
         
-        <!-- PÁGINA TIKTOK VIDEO -->
+        <!-- TIKTOK VIDEO -->
         <div id="tiktok" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Video</button>
                 <button class="tab" onclick="showTab('tt-docs', 'tiktok')">Docs</button>
             </div>
-            
             <div id="tt-download" class="tab-content active">
                 <div class="card">
                     <h2>TikTok Video</h2>
@@ -242,25 +242,26 @@
                     </div>
                 </div>
             </div>
-            
             <div id="tt-docs" class="tab-content">
                 <div class="card"><h2>TikTok API</h2><div class="endpoint"><h3><span class="method post">POST</span> /api/tiktok</h3><pre>{"url": "...", "watermark": false}</pre></div></div>
             </div>
         </div>
         
-        <!-- PÁGINA TIKTOK IMAGES -->
+        <!-- TIKTOK IMAGES (CON SELECCIÓN) -->
         <div id="tiktok-images" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('img-download', 'tiktok-images')">Download</button>
                 <button class="tab" onclick="showTab('img-docs', 'tiktok-images')">Docs</button>
             </div>
-            
             <div id="img-download" class="tab-content active">
                 <div class="card">
                     <h2>TikTok Images <span class="platform-badge">HD</span></h2>
                     <div class="input-group"><label>URL</label><input type="text" id="img-url" placeholder="https://www.tiktok.com/@user/photo/..."></div>
+                    <div class="example-links">
+                        <span class="example-link" onclick="setExample('img', 'https://www.tiktok.com/@tiktok/photo/7106592662294203694')">Example Carousel</span>
+                    </div>
                     <button onclick="getImagesInfo()">📊 Get Info</button>
-                    <button onclick="startImagesDownload()">⬇️ Download</button>
+                    <button onclick="startImagesDownload()">⬇️ Download Selected</button>
                     
                     <div id="img-infoBox" style="display: none;" class="task-info">
                         <p><strong>Title:</strong> <span id="img-title">-</span></p>
@@ -269,9 +270,11 @@
                     </div>
                     
                     <div id="img-imagesBox" style="display: none;">
-                        <label>Select Images:</label>
+                        <label>Select Images to Download:</label>
                         <div class="image-grid" id="img-imagesGrid"></div>
-                        <div class="checkbox-group"><label><input type="checkbox" id="img-selectAll" checked> Select All</label></div>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="img-selectAll" checked> Select All</label>
+                        </div>
                     </div>
                     
                     <div id="img-downloadStatus" style="display: none;">
@@ -285,7 +288,6 @@
                     </div>
                 </div>
             </div>
-            
             <div id="img-docs" class="tab-content">
                 <div class="card"><h2>Images API</h2>
                     <div class="endpoint"><h3><span class="method post">POST</span> /api/tiktok/images/info</h3><pre>{"url": "..."}</pre></div>
@@ -294,7 +296,7 @@
             </div>
         </div>
         
-        <!-- PÁGINA LYRICS -->
+        <!-- LYRICS -->
         <div id="lyrics" class="page">
             <div class="card">
                 <h2>FrikiTube Lyrics</h2>
@@ -342,6 +344,10 @@
             event.target.classList.add('active');
         }
         
+        function setExample(platform, url) {
+            document.getElementById(`${platform}-url`).value = url;
+        }
+        
         // ========== TIKTOK IMAGES ==========
         async function getImagesInfo() {
             const url = document.getElementById('img-url').value;
@@ -349,6 +355,8 @@
             
             document.getElementById('img-infoBox').style.display = 'block';
             document.getElementById('img-title').textContent = 'Loading...';
+            document.getElementById('img-uploader').textContent = '-';
+            document.getElementById('img-total').textContent = '-';
             
             try {
                 const res = await fetch(`${API_URL}/api/tiktok/images/info`, {
@@ -366,44 +374,67 @@
                     
                     if (data.total_images > 0) {
                         document.getElementById('img-imagesBox').style.display = 'block';
-                        let html = '';
-                        for (let i = 0; i < currentImages.length; i++) {
-                            html += `<div class="image-item selected" onclick="toggleImage(${i})">📷 Image ${i+1}</div>`;
-                        }
-                        document.getElementById('img-imagesGrid').innerHTML = html;
-                        document.getElementById('img-selectAll').onchange = (e) => {
-                            document.querySelectorAll('#img-imagesGrid .image-item').forEach(item => {
-                                if (e.target.checked) item.classList.add('selected');
-                                else item.classList.remove('selected');
-                            });
-                        };
+                        renderImageGrid();
+                    } else {
+                        document.getElementById('img-imagesBox').style.display = 'none';
                     }
                 } else {
                     alert('❌ ' + (data.error || 'Error'));
+                    document.getElementById('img-infoBox').style.display = 'none';
                 }
             } catch(e) {
                 alert('Error: ' + e.message);
             }
         }
         
+        function renderImageGrid() {
+            const grid = document.getElementById('img-imagesGrid');
+            let html = '';
+            for (let i = 0; i < currentImages.length; i++) {
+                html += `<div class="image-item selected" onclick="toggleImage(${i})">
+                    <input type="checkbox" id="img-check-${i}" checked style="display:none;">
+                    📷 Image ${i+1}
+                </div>`;
+            }
+            grid.innerHTML = html;
+            
+            document.getElementById('img-selectAll').onchange = (e) => {
+                const items = document.querySelectorAll('#img-imagesGrid .image-item');
+                items.forEach((item, i) => {
+                    if (e.target.checked) {
+                        item.classList.add('selected');
+                    } else {
+                        item.classList.remove('selected');
+                    }
+                });
+            };
+        }
+        
         function toggleImage(index) {
-            document.querySelectorAll('#img-imagesGrid .image-item')[index].classList.toggle('selected');
+            const item = document.querySelectorAll('#img-imagesGrid .image-item')[index];
+            item.classList.toggle('selected');
         }
         
         async function startImagesDownload() {
             const url = document.getElementById('img-url').value;
             if (!url) return alert('URL required');
             
-            const selected = [];
+            const selectedIndexes = [];
             document.querySelectorAll('#img-imagesGrid .image-item').forEach((item, i) => {
-                if (item.classList.contains('selected')) selected.push(i);
+                if (item.classList.contains('selected')) {
+                    selectedIndexes.push(i);
+                }
             });
+            
+            if (selectedIndexes.length === 0) {
+                return alert('Select at least one image');
+            }
             
             try {
                 const res = await fetch(`${API_URL}/api/tiktok/images`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({url, image_indexes: selected})
+                    body: JSON.stringify({url, image_indexes: selectedIndexes})
                 });
                 const data = await res.json();
                 
@@ -412,8 +443,11 @@
                 imgInterval = setInterval(checkImagesStatus, 2000);
                 
                 document.getElementById('img-downloadStatus').style.display = 'block';
+                document.getElementById('img-downloadUrlBox').style.display = 'none';
                 document.getElementById('img-taskInfo').innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>`;
-            } catch(e) { alert('Error: ' + e.message); }
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
         }
         
         async function checkImagesStatus() {
@@ -421,12 +455,15 @@
             try {
                 const res = await fetch(`${API_URL}/api/status/${imgTaskId}`);
                 const data = await res.json();
+                
                 document.getElementById('img-progressFill').style.width = data.progress + '%';
+                
                 let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>
                             <p><strong>Progress</strong> ${data.progress}%</p>`;
                 if (data.title) html += `<p><strong>Title</strong> ${data.title}</p>`;
-                if (data.total_images) html += `<p><strong>Images</strong> ${data.total_images}</p>`;
+                if (data.total_images) html += `<p><strong>Selected Images</strong> ${data.total_images}</p>`;
                 if (data.error) html += `<p style="color:#ff4444;"><strong>Error</strong> ${data.error}</p>`;
+                
                 document.getElementById('img-taskInfo').innerHTML = html;
                 
                 if (data.status === 'completed') {
@@ -434,11 +471,13 @@
                     document.getElementById('img-downloadUrl').value = window.location.origin + data.stream_url;
                     document.getElementById('img-downloadUrlBox').style.display = 'block';
                 }
-                if (data.status === 'failed') clearInterval(imgInterval);
+                if (data.status === 'failed') {
+                    clearInterval(imgInterval);
+                }
             } catch(e) {}
         }
         
-        // ========== YOUTUBE & TIKTOK ==========
+        // ========== YOUTUBE & TIKTOK VIDEO ==========
         async function startDownload(platform) {
             const url = document.getElementById(`${platform}-url`).value;
             if (!url) return alert('URL required');
@@ -471,8 +510,11 @@
                 }
                 
                 document.getElementById(`${platform}-downloadStatus`).style.display = 'block';
+                document.getElementById(`${platform}-downloadUrlBox`).style.display = 'none';
                 document.getElementById(`${platform}-taskInfo`).innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>`;
-            } catch(e) { alert('Error: ' + e.message); }
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
         }
         
         async function checkStatus(platform) {
@@ -481,15 +523,25 @@
             try {
                 const res = await fetch(`${API_URL}/api/status/${taskId}`);
                 const data = await res.json();
+                
                 document.getElementById(`${platform}-progressFill`).style.width = data.progress + '%';
-                let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
+                
+                let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>
+                            <p><strong>Progress</strong> ${data.progress}%</p>`;
                 if (data.title) html += `<p><strong>Title</strong> ${data.title}</p>`;
+                if (data.uploader) html += `<p><strong>Uploader</strong> ${data.uploader}</p>`;
+                
                 document.getElementById(`${platform}-taskInfo`).innerHTML = html;
                 
                 if (data.status === 'completed') {
-                    if (platform === 'yt') clearInterval(ytInterval); else clearInterval(ttInterval);
+                    if (platform === 'yt') clearInterval(ytInterval);
+                    else clearInterval(ttInterval);
                     document.getElementById(`${platform}-downloadUrl`).value = window.location.origin + data.stream_url;
                     document.getElementById(`${platform}-downloadUrlBox`).style.display = 'block';
+                }
+                if (data.status === 'failed') {
+                    if (platform === 'yt') clearInterval(ytInterval);
+                    else clearInterval(ttInterval);
                 }
             } catch(e) {}
         }
