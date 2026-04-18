@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/api/image/search", "destination": "http://64.20.54.50:30325/api/image/search" },
+    { "source": "/api/image/download", "destination": "http://64.20.54.50:30325/api/image/download" },
     { "source": "/api/tiktok/search", "destination": "http://64.20.54.50:30325/api/tiktok/search" },
     { "source": "/api/tiktok/random", "destination": "http://64.20.54.50:30325/api/tiktok/random" },
     { "source": "/api/lyrics", "destination": "http://64.20.54.50:30325/api/lyrics" },
