@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/api/tiktok/carousel/info", "destination": "http://64.20.54.50:30325/api/tiktok/carousel/info" },
+    { "source": "/api/tiktok/carousel", "destination": "http://64.20.54.50:30325/api/tiktok/carousel" },
     { "source": "/api/lyrics", "destination": "http://64.20.54.50:30325/api/lyrics" },
     { "source": "/api/tiktok", "destination": "http://64.20.54.50:30325/api/tiktok" },
     { "source": "/api/stream/:task_id", "destination": "http://64.20.54.50:30325/api/stream/:task_id" },
