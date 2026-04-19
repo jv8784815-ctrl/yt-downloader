@@ -328,7 +328,7 @@ async function getImage(sock, from, query) {
                 const res = await fetch(`${API_URL}/api/image/search`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query})
+                    body: JSON.stringify({query, adult: false})
                 });
                 const data = await res.json();
                 
@@ -346,21 +346,11 @@ async function getImage(sock, from, query) {
             let query = document.getElementById('img-query').value;
             if (!query) return alert('Enter search query');
             
-            // Añadir palabras clave para contenido +18
-            const keywords = ['porn', 'xxx', 'hentai', 'nsfw', 'explicit', 'adult', '18+'];
-            const randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];
-            
-            // 50% probabilidad de ser animado o real
-            const isAnimated = Math.random() > 0.5;
-            const typeKeyword = isAnimated ? 'anime hentai' : 'real';
-            
-            query = `${query} ${typeKeyword} ${randomKeyword}`;
-            
             try {
                 const res = await fetch(`${API_URL}/api/image/search`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query})
+                    body: JSON.stringify({query, adult: true})
                 });
                 const data = await res.json();
                 
@@ -382,7 +372,7 @@ async function getImage(sock, from, query) {
                 const res = await fetch(`${API_URL}/api/image/download`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query})
+                    body: JSON.stringify({query, adult: false})
                 });
                 const data = await res.json();
                 
@@ -406,6 +396,7 @@ async function getImage(sock, from, query) {
                 if (data.title) html += `<p><strong>Query</strong> ${data.title}</p>`;
                 if (data.file_size_str) html += `<p><strong>Size</strong> ${data.file_size_str}</p>`;
                 if (data.source) html += `<p><strong>Source</strong> ${data.source}</p>`;
+                if (data.adult) html += `<p><span class="status-badge" style="background:#ff005022;color:#ff0050;">🔞 +18</span></p>`;
                 document.getElementById('img-taskInfo').innerHTML = html;
                 
                 if (data.status === 'completed') {
