@@ -132,13 +132,6 @@
         ::-webkit-scrollbar-thumb { background: #444444; }
         .button-group { display: flex; gap: 10px; margin-bottom: 15px; }
         .button-group button { flex: 1; margin-right: 0; }
-        .waifu-types { display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0; }
-        .waifu-type {
-            background: #1a1a1a; border: 1px solid #444; border-radius: 20px;
-            padding: 6px 15px; font-size: 0.75em; cursor: pointer; transition: all 0.2s;
-        }
-        .waifu-type:hover { background: #9b59b6; border-color: #9b59b6; }
-        .waifu-type.active { background: #9b59b6; border-color: #9b59b6; }
     </style>
 </head>
 <body>
@@ -252,18 +245,15 @@ async function downloadTT(sock, from, url) {
                 <div class="card">
                     <h2>Google Images</h2>
                     <div class="input-group"><label>Search</label><input type="text" id="img-query" placeholder="gato gracioso..."></div>
-                    
                     <div class="button-group">
                         <button onclick="searchImage()">🔍 Search</button>
                         <button onclick="searchImage18()" class="btn-18">🔞 +18</button>
                     </div>
                     <button onclick="downloadImage()">⬇️ Download</button>
-                    
                     <div id="img-preview" style="display: none; text-align: center; margin: 20px 0;">
                         <p style="color: #888; margin-bottom: 10px;"><span id="img-source"></span></p>
                         <img id="img-preview-img" src="" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
                     </div>
-                    
                     <div id="img-downloadStatus" style="display: none;">
                         <div class="progress-bar"><div class="progress-fill" id="img-progressFill"></div></div>
                         <div class="task-info" id="img-taskInfo"></div>
@@ -351,12 +341,7 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
         image: { url: res.data.url }, 
         caption: `🎴 ${type} (${category})` 
     });
-}
-
-// Comandos:
-.waifu - Waifu NSFW aleatoria
-.waifu sfw - Waifu SFW
-.neko - Neko NSFW</pre>
+}</pre>
                     <button onclick="copyCode('waifu-baileysCode')">Copy Code</button>
                 </div>
             </div>
@@ -405,7 +390,7 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
         
         function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('Copied!'); }
         
-        // ========== WAIFU API ==========
+        // ========== WAIFU API (CORREGIDO: todo minúsculas) ==========
         async function getWaifu() {
             const type = document.getElementById('waifu-type').value;
             const category = document.getElementById('waifu-category').value;
