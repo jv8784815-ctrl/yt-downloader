@@ -89,6 +89,15 @@
             border-color: #ff3366 !important;
             color: #ffffff !important;
         }
+        .btn-waifu {
+            background: #9b59b6 !important;
+            border-color: #9b59b6 !important;
+        }
+        .btn-waifu:hover {
+            background: #af7ac5 !important;
+            border-color: #af7ac5 !important;
+            color: #ffffff !important;
+        }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -123,13 +132,20 @@
         ::-webkit-scrollbar-thumb { background: #444444; }
         .button-group { display: flex; gap: 10px; margin-bottom: 15px; }
         .button-group button { flex: 1; margin-right: 0; }
+        .waifu-types { display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0; }
+        .waifu-type {
+            background: #1a1a1a; border: 1px solid #444; border-radius: 20px;
+            padding: 6px 15px; font-size: 0.75em; cursor: pointer; transition: all 0.2s;
+        }
+        .waifu-type:hover { background: #9b59b6; border-color: #9b59b6; }
+        .waifu-type.active { background: #9b59b6; border-color: #9b59b6; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>TUBE</span></div>
-            <div class="subtitle">API · STREAMING · LYRICS · IMAGES</div>
+            <div class="subtitle">API · STREAMING · LYRICS · IMAGES · WAIFU</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">CHECKING</span>
@@ -140,6 +156,7 @@
             <button class="nav-btn active" onclick="showPage('youtube')">YouTube</button>
             <button class="nav-btn" onclick="showPage('tiktok')">TikTok</button>
             <button class="nav-btn" onclick="showPage('images')">Images</button>
+            <button class="nav-btn" onclick="showPage('waifu')">Waifu</button>
             <button class="nav-btn" onclick="showPage('lyrics')">Lyrics</button>
         </div>
         
@@ -225,7 +242,7 @@ async function downloadTT(sock, from, url) {
             </div>
         </div>
         
-        <!-- GOOGLE IMAGES (CON BOTÓN +18) -->
+        <!-- GOOGLE IMAGES -->
         <div id="images" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('img-search', 'images')">Search</button>
@@ -276,6 +293,75 @@ async function getImage(sock, from, query) {
             </div>
         </div>
         
+        <!-- WAIFU API -->
+        <div id="waifu" class="page">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('waifu-search', 'waifu')">Get Waifu</button>
+                <button class="tab" onclick="showTab('waifu-baileys', 'waifu')">Baileys</button>
+            </div>
+            <div id="waifu-search" class="tab-content active">
+                <div class="card">
+                    <h2>Waifu API <span class="platform-badge" style="background:#9b59b622;color:#9b59b6;">NSFW</span></h2>
+                    
+                    <div class="input-group"><label>Category</label>
+                        <select id="waifu-category">
+                            <option value="nsfw">🔞 NSFW</option>
+                            <option value="sfw">✅ SFW</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group"><label>Type</label>
+                        <select id="waifu-type">
+                            <option value="waifu">Waifu</option>
+                            <option value="neko">Neko</option>
+                            <option value="trap">Trap</option>
+                            <option value="blowjob">Blowjob</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="getWaifu()" class="btn-waifu">🎴 Get Waifu</button>
+                        <button onclick="downloadWaifu()">⬇️ Download</button>
+                    </div>
+                    
+                    <div id="waifu-preview" style="display: none; text-align: center; margin: 20px 0;">
+                        <p style="color: #888; margin-bottom: 10px;"><span id="waifu-source"></span></p>
+                        <img id="waifu-preview-img" src="" alt="Waifu" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
+                    </div>
+                    
+                    <div id="waifu-downloadStatus" style="display: none;">
+                        <div class="progress-bar"><div class="progress-fill" id="waifu-progressFill"></div></div>
+                        <div class="task-info" id="waifu-taskInfo"></div>
+                        <div class="url-box" id="waifu-downloadUrlBox" style="display: none;">
+                            <label>Download URL</label>
+                            <div class="url-copy-group"><input type="text" id="waifu-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('waifu')">Copy</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="waifu-baileys" class="tab-content">
+                <div class="card"><h2>Waifu + Baileys</h2>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <pre>const axios = require('axios');
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+
+async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
+    const res = await axios.get(`${API}/api/waifu?type=${type}&category=${category}`);
+    await sock.sendMessage(from, { 
+        image: { url: res.data.url }, 
+        caption: `🎴 ${type} (${category})` 
+    });
+}
+
+// Comandos:
+.waifu - Waifu NSFW aleatoria
+.waifu sfw - Waifu SFW
+.neko - Neko NSFW</pre>
+                    <button onclick="copyCode('waifu-baileysCode')">Copy Code</button>
+                </div>
+            </div>
+        </div>
+        
         <!-- LYRICS -->
         <div id="lyrics" class="page">
             <div class="card">
@@ -289,13 +375,13 @@ async function getImage(sock, from, query) {
             </div>
         </div>
         
-        <footer><p>FRIKITUBE API · YOUTUBE · TIKTOK · IMAGES · LYRICS</p></footer>
+        <footer><p>FRIKITUBE API · YOUTUBE · TIKTOK · IMAGES · WAIFU · LYRICS</p></footer>
     </div>
     
     <script>
         const API_URL = '';
-        let ytTaskId = null, ttTaskId = null, imgTaskId = null;
-        let ytInterval = null, ttInterval = null, imgInterval = null;
+        let ytTaskId = null, ttTaskId = null, imgTaskId = null, waifuTaskId = null;
+        let ytInterval = null, ttInterval = null, imgInterval = null, waifuInterval = null;
         
         async function checkServerStatus() {
             try { await fetch(`${API_URL}/health`); document.getElementById('statusDot').classList.add('online'); document.getElementById('statusText').textContent = 'ONLINE'; }
@@ -318,6 +404,67 @@ async function getImage(sock, from, query) {
         }
         
         function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('Copied!'); }
+        
+        // ========== WAIFU API ==========
+        async function getWaifu() {
+            const type = document.getElementById('waifu-type').value;
+            const category = document.getElementById('waifu-category').value;
+            
+            try {
+                const res = await fetch(`${API_URL}/api/waifu?type=${type}&category=${category}`);
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('waifu-preview').style.display = 'block';
+                    document.getElementById('waifu-preview-img').src = data.url;
+                    document.getElementById('waifu-source').textContent = `Source: ${data.source} | ${data.category} | ${data.type}`;
+                } else {
+                    alert('Error getting waifu');
+                }
+            } catch(e) { alert('Error: ' + e.message); }
+        }
+        
+        async function downloadWaifu() {
+            const type = document.getElementById('waifu-type').value;
+            const category = document.getElementById('waifu-category').value;
+            
+            try {
+                const res = await fetch(`${API_URL}/api/waifu/download`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({type, category})
+                });
+                const data = await res.json();
+                
+                waifuTaskId = data.task_id;
+                if (waifuInterval) clearInterval(waifuInterval);
+                waifuInterval = setInterval(checkWaifuStatus, 2000);
+                
+                document.getElementById('waifu-downloadStatus').style.display = 'block';
+                document.getElementById('waifu-downloadUrlBox').style.display = 'none';
+                document.getElementById('waifu-taskInfo').innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p><p><strong>Type</strong> ${type} (${category})</p>`;
+            } catch(e) { alert('Error: ' + e.message); }
+        }
+        
+        async function checkWaifuStatus() {
+            if (!waifuTaskId) return;
+            try {
+                const res = await fetch(`${API_URL}/api/status/${waifuTaskId}`);
+                const data = await res.json();
+                document.getElementById('waifu-progressFill').style.width = data.progress + '%';
+                let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
+                if (data.title) html += `<p><strong>Type</strong> ${data.title}</p>`;
+                if (data.file_size_str) html += `<p><strong>Size</strong> ${data.file_size_str}</p>`;
+                if (data.category) html += `<p><span class="status-badge" style="background:#9b59b622;color:#9b59b6;">${data.category}</span></p>`;
+                document.getElementById('waifu-taskInfo').innerHTML = html;
+                
+                if (data.status === 'completed') {
+                    clearInterval(waifuInterval);
+                    document.getElementById('waifu-downloadUrl').value = window.location.origin + data.stream_url;
+                    document.getElementById('waifu-downloadUrlBox').style.display = 'block';
+                }
+            } catch(e) {}
+        }
         
         // ========== GOOGLE IMAGES ==========
         async function searchImage() {
@@ -403,10 +550,6 @@ async function getImage(sock, from, query) {
                     clearInterval(imgInterval);
                     document.getElementById('img-downloadUrl').value = window.location.origin + data.stream_url;
                     document.getElementById('img-downloadUrlBox').style.display = 'block';
-                }
-                if (data.status === 'failed') {
-                    clearInterval(imgInterval);
-                    document.getElementById('img-taskInfo').innerHTML += `<p style="color: #ff4444;"><strong>Error</strong> ${data.error || 'Unknown'}</p>`;
                 }
             } catch(e) {}
         }
