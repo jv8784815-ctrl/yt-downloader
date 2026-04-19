@@ -1,5 +1,8 @@
 {
   "rewrites": [
+    { "source": "/api/waifu", "destination": "http://64.20.54.50:30325/api/waifu" },
+    { "source": "/api/waifu/types", "destination": "http://64.20.54.50:30325/api/waifu/types" },
+    { "source": "/api/waifu/download", "destination": "http://64.20.54.50:30325/api/waifu/download" },
     { "source": "/api/image/search", "destination": "http://64.20.54.50:30325/api/image/search" },
     { "source": "/api/image/download", "destination": "http://64.20.54.50:30325/api/image/download" },
     { "source": "/api/tiktok/search", "destination": "http://64.20.54.50:30325/api/tiktok/search" },
