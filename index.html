@@ -81,24 +81,10 @@
             margin-right: 10px; margin-bottom: 10px; border-radius: 6px; text-transform: uppercase;
         }
         button:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
-        .btn-18 {
-            background: #ff0050 !important;
-            border-color: #ff0050 !important;
-        }
-        .btn-18:hover {
-            background: #ff3366 !important;
-            border-color: #ff3366 !important;
-            color: #ffffff !important;
-        }
-        .btn-waifu {
-            background: #9b59b6 !important;
-            border-color: #9b59b6 !important;
-        }
-        .btn-waifu:hover {
-            background: #af7ac5 !important;
-            border-color: #af7ac5 !important;
-            color: #ffffff !important;
-        }
+        .btn-18 { background: #ff0050 !important; border-color: #ff0050 !important; }
+        .btn-18:hover { background: #ff3366 !important; border-color: #ff3366 !important; color: #ffffff !important; }
+        .btn-waifu { background: #9b59b6 !important; border-color: #9b59b6 !important; }
+        .btn-waifu:hover { background: #af7ac5 !important; border-color: #af7ac5 !important; color: #ffffff !important; }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -448,7 +434,7 @@ async function buscarImagen(sock, from, query, adult = false) {
                             <option value="waifu">Waifu</option>
                             <option value="neko">Neko</option>
                             <option value="trap">Trap</option>
-                            <option value="blowjob">Blowjob</option>
+                            <option value="blowjob">Blowjob (Video)</option>
                         </select>
                     </div>
                     <div class="button-group">
@@ -496,7 +482,9 @@ async function buscarImagen(sock, from, query, adult = false) {
                 <div class="card">
                     <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre id="waifu-baileysCode">const axios = require('axios');
+                    
+                    <h3>🎴 Waifu / Neko / Trap (Imagen)</h3>
+                    <pre>const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
@@ -510,8 +498,42 @@ async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
 // Comandos:
 // .waifu - Waifu NSFW
 // .waifu sfw - Waifu SFW
-// .neko - Neko NSFW</pre>
-                    <button onclick="copyCode('waifu-baileysCode')">Copiar Código</button>
+// .neko - Neko NSFW
+// .trap - Trap NSFW</pre>
+                    
+                    <h3 style="margin-top: 30px;">🎬 Blowjob (VIDEO)</h3>
+                    <pre id="waifu-blowjobCode">const axios = require('axios');
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+
+async function obtenerBlowjob(sock, from) {
+    // 1. Obtener URL del video
+    const res = await axios.get(`${API}/api/waifu?type=blowjob&category=nsfw`);
+    const videoUrl = res.data.url;
+    
+    // 2. Descargar el video usando el endpoint de download
+    const downloadRes = await axios.post(`${API}/api/waifu/download`, {
+        type: 'blowjob',
+        category: 'nsfw'
+    });
+    
+    const taskId = downloadRes.data.task_id;
+    let status;
+    do {
+        await new Promise(r => setTimeout(r, 2000));
+        status = await axios.get(`${API}/api/status/${taskId}`);
+    } while (status.data.status !== 'completed');
+    
+    // 3. Enviar como video
+    await sock.sendMessage(from, {
+        video: { url: `${API}/api/stream/${taskId}` },
+        mimetype: 'video/mp4',
+        caption: '🎬 Blowjob NSFW',
+        gifPlayback: false
+    });
+}
+
+// Comando: .blowjob - Envía un video Blowjob NSFW</pre>
+                    <button onclick="copyCode('waifu-blowjobCode')">Copiar Código Blowjob</button>
                 </div>
             </div>
         </div>
