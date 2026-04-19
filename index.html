@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FrikiTube · API</title>
+    <title>FrikiAPI</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -26,12 +26,12 @@
         .status-dot.offline { background: #666666; }
         #statusText { font-size: 0.75em; color: #aaaaaa; letter-spacing: 2px; }
         .nav-main {
-            display: flex; gap: 5px; margin-bottom: 30px;
+            display: flex; gap: 5px; margin-bottom: 30px; flex-wrap: wrap;
             border-bottom: 1px solid #333333; padding-bottom: 15px;
         }
         .nav-btn {
-            padding: 12px 35px; background: transparent; border: none; color: #666666;
-            font-size: 1em; font-weight: 400; letter-spacing: 3px; cursor: pointer;
+            padding: 12px 25px; background: transparent; border: none; color: #666666;
+            font-size: 0.9em; font-weight: 400; letter-spacing: 3px; cursor: pointer;
             transition: all 0.3s; position: relative; text-transform: uppercase;
         }
         .nav-btn:hover { color: #aaaaaa; }
@@ -46,7 +46,7 @@
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .tabs { display: flex; gap: 25px; margin-bottom: 25px; padding: 0 5px; }
+        .tabs { display: flex; gap: 25px; margin-bottom: 25px; padding: 0 5px; flex-wrap: wrap; }
         .tab {
             padding: 8px 0; background: transparent; border: none; color: #666666;
             font-size: 0.8em; letter-spacing: 3px; cursor: pointer; transition: all 0.3s;
@@ -64,6 +64,7 @@
             color: #ffffff; font-size: 1.5em; font-weight: 400; letter-spacing: 2px;
             margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid #333333;
         }
+        .card h3 { color: #cccccc; font-size: 1em; font-weight: 400; letter-spacing: 2px; margin: 25px 0 15px; }
         .input-group { margin-bottom: 22px; }
         label {
             display: block; margin-bottom: 8px; color: #888888; font-size: 0.7em;
@@ -111,6 +112,7 @@
             letter-spacing: 2px; border-radius: 20px; background: #222222; color: #cccccc;
         }
         .status-pending { background: #ffc10722; color: #ffc107; }
+        .status-downloading { background: #2196f322; color: #2196f3; }
         .status-completed { background: #00e67622; color: #00e676; }
         .status-failed { background: #ff444422; color: #ff4444; }
         .url-box { padding: 20px; background: #050505; border-radius: 6px; margin: 20px 0; }
@@ -126,181 +128,322 @@
         }
         .image-preview { text-align: center; margin: 20px 0; }
         .image-preview img { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444; }
+        .lyrics-box {
+            background: #000000; padding: 25px; border-radius: 6px; border: 1px solid #333333;
+            margin-top: 20px; max-height: 500px; overflow-y: auto; white-space: pre-line;
+            line-height: 1.8; color: #cccccc; font-size: 0.95em;
+        }
         footer { text-align: center; padding: 30px 0; color: #555555; border-top: 1px solid #333333; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
         ::-webkit-scrollbar-thumb { background: #444444; }
         .button-group { display: flex; gap: 10px; margin-bottom: 15px; }
         .button-group button { flex: 1; margin-right: 0; }
+        .endpoint {
+            padding: 20px; margin-bottom: 15px; background: #050505;
+            border-radius: 6px; border-left: 3px solid #ffffff;
+        }
+        .method {
+            display: inline-block; padding: 3px 10px; font-size: 0.6em; letter-spacing: 1px;
+            border-radius: 4px; margin-right: 10px; background: #222222; color: #cccccc;
+        }
+        .method.post { background: #00e67622; color: #00e676; }
+        .method.get { background: #2196f322; color: #2196f3; }
+        @media (max-width: 700px) {
+            .logo { font-size: 1.8em; letter-spacing: 4px; }
+            .card { padding: 20px; }
+            .nav-btn { padding: 10px 15px; letter-spacing: 2px; font-size: 0.8em; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">FRIKI<span>TUBE</span></div>
-            <div class="subtitle">API · STREAMING · LYRICS · IMAGES · WAIFU</div>
+            <div class="logo">FRIKI<span>API</span></div>
+            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
-                <span id="statusText">CHECKING</span>
+                <span id="statusText">VERIFICANDO</span>
             </div>
         </header>
         
         <div class="nav-main">
-            <button class="nav-btn active" onclick="showPage('youtube')">YouTube</button>
-            <button class="nav-btn" onclick="showPage('tiktok')">TikTok</button>
-            <button class="nav-btn" onclick="showPage('images')">Images</button>
-            <button class="nav-btn" onclick="showPage('waifu')">Waifu</button>
-            <button class="nav-btn" onclick="showPage('lyrics')">Lyrics</button>
+            <button class="nav-btn active" onclick="showPage('youtube')">FrikiTube</button>
+            <button class="nav-btn" onclick="showPage('tiktok')">FrikiTok</button>
+            <button class="nav-btn" onclick="showPage('images')">FrikiIMG</button>
+            <button class="nav-btn" onclick="showPage('waifu')">FrikiWaifu</button>
+            <button class="nav-btn" onclick="showPage('lyrics')">FrikiLyric</button>
         </div>
         
-        <!-- YOUTUBE -->
+        <!-- ========== FRIKITUBE (YOUTUBE) ========== -->
         <div id="youtube" class="page active">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('yt-download', 'youtube')">Download</button>
+                <button class="tab active" onclick="showTab('yt-download', 'youtube')">Descargar</button>
+                <button class="tab" onclick="showTab('yt-docs', 'youtube')">Endpoints</button>
                 <button class="tab" onclick="showTab('yt-baileys', 'youtube')">Baileys</button>
             </div>
+            
             <div id="yt-download" class="tab-content active">
                 <div class="card">
-                    <h2>YouTube Download</h2>
-                    <div class="input-group"><label>URL</label><input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..."></div>
-                    <div class="input-group"><label>Format</label><select id="yt-format"><option value="mp3">MP3</option><option value="mp4">MP4</option></select></div>
-                    <button onclick="startDownload('yt')">Download</button>
+                    <h2>Descargar de YouTube</h2>
+                    <div class="input-group"><label>URL del video</label><input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..."></div>
+                    <div class="input-group"><label>Formato</label><select id="yt-format"><option value="mp3">MP3 (Audio)</option><option value="mp4">MP4 (Video)</option></select></div>
+                    <button onclick="startDownload('yt')">Descargar</button>
                     <div id="yt-downloadStatus" style="display: none;">
                         <div class="progress-bar"><div class="progress-fill" id="yt-progressFill"></div></div>
                         <div class="task-info" id="yt-taskInfo"></div>
                         <div class="url-box" id="yt-downloadUrlBox" style="display: none;">
-                            <label>Download URL</label>
-                            <div class="url-copy-group"><input type="text" id="yt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('yt')">Copy</button></div>
+                            <label>URL de descarga</label>
+                            <div class="url-copy-group"><input type="text" id="yt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('yt')">Copiar</button></div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div id="yt-docs" class="tab-content">
+                <div class="card">
+                    <h2>Endpoints de FrikiTube</h2>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/download</h3>
+                        <p style="color: #888; margin: 10px 0;">Inicia una descarga de YouTube</p>
+                        <pre>{
+  "url": "https://youtu.be/...",
+  "format": "mp3",
+  "quality": "medium"
+}</pre>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/status/{task_id}</h3>
+                        <p style="color: #888; margin: 10px 0;">Verifica el estado de la descarga</p>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/stream/{task_id}</h3>
+                        <p style="color: #888; margin: 10px 0;">Descarga el archivo procesado</p>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/info?url=...</h3>
+                        <p style="color: #888; margin: 10px 0;">Obtiene información del video</p>
+                    </div>
+                </div>
+            </div>
+            
             <div id="yt-baileys" class="tab-content">
-                <div class="card"><h2>Baileys Integration</h2>
+                <div class="card">
+                    <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre>const axios = require('axios');
+                    <pre id="yt-baileysCode">const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
-async function downloadYT(sock, from, url) {
-    const res = await axios.post(`${API}/api/download`, {url, format: 'mp4', quality: 'medium'});
+async function descargarYouTube(sock, from, url) {
+    const res = await axios.post(`${API}/api/download`, {
+        url, format: 'mp4', quality: 'medium'
+    });
     const taskId = res.data.task_id;
     let status;
-    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
-    while (status.data.status !== 'completed');
-    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
+    do {
+        await new Promise(r => setTimeout(r, 2000));
+        status = await axios.get(`${API}/api/status/${taskId}`);
+    } while (status.data.status !== 'completed');
+    
+    await sock.sendMessage(from, {
+        video: { url: `${API}/api/stream/${taskId}` },
+        mimetype: 'video/mp4',
+        caption: status.data.title
+    });
 }</pre>
-                    <button onclick="copyCode('yt-baileysCode')">Copy Code</button>
+                    <button onclick="copyCode('yt-baileysCode')">Copiar Código</button>
                 </div>
             </div>
         </div>
         
-        <!-- TIKTOK -->
+        <!-- ========== FRIKITOK (TIKTOK) ========== -->
         <div id="tiktok" class="page">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Download</button>
+                <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Descargar</button>
+                <button class="tab" onclick="showTab('tt-docs', 'tiktok')">Endpoints</button>
                 <button class="tab" onclick="showTab('tt-baileys', 'tiktok')">Baileys</button>
             </div>
+            
             <div id="tt-download" class="tab-content active">
                 <div class="card">
-                    <h2>TikTok Video</h2>
-                    <div class="input-group"><label>URL</label><input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/..."></div>
-                    <div class="input-group"><label>Watermark</label><select id="tt-watermark"><option value="false">Without</option><option value="true">With</option></select></div>
-                    <button onclick="startDownload('tt')">Download</button>
+                    <h2>Descargar de TikTok</h2>
+                    <div class="input-group"><label>URL del video</label><input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/..."></div>
+                    <div class="input-group"><label>Marca de agua</label><select id="tt-watermark"><option value="false">Sin marca</option><option value="true">Con marca</option></select></div>
+                    <button onclick="startDownload('tt')">Descargar</button>
                     <div id="tt-downloadStatus" style="display: none;">
                         <div class="progress-bar"><div class="progress-fill" id="tt-progressFill"></div></div>
                         <div class="task-info" id="tt-taskInfo"></div>
                         <div class="url-box" id="tt-downloadUrlBox" style="display: none;">
-                            <label>Download URL</label>
-                            <div class="url-copy-group"><input type="text" id="tt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('tt')">Copy</button></div>
+                            <label>URL de descarga</label>
+                            <div class="url-copy-group"><input type="text" id="tt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('tt')">Copiar</button></div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div id="tt-docs" class="tab-content">
+                <div class="card">
+                    <h2>Endpoints de FrikiTok</h2>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/tiktok</h3>
+                        <p style="color: #888; margin: 10px 0;">Descarga un video de TikTok</p>
+                        <pre>{
+  "url": "https://www.tiktok.com/...",
+  "watermark": false
+}</pre>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/tiktok/search</h3>
+                        <p style="color: #888; margin: 10px 0;">Busca videos en TikTok</p>
+                        <pre>{
+  "query": "gatos graciosos",
+  "limit": 10
+}</pre>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/tiktok/random?q=...</h3>
+                        <p style="color: #888; margin: 10px 0;">Obtiene un TikTok aleatorio</p>
+                    </div>
+                </div>
+            </div>
+            
             <div id="tt-baileys" class="tab-content">
-                <div class="card"><h2>TikTok + Baileys</h2>
+                <div class="card">
+                    <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre>const axios = require('axios');
+                    <pre id="tt-baileysCode">const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
-async function downloadTT(sock, from, url) {
-    const res = await axios.post(`${API}/api/tiktok`, {url, watermark: false});
+async function descargarTikTok(sock, from, url) {
+    const res = await axios.post(`${API}/api/tiktok`, {
+        url, watermark: false
+    });
     const taskId = res.data.task_id;
     let status;
-    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
-    while (status.data.status !== 'completed');
-    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
+    do {
+        await new Promise(r => setTimeout(r, 2000));
+        status = await axios.get(`${API}/api/status/${taskId}`);
+    } while (status.data.status !== 'completed');
+    
+    await sock.sendMessage(from, {
+        video: { url: `${API}/api/stream/${taskId}` },
+        mimetype: 'video/mp4',
+        caption: status.data.title
+    });
+}
+
+// Buscar y enviar TikTok aleatorio
+async function tiktokAleatorio(sock, from, query) {
+    const random = await axios.get(`${API}/api/tiktok/random?q=${encodeURIComponent(query)}`);
+    if (random.data.success) {
+        await descargarTikTok(sock, from, random.data.url);
+    }
 }</pre>
-                    <button onclick="copyCode('tt-baileysCode')">Copy Code</button>
+                    <button onclick="copyCode('tt-baileysCode')">Copiar Código</button>
                 </div>
             </div>
         </div>
         
-        <!-- GOOGLE IMAGES -->
+        <!-- ========== FRIKIIMG (IMÁGENES) ========== -->
         <div id="images" class="page">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('img-search', 'images')">Search</button>
+                <button class="tab active" onclick="showTab('img-search', 'images')">Buscar</button>
+                <button class="tab" onclick="showTab('img-docs', 'images')">Endpoints</button>
                 <button class="tab" onclick="showTab('img-baileys', 'images')">Baileys</button>
             </div>
+            
             <div id="img-search" class="tab-content active">
                 <div class="card">
-                    <h2>Google Images</h2>
-                    <div class="input-group"><label>Search</label><input type="text" id="img-query" placeholder="gato gracioso..."></div>
+                    <h2>Buscar Imágenes en Google</h2>
+                    <div class="input-group"><label>Búsqueda</label><input type="text" id="img-query" placeholder="gato gracioso..."></div>
                     <div class="button-group">
-                        <button onclick="searchImage()">🔍 Search</button>
+                        <button onclick="searchImage()">🔍 Buscar</button>
                         <button onclick="searchImage18()" class="btn-18">🔞 +18</button>
                     </div>
-                    <button onclick="downloadImage()">⬇️ Download</button>
+                    <button onclick="downloadImage()">⬇️ Descargar</button>
                     <div id="img-preview" style="display: none; text-align: center; margin: 20px 0;">
                         <p style="color: #888; margin-bottom: 10px;"><span id="img-source"></span></p>
-                        <img id="img-preview-img" src="" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
+                        <img id="img-preview-img" src="" alt="Vista previa" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
                     </div>
                     <div id="img-downloadStatus" style="display: none;">
                         <div class="progress-bar"><div class="progress-fill" id="img-progressFill"></div></div>
                         <div class="task-info" id="img-taskInfo"></div>
                         <div class="url-box" id="img-downloadUrlBox" style="display: none;">
-                            <label>Download URL</label>
-                            <div class="url-copy-group"><input type="text" id="img-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('img')">Copy</button></div>
+                            <label>URL de descarga</label>
+                            <div class="url-copy-group"><input type="text" id="img-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('img')">Copiar</button></div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div id="img-docs" class="tab-content">
+                <div class="card">
+                    <h2>Endpoints de FrikiIMG</h2>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/image/search</h3>
+                        <p style="color: #888; margin: 10px 0;">Busca una imagen en Google</p>
+                        <pre>{
+  "query": "gato",
+  "adult": false
+}</pre>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/image/download</h3>
+                        <p style="color: #888; margin: 10px 0;">Descarga la imagen encontrada</p>
+                        <pre>{
+  "query": "gato",
+  "adult": false
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
             <div id="img-baileys" class="tab-content">
-                <div class="card"><h2>Google Images + Baileys</h2>
+                <div class="card">
+                    <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre>const axios = require('axios');
+                    <pre id="img-baileysCode">const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
-async function getImage(sock, from, query) {
-    const res = await axios.post(`${API}/api/image/download`, {query});
+async function buscarImagen(sock, from, query, adult = false) {
+    const res = await axios.post(`${API}/api/image/download`, {
+        query, adult
+    });
     const taskId = res.data.task_id;
     let status;
-    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
-    while (status.data.status !== 'completed');
-    await sock.sendMessage(from, { image: { url: `${API}/api/stream/${taskId}` }, caption: query });
+    do {
+        await new Promise(r => setTimeout(r, 2000));
+        status = await axios.get(`${API}/api/status/${taskId}`);
+    } while (status.data.status !== 'completed');
+    
+    await sock.sendMessage(from, {
+        image: { url: `${API}/api/stream/${taskId}` },
+        caption: `🔍 ${query}${adult ? ' 🔞' : ''}`
+    });
 }</pre>
-                    <button onclick="copyCode('img-baileysCode')">Copy Code</button>
+                    <button onclick="copyCode('img-baileysCode')">Copiar Código</button>
                 </div>
             </div>
         </div>
         
-        <!-- WAIFU API -->
+        <!-- ========== FRIKIWAIFU ========== -->
         <div id="waifu" class="page">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('waifu-search', 'waifu')">Get Waifu</button>
+                <button class="tab active" onclick="showTab('waifu-search', 'waifu')">Obtener</button>
+                <button class="tab" onclick="showTab('waifu-docs', 'waifu')">Endpoints</button>
                 <button class="tab" onclick="showTab('waifu-baileys', 'waifu')">Baileys</button>
             </div>
+            
             <div id="waifu-search" class="tab-content active">
                 <div class="card">
-                    <h2>Waifu API <span class="platform-badge" style="background:#9b59b622;color:#9b59b6;">NSFW</span></h2>
-                    
-                    <div class="input-group"><label>Category</label>
+                    <h2>Obtener Waifu</h2>
+                    <div class="input-group"><label>Categoría</label>
                         <select id="waifu-category">
                             <option value="nsfw">🔞 NSFW</option>
                             <option value="sfw">✅ SFW</option>
                         </select>
                     </div>
-                    
-                    <div class="input-group"><label>Type</label>
+                    <div class="input-group"><label>Tipo</label>
                         <select id="waifu-type">
                             <option value="waifu">Waifu</option>
                             <option value="neko">Neko</option>
@@ -308,59 +451,141 @@ async function getImage(sock, from, query) {
                             <option value="blowjob">Blowjob</option>
                         </select>
                     </div>
-                    
                     <div class="button-group">
-                        <button onclick="getWaifu()" class="btn-waifu">🎴 Get Waifu</button>
-                        <button onclick="downloadWaifu()">⬇️ Download</button>
+                        <button onclick="getWaifu()" class="btn-waifu">🎴 Obtener Waifu</button>
+                        <button onclick="downloadWaifu()">⬇️ Descargar</button>
                     </div>
-                    
                     <div id="waifu-preview" style="display: none; text-align: center; margin: 20px 0;">
                         <p style="color: #888; margin-bottom: 10px;"><span id="waifu-source"></span></p>
                         <img id="waifu-preview-img" src="" alt="Waifu" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
                     </div>
-                    
                     <div id="waifu-downloadStatus" style="display: none;">
                         <div class="progress-bar"><div class="progress-fill" id="waifu-progressFill"></div></div>
                         <div class="task-info" id="waifu-taskInfo"></div>
                         <div class="url-box" id="waifu-downloadUrlBox" style="display: none;">
-                            <label>Download URL</label>
-                            <div class="url-copy-group"><input type="text" id="waifu-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('waifu')">Copy</button></div>
+                            <label>URL de descarga</label>
+                            <div class="url-copy-group"><input type="text" id="waifu-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('waifu')">Copiar</button></div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div id="waifu-docs" class="tab-content">
+                <div class="card">
+                    <h2>Endpoints de FrikiWaifu</h2>
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/waifu?type=waifu&category=nsfw</h3>
+                        <p style="color: #888; margin: 10px 0;">Obtiene una imagen aleatoria</p>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/waifu/types</h3>
+                        <p style="color: #888; margin: 10px 0;">Lista los tipos disponibles</p>
+                    </div>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/waifu/download</h3>
+                        <p style="color: #888; margin: 10px 0;">Descarga la imagen</p>
+                        <pre>{
+  "type": "waifu",
+  "category": "nsfw"
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
             <div id="waifu-baileys" class="tab-content">
-                <div class="card"><h2>Waifu + Baileys</h2>
+                <div class="card">
+                    <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre>const axios = require('axios');
+                    <pre id="waifu-baileysCode">const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
-async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
+async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
     const res = await axios.get(`${API}/api/waifu?type=${type}&category=${category}`);
-    await sock.sendMessage(from, { 
-        image: { url: res.data.url }, 
-        caption: `🎴 ${type} (${category})` 
+    await sock.sendMessage(from, {
+        image: { url: res.data.url },
+        caption: `🎴 ${type} (${category})`
     });
-}</pre>
-                    <button onclick="copyCode('waifu-baileysCode')">Copy Code</button>
+}
+
+// Comandos:
+// .waifu - Waifu NSFW
+// .waifu sfw - Waifu SFW
+// .neko - Neko NSFW</pre>
+                    <button onclick="copyCode('waifu-baileysCode')">Copiar Código</button>
                 </div>
             </div>
         </div>
         
-        <!-- LYRICS -->
+        <!-- ========== FRIKILYRIC (LETRAS) ========== -->
         <div id="lyrics" class="page">
-            <div class="card">
-                <h2>FrikiTube Lyrics</h2>
-                <div class="input-group"><label>Song Name</label><input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain"></div>
-                <button onclick="searchLyrics()">Search</button>
-                <div id="lyricsResult" style="display: none;">
-                    <div class="task-info" id="lyricsInfo"></div>
-                    <div class="lyrics-box" id="lyricsContent" style="max-height:400px; overflow-y:auto; white-space:pre-line; background:#050505; padding:20px; border-radius:6px; margin-top:15px;"></div>
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('ly-search', 'lyrics')">Buscar</button>
+                <button class="tab" onclick="showTab('ly-docs', 'lyrics')">Endpoints</button>
+                <button class="tab" onclick="showTab('ly-baileys', 'lyrics')">Baileys</button>
+            </div>
+            
+            <div id="ly-search" class="tab-content active">
+                <div class="card">
+                    <h2>Buscar Letra de Canción</h2>
+                    <div class="input-group"><label>Nombre de la canción</label><input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain"></div>
+                    <div class="example-links" style="display: flex; gap: 10px; margin: 15px 0;">
+                        <span class="example-link" onclick="setLyricsExample('Fleetwood Mac - The Chain')">Fleetwood Mac</span>
+                        <span class="example-link" onclick="setLyricsExample('Bad Bunny - Me Porto Bonito')">Bad Bunny</span>
+                    </div>
+                    <button onclick="searchLyrics()">Buscar</button>
+                    <div id="lyricsResult" style="display: none;">
+                        <div class="task-info" id="lyricsInfo"></div>
+                        <div class="lyrics-box" id="lyricsContent"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="ly-docs" class="tab-content">
+                <div class="card">
+                    <h2>Endpoints de FrikiLyric</h2>
+                    <div class="endpoint">
+                        <h3><span class="method get">GET</span> /api/lyrics?q=...</h3>
+                        <p style="color: #888; margin: 10px 0;">Busca la letra de una canción</p>
+                        <pre>{
+  "success": true,
+  "artist": "Fleetwood Mac",
+  "title": "The Chain",
+  "lyrics": "Listen to the wind blow...",
+  "source": "lrclib"
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="ly-baileys" class="tab-content">
+                <div class="card">
+                    <h2>Integración con Baileys</h2>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <pre id="ly-baileysCode">const axios = require('axios');
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+
+async function buscarLetra(sock, from, query) {
+    const res = await axios.get(`${API}/api/lyrics?q=${encodeURIComponent(query)}`);
+    const data = res.data;
+    
+    if (data.success) {
+        let mensaje = `🎵 *${data.title}*\n👤 *${data.artist}*\n\n`;
+        mensaje += data.lyrics.substring(0, 1000);
+        if (data.lyrics.length > 1000) mensaje += '...';
+        
+        await sock.sendMessage(from, { text: mensaje });
+    } else {
+        await sock.sendMessage(from, { text: '❌ No se encontró la letra' });
+    }
+}
+
+// Comando: .letra Fleetwood Mac - The Chain</pre>
+                    <button onclick="copyCode('ly-baileysCode')">Copiar Código</button>
                 </div>
             </div>
         </div>
         
-        <footer><p>FRIKITUBE API · YOUTUBE · TIKTOK · IMAGES · WAIFU · LYRICS</p></footer>
+        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC</p></footer>
     </div>
     
     <script>
@@ -369,8 +594,8 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
         let ytInterval = null, ttInterval = null, imgInterval = null, waifuInterval = null;
         
         async function checkServerStatus() {
-            try { await fetch(`${API_URL}/health`); document.getElementById('statusDot').classList.add('online'); document.getElementById('statusText').textContent = 'ONLINE'; }
-            catch { document.getElementById('statusDot').classList.add('offline'); document.getElementById('statusText').textContent = 'OFFLINE'; }
+            try { await fetch(`${API_URL}/health`); document.getElementById('statusDot').classList.add('online'); document.getElementById('statusText').textContent = 'EN LÍNEA'; }
+            catch { document.getElementById('statusDot').classList.add('offline'); document.getElementById('statusText').textContent = 'SIN CONEXIÓN'; }
         }
         
         function showPage(page) {
@@ -388,46 +613,39 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
             event.target.classList.add('active');
         }
         
-        function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('Copied!'); }
+        function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('¡Código copiado!'); }
         
-        // ========== WAIFU API (CORREGIDO: todo minúsculas) ==========
+        function setLyricsExample(query) { document.getElementById('lyrics-query').value = query; }
+        
+        // ========== WAIFU ==========
         async function getWaifu() {
             const type = document.getElementById('waifu-type').value;
             const category = document.getElementById('waifu-category').value;
-            
             try {
                 const res = await fetch(`${API_URL}/api/waifu?type=${type}&category=${category}`);
                 const data = await res.json();
-                
                 if (data.success) {
                     document.getElementById('waifu-preview').style.display = 'block';
                     document.getElementById('waifu-preview-img').src = data.url;
-                    document.getElementById('waifu-source').textContent = `Source: ${data.source} | ${data.category} | ${data.type}`;
-                } else {
-                    alert('Error getting waifu');
-                }
+                    document.getElementById('waifu-source').textContent = `Fuente: ${data.source} | ${data.category} | ${data.type}`;
+                } else { alert('Error al obtener waifu'); }
             } catch(e) { alert('Error: ' + e.message); }
         }
         
         async function downloadWaifu() {
             const type = document.getElementById('waifu-type').value;
             const category = document.getElementById('waifu-category').value;
-            
             try {
                 const res = await fetch(`${API_URL}/api/waifu/download`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({type, category})
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({type, category})
                 });
                 const data = await res.json();
-                
                 waifuTaskId = data.task_id;
                 if (waifuInterval) clearInterval(waifuInterval);
                 waifuInterval = setInterval(checkWaifuStatus, 2000);
-                
                 document.getElementById('waifu-downloadStatus').style.display = 'block';
                 document.getElementById('waifu-downloadUrlBox').style.display = 'none';
-                document.getElementById('waifu-taskInfo').innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p><p><strong>Type</strong> ${type} (${category})</p>`;
+                document.getElementById('waifu-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p><p><strong>Tipo</strong> ${type} (${category})</p>`;
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -437,12 +655,10 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
                 const res = await fetch(`${API_URL}/api/status/${waifuTaskId}`);
                 const data = await res.json();
                 document.getElementById('waifu-progressFill').style.width = data.progress + '%';
-                let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
-                if (data.title) html += `<p><strong>Type</strong> ${data.title}</p>`;
-                if (data.file_size_str) html += `<p><strong>Size</strong> ${data.file_size_str}</p>`;
-                if (data.category) html += `<p><span class="status-badge" style="background:#9b59b622;color:#9b59b6;">${data.category}</span></p>`;
+                let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
+                if (data.title) html += `<p><strong>Tipo</strong> ${data.title}</p>`;
+                if (data.file_size_str) html += `<p><strong>Tamaño</strong> ${data.file_size_str}</p>`;
                 document.getElementById('waifu-taskInfo').innerHTML = html;
-                
                 if (data.status === 'completed') {
                     clearInterval(waifuInterval);
                     document.getElementById('waifu-downloadUrl').value = window.location.origin + data.stream_url;
@@ -451,70 +667,53 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
             } catch(e) {}
         }
         
-        // ========== GOOGLE IMAGES ==========
+        // ========== IMÁGENES ==========
         async function searchImage() {
             const query = document.getElementById('img-query').value;
-            if (!query) return alert('Enter search query');
-            
+            if (!query) return alert('Ingresa una búsqueda');
             try {
                 const res = await fetch(`${API_URL}/api/image/search`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query, adult: false})
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: false})
                 });
                 const data = await res.json();
-                
                 if (data.success) {
                     document.getElementById('img-preview').style.display = 'block';
                     document.getElementById('img-preview-img').src = data.image_url;
-                    document.getElementById('img-source').textContent = `Source: ${data.source || 'Google Images'}`;
-                } else {
-                    alert('No image found');
-                }
+                    document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Google Images'}`;
+                } else { alert('No se encontró la imagen'); }
             } catch(e) { alert('Error: ' + e.message); }
         }
         
         async function searchImage18() {
             let query = document.getElementById('img-query').value;
-            if (!query) return alert('Enter search query');
-            
+            if (!query) return alert('Ingresa una búsqueda');
             try {
                 const res = await fetch(`${API_URL}/api/image/search`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query, adult: true})
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: true})
                 });
                 const data = await res.json();
-                
                 if (data.success) {
                     document.getElementById('img-preview').style.display = 'block';
                     document.getElementById('img-preview-img').src = data.image_url;
-                    document.getElementById('img-source').textContent = `Source: ${data.source || 'Google Images'} | 🔞 +18`;
-                } else {
-                    alert('No image found');
-                }
+                    document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Google Images'} | 🔞 +18`;
+                } else { alert('No se encontró la imagen'); }
             } catch(e) { alert('Error: ' + e.message); }
         }
         
         async function downloadImage() {
             const query = document.getElementById('img-query').value;
-            if (!query) return alert('Enter search query');
-            
+            if (!query) return alert('Ingresa una búsqueda');
             try {
                 const res = await fetch(`${API_URL}/api/image/download`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query, adult: false})
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: false})
                 });
                 const data = await res.json();
-                
                 imgTaskId = data.task_id;
                 if (imgInterval) clearInterval(imgInterval);
                 imgInterval = setInterval(checkImageStatus, 2000);
-                
                 document.getElementById('img-downloadStatus').style.display = 'block';
                 document.getElementById('img-downloadUrlBox').style.display = 'none';
-                document.getElementById('img-taskInfo').innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p><p><strong>Query</strong> ${query}</p>`;
+                document.getElementById('img-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p><p><strong>Búsqueda</strong> ${query}</p>`;
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -524,13 +723,11 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
                 const res = await fetch(`${API_URL}/api/status/${imgTaskId}`);
                 const data = await res.json();
                 document.getElementById('img-progressFill').style.width = data.progress + '%';
-                let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
-                if (data.title) html += `<p><strong>Query</strong> ${data.title}</p>`;
-                if (data.file_size_str) html += `<p><strong>Size</strong> ${data.file_size_str}</p>`;
-                if (data.source) html += `<p><strong>Source</strong> ${data.source}</p>`;
+                let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
+                if (data.title) html += `<p><strong>Búsqueda</strong> ${data.title}</p>`;
+                if (data.file_size_str) html += `<p><strong>Tamaño</strong> ${data.file_size_str}</p>`;
                 if (data.adult) html += `<p><span class="status-badge" style="background:#ff005022;color:#ff0050;">🔞 +18</span></p>`;
                 document.getElementById('img-taskInfo').innerHTML = html;
-                
                 if (data.status === 'completed') {
                     clearInterval(imgInterval);
                     document.getElementById('img-downloadUrl').value = window.location.origin + data.stream_url;
@@ -542,7 +739,7 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
         // ========== YOUTUBE & TIKTOK ==========
         async function startDownload(platform) {
             const url = document.getElementById(`${platform}-url`).value;
-            if (!url) return alert('URL required');
+            if (!url) return alert('Ingresa una URL');
             
             let endpoint, body;
             if (platform === 'yt') {
@@ -556,12 +753,10 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
             try {
                 const res = await fetch(`${API_URL}${endpoint}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
                 const data = await res.json();
-                
                 if (platform === 'yt') { ytTaskId = data.task_id; if (ytInterval) clearInterval(ytInterval); ytInterval = setInterval(() => checkStatus('yt'), 2000); }
                 else { ttTaskId = data.task_id; if (ttInterval) clearInterval(ttInterval); ttInterval = setInterval(() => checkStatus('tt'), 2000); }
-                
                 document.getElementById(`${platform}-downloadStatus`).style.display = 'block';
-                document.getElementById(`${platform}-taskInfo`).innerHTML = `<p><strong>Status</strong> <span class="status-badge status-pending">pending</span></p>`;
+                document.getElementById(`${platform}-taskInfo`).innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p>`;
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -572,8 +767,8 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
                 const res = await fetch(`${API_URL}/api/status/${taskId}`);
                 const data = await res.json();
                 document.getElementById(`${platform}-progressFill`).style.width = data.progress + '%';
-                let html = `<p><strong>Status</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
-                if (data.title) html += `<p><strong>Title</strong> ${data.title}</p>`;
+                let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
+                if (data.title) html += `<p><strong>Título</strong> ${data.title}</p>`;
                 document.getElementById(`${platform}-taskInfo`).innerHTML = html;
                 if (data.status === 'completed') {
                     if (platform === 'yt') clearInterval(ytInterval); else clearInterval(ttInterval);
@@ -583,20 +778,20 @@ async function getWaifu(sock, from, type = 'waifu', category = 'nsfw') {
             } catch(e) {}
         }
         
-        function copyUrl(platform) { document.getElementById(`${platform}-downloadUrl`).select(); document.execCommand('copy'); alert('Copied!'); }
+        function copyUrl(platform) { document.getElementById(`${platform}-downloadUrl`).select(); document.execCommand('copy'); alert('¡Copiado!'); }
         
         // ========== LYRICS ==========
         async function searchLyrics() {
             const query = document.getElementById('lyrics-query').value;
-            if (!query) return alert('Enter song');
+            if (!query) return alert('Ingresa una canción');
             document.getElementById('lyricsResult').style.display = 'block';
-            document.getElementById('lyricsContent').textContent = 'Loading...';
+            document.getElementById('lyricsContent').textContent = 'Cargando...';
             try {
                 const res = await fetch(`${API_URL}/api/lyrics?q=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 document.getElementById('lyricsInfo').innerHTML = data.artist ? `<p><strong>${data.artist}</strong> - ${data.title}</p>` : '';
-                document.getElementById('lyricsContent').textContent = data.lyrics || 'Not found.';
-            } catch(e) { document.getElementById('lyricsContent').textContent = 'Error.'; }
+                document.getElementById('lyricsContent').textContent = data.lyrics || 'No se encontró la letra.';
+            } catch(e) { document.getElementById('lyricsContent').textContent = 'Error al cargar.'; }
         }
         
         checkServerStatus();
