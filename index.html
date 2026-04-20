@@ -87,6 +87,8 @@
         .btn-waifu:hover { background: #af7ac5 !important; border-color: #af7ac5 !important; }
         .btn-hosting { background: #ff8800 !important; border-color: #ff8800 !important; }
         .btn-hosting:hover { background: #ffaa33 !important; border-color: #ffaa33 !important; }
+        .btn-instagram { background: #e4405f !important; border-color: #e4405f !important; }
+        .btn-instagram:hover { background: #ff6b81 !important; border-color: #ff6b81 !important; }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -124,51 +126,21 @@
             line-height: 1.8; color: #cccccc; font-size: 0.95em;
         }
         .file-upload-area {
-            border: 2px dashed #444444;
-            border-radius: 8px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 20px;
+            border: 2px dashed #444444; border-radius: 8px; padding: 40px;
+            text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 20px;
         }
-        .file-upload-area:hover {
-            border-color: #ff8800;
-            background: #ff880011;
-        }
+        .file-upload-area:hover { border-color: #ff8800; background: #ff880011; }
         .file-upload-area input { display: none; }
         .file-upload-area label { cursor: pointer; color: #888; }
-        .hosted-files-list {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-top: 20px;
-        }
+        .hosted-files-list { max-height: 400px; overflow-y: auto; margin-top: 20px; }
         .hosted-file-item {
-            background: #050505;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
+            background: #050505; border: 1px solid #333; border-radius: 6px;
+            padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 10px;
         }
-        .hosted-file-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .hosted-file-actions {
-            display: flex;
-            gap: 8px;
-        }
-        .hosted-file-actions button {
-            padding: 8px 16px;
-            margin: 0;
-            font-size: 0.7em;
-        }
+        .hosted-file-info { display: flex; align-items: center; gap: 15px; }
+        .hosted-file-actions { display: flex; gap: 8px; }
+        .hosted-file-actions button { padding: 8px 16px; margin: 0; font-size: 0.7em; }
         footer { text-align: center; padding: 30px 0; color: #555555; border-top: 1px solid #333333; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
@@ -198,7 +170,7 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>API</span></div>
-            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING</div>
+            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · INSTAGRAM</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">VERIFICANDO</span>
@@ -208,6 +180,7 @@
         <div class="nav-main">
             <button class="nav-btn active" onclick="showPage('youtube')">FrikiTube</button>
             <button class="nav-btn" onclick="showPage('tiktok')">FrikiTok</button>
+            <button class="nav-btn" onclick="showPage('instagram')">Instagram</button>
             <button class="nav-btn" onclick="showPage('images')">FrikiIMG</button>
             <button class="nav-btn" onclick="showPage('waifu')">FrikiWaifu</button>
             <button class="nav-btn" onclick="showPage('lyrics')">FrikiLyric</button>
@@ -304,6 +277,53 @@ async function descargarTikTok(sock, from, url) {
     await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
 }</pre>
                     <button onclick="copyCode('tt-baileysCode')">Copiar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- INSTAGRAM -->
+        <div id="instagram" class="page">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('ig-download', 'instagram')">Descargar</button>
+                <button class="tab" onclick="showTab('ig-docs', 'instagram')">Endpoints</button>
+                <button class="tab" onclick="showTab('ig-baileys', 'instagram')">Baileys</button>
+            </div>
+            <div id="ig-download" class="tab-content active">
+                <div class="card">
+                    <h2>Descargar de Instagram</h2>
+                    <div class="input-group"><label>URL del Reel/Video</label><input type="text" id="ig-url" placeholder="https://www.instagram.com/reel/..."></div>
+                    <button onclick="startDownload('ig')" class="btn-instagram">📸 Descargar</button>
+                    <div id="ig-downloadStatus" style="display: none;">
+                        <div class="progress-bar"><div class="progress-fill" id="ig-progressFill"></div></div>
+                        <div class="task-info" id="ig-taskInfo"></div>
+                        <div class="url-box" id="ig-downloadUrlBox" style="display: none;">
+                            <label>URL de descarga</label>
+                            <div class="url-copy-group"><input type="text" id="ig-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('ig')">Copiar</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ig-docs" class="tab-content">
+                <div class="card"><h2>Endpoints</h2>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/instagram</h3><pre>{"url": "https://www.instagram.com/reel/..."}</pre></div>
+                    <div class="endpoint"><h3><span class="method get">GET</span> /api/instagram/info?url=...</h3></div>
+                </div>
+            </div>
+            <div id="ig-baileys" class="tab-content">
+                <div class="card"><h2>Baileys</h2>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <pre>const axios = require('axios');
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+
+async function descargarInstagram(sock, from, url) {
+    const res = await axios.post(`${API}/api/instagram`, {url});
+    const taskId = res.data.task_id;
+    let status;
+    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
+    while (status.data.status !== 'completed');
+    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
+}</pre>
+                    <button onclick="copyCode('ig-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
@@ -472,8 +492,6 @@ async function buscarLetra(sock, from, query) {
                 <button class="tab" onclick="showTab('host-docs', 'hosting')">Endpoints</button>
                 <button class="tab" onclick="showTab('host-baileys', 'hosting')">Baileys</button>
             </div>
-            
-            <!-- Subir -->
             <div id="host-upload" class="tab-content active">
                 <div class="card">
                     <h2>Subir Imagen o Video</h2>
@@ -490,7 +508,6 @@ async function buscarLetra(sock, from, query) {
                         <label style="margin: 0;">🗜️ Comprimir archivo (sin pérdida de calidad)</label>
                     </div>
                     <button onclick="uploadFile()" class="btn-hosting">⬆️ Subir y Generar Link</button>
-                    
                     <div id="host-uploadResult" style="display: none; margin-top: 20px;">
                         <div class="task-info">
                             <p><strong>✅ ¡Archivo subido!</strong></p>
@@ -517,8 +534,6 @@ async function buscarLetra(sock, from, query) {
                     </div>
                 </div>
             </div>
-            
-            <!-- Mis Archivos -->
             <div id="host-list" class="tab-content">
                 <div class="card">
                     <h2>Archivos Hosteados</h2>
@@ -528,8 +543,6 @@ async function buscarLetra(sock, from, query) {
                     </div>
                 </div>
             </div>
-            
-            <!-- Endpoints -->
             <div id="host-docs" class="tab-content">
                 <div class="card"><h2>Endpoints</h2>
                     <div class="endpoint"><h3><span class="method post">POST</span> /api/hosting/upload</h3><pre>FormData: { file, compress }</pre></div>
@@ -539,8 +552,6 @@ async function buscarLetra(sock, from, query) {
                     <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/list</h3></div>
                 </div>
             </div>
-            
-            <!-- Baileys -->
             <div id="host-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
@@ -552,27 +563,21 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
     const form = new FormData();
     form.append('file', fileBuffer, filename);
     form.append('compress', 'true');
-    
-    const res = await axios.post(`${API}/api/hosting/upload`, form, {
-        headers: form.getHeaders()
-    });
-    
-    await sock.sendMessage(from, { 
-        text: `✅ *Archivo subido*\n📎 Link: ${API}/api/hosting/view/${res.data.file_id}` 
-    });
+    const res = await axios.post(`${API}/api/hosting/upload`, form, { headers: form.getHeaders() });
+    await sock.sendMessage(from, { text: `✅ *Archivo subido*\n📎 Link: ${API}/api/hosting/view/${res.data.file_id}` });
 }</pre>
                     <button onclick="copyCode('host-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING</p></footer>
+        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · INSTAGRAM · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING</p></footer>
     </div>
     
     <script>
         const API_URL = '';
-        let ytTaskId = null, ttTaskId = null, imgTaskId = null, waifuTaskId = null;
-        let ytInterval = null, ttInterval = null, imgInterval = null, waifuInterval = null;
+        let ytTaskId = null, ttTaskId = null, igTaskId = null, imgTaskId = null, waifuTaskId = null;
+        let ytInterval = null, ttInterval = null, igInterval = null, imgInterval = null, waifuInterval = null;
         let selectedFile = null;
         
         async function checkServerStatus() {
@@ -617,77 +622,53 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
         
         async function uploadFile() {
             if (!selectedFile) return alert('Selecciona un archivo');
-            
             const formData = new FormData();
             formData.append('file', selectedFile);
             formData.append('compress', document.getElementById('host-compress').checked);
-            
             document.getElementById('host-uploadResult').style.display = 'none';
-            
             try {
-                const res = await fetch(`${API_URL}/api/hosting/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
+                const res = await fetch(`${API_URL}/api/hosting/upload`, { method: 'POST', body: formData });
                 const data = await res.json();
-                
                 if (data.success) {
                     document.getElementById('host-file-id').textContent = data.file_id;
                     document.getElementById('host-original-size').textContent = data.original_size_str;
                     document.getElementById('host-compressed-size').textContent = data.compressed_size_str;
                     document.getElementById('host-compression-ratio').textContent = data.compression_ratio;
-                    
                     const viewUrl = window.location.origin + data.view_url;
                     const downloadUrl = window.location.origin + data.download_url;
-                    
                     document.getElementById('host-view-url').value = viewUrl;
                     document.getElementById('host-download-url').value = downloadUrl;
-                    
-                    // Vista previa
                     const preview = document.getElementById('host-preview');
                     if (data.type === 'image') {
                         preview.innerHTML = `<img src="${viewUrl}" style="max-width: 100%; max-height: 300px; border-radius: 8px;">`;
                     } else {
                         preview.innerHTML = `<video src="${viewUrl}" controls style="max-width: 100%; max-height: 300px; border-radius: 8px;"></video>`;
                     }
-                    
                     document.getElementById('host-uploadResult').style.display = 'block';
-                } else {
-                    alert('Error al subir');
-                }
-            } catch(e) {
-                alert('Error: ' + e.message);
-            }
+                } else { alert('Error al subir'); }
+            } catch(e) { alert('Error: ' + e.message); }
         }
         
         async function loadHostedFiles() {
             try {
                 const res = await fetch(`${API_URL}/api/hosting/list`);
                 const data = await res.json();
-                
                 let html = '';
                 if (data.files && data.files.length > 0) {
                     data.files.forEach(f => {
                         html += `<div class="hosted-file-item">
                             <div class="hosted-file-info">
                                 <span>${f.type === 'image' ? '🖼️' : '🎬'}</span>
-                                <div>
-                                    <strong>${f.name}</strong><br>
-                                    <small>${f.size} · ${new Date(f.created_at).toLocaleString()}</small>
-                                </div>
+                                <div><strong>${f.name}</strong><br><small>${f.size} · ${new Date(f.created_at).toLocaleString()}</small></div>
                             </div>
                             <div class="hosted-file-actions">
                                 <button onclick="copyHostedLink('${f.id}')">📋 Link</button>
                             </div>
                         </div>`;
                     });
-                } else {
-                    html = '<p style="color: #888;">No hay archivos hosteados</p>';
-                }
+                } else { html = '<p style="color: #888;">No hay archivos hosteados</p>'; }
                 document.getElementById('host-files-list').innerHTML = html;
-            } catch(e) {
-                document.getElementById('host-files-list').innerHTML = '<p style="color: #ff4444;">Error al cargar</p>';
-            }
+            } catch(e) { document.getElementById('host-files-list').innerHTML = '<p style="color: #ff4444;">Error al cargar</p>'; }
         }
         
         function copyHostedLink(id) {
@@ -696,7 +677,7 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
             alert('Link copiado: ' + url);
         }
         
-        // ========== YOUTUBE & TIKTOK ==========
+        // ========== YOUTUBE, TIKTOK E INSTAGRAM ==========
         async function startDownload(platform) {
             let url, endpoint, body;
             if (platform === 'yt') {
@@ -704,25 +685,35 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
                 if (!url) return alert('Ingresa una URL');
                 endpoint = '/api/download';
                 body = {url, format: document.getElementById('yt-format').value};
-            } else {
+            } else if (platform === 'tt') {
                 url = document.getElementById('tt-url').value;
                 if (!url) return alert('Ingresa una URL');
                 endpoint = '/api/tiktok';
                 body = {url, watermark: document.getElementById('tt-watermark').value === 'true'};
-            }
+            } else if (platform === 'ig') {
+                url = document.getElementById('ig-url').value;
+                if (!url) return alert('Ingresa una URL');
+                endpoint = '/api/instagram';
+                body = {url};
+            } else { return; }
             
             try {
                 const res = await fetch(`${API_URL}${endpoint}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
                 const data = await res.json();
                 if (platform === 'yt') { ytTaskId = data.task_id; if (ytInterval) clearInterval(ytInterval); ytInterval = setInterval(() => checkStatus('yt'), 2000); }
-                else { ttTaskId = data.task_id; if (ttInterval) clearInterval(ttInterval); ttInterval = setInterval(() => checkStatus('tt'), 2000); }
+                else if (platform === 'tt') { ttTaskId = data.task_id; if (ttInterval) clearInterval(ttInterval); ttInterval = setInterval(() => checkStatus('tt'), 2000); }
+                else if (platform === 'ig') { igTaskId = data.task_id; if (igInterval) clearInterval(igInterval); igInterval = setInterval(() => checkStatus('ig'), 2000); }
                 document.getElementById(`${platform}-downloadStatus`).style.display = 'block';
                 document.getElementById(`${platform}-taskInfo`).innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p>`;
             } catch(e) { alert('Error: ' + e.message); }
         }
         
         async function checkStatus(platform) {
-            const taskId = platform === 'yt' ? ytTaskId : ttTaskId;
+            let taskId;
+            if (platform === 'yt') taskId = ytTaskId;
+            else if (platform === 'tt') taskId = ttTaskId;
+            else if (platform === 'ig') taskId = igTaskId;
+            else return;
             if (!taskId) return;
             try {
                 const res = await fetch(`${API_URL}/api/status/${taskId}`);
@@ -730,9 +721,12 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
                 document.getElementById(`${platform}-progressFill`).style.width = data.progress + '%';
                 let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
                 if (data.title) html += `<p><strong>Título</strong> ${data.title}</p>`;
+                if (data.uploader) html += `<p><strong>Autor</strong> ${data.uploader}</p>`;
                 document.getElementById(`${platform}-taskInfo`).innerHTML = html;
                 if (data.status === 'completed') {
-                    if (platform === 'yt') clearInterval(ytInterval); else clearInterval(ttInterval);
+                    if (platform === 'yt') clearInterval(ytInterval);
+                    else if (platform === 'tt') clearInterval(ttInterval);
+                    else if (platform === 'ig') clearInterval(igInterval);
                     document.getElementById(`${platform}-downloadUrl`).value = window.location.origin + data.stream_url;
                     document.getElementById(`${platform}-downloadUrlBox`).style.display = 'block';
                 }
