@@ -89,6 +89,8 @@
         .btn-hosting:hover { background: #ffaa33 !important; border-color: #ffaa33 !important; }
         .btn-instagram { background: #e4405f !important; border-color: #e4405f !important; }
         .btn-instagram:hover { background: #ff6b81 !important; border-color: #ff6b81 !important; }
+        .btn-brat { background: #8bc34a !important; border-color: #8bc34a !important; }
+        .btn-brat:hover { background: #aed581 !important; border-color: #aed581 !important; }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -141,6 +143,11 @@
         .hosted-file-info { display: flex; align-items: center; gap: 15px; }
         .hosted-file-actions { display: flex; gap: 8px; }
         .hosted-file-actions button { padding: 8px 16px; margin: 0; font-size: 0.7em; }
+        .brat-preview {
+            background: #ffffff; border-radius: 8px; padding: 20px;
+            text-align: center; margin: 20px 0;
+        }
+        .brat-preview img { max-width: 100%; max-height: 300px; border-radius: 8px; }
         footer { text-align: center; padding: 30px 0; color: #555555; border-top: 1px solid #333333; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
@@ -170,7 +177,7 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>API</span></div>
-            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · INSTAGRAM</div>
+            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · BRAT</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">VERIFICANDO</span>
@@ -185,6 +192,7 @@
             <button class="nav-btn" onclick="showPage('waifu')">FrikiWaifu</button>
             <button class="nav-btn" onclick="showPage('lyrics')">FrikiLyric</button>
             <button class="nav-btn" onclick="showPage('hosting')">FrikiHosting</button>
+            <button class="nav-btn" onclick="showPage('brat')">FrikiBrat</button>
         </div>
         
         <!-- YOUTUBE -->
@@ -305,8 +313,7 @@ async function descargarTikTok(sock, from, url) {
             </div>
             <div id="ig-docs" class="tab-content">
                 <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/instagram</h3><pre>{"url": "https://www.instagram.com/reel/..."}</pre></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/instagram/info?url=...</h3></div>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/instagram</h3><pre>{"url": "..."}</pre></div>
                 </div>
             </div>
             <div id="ig-baileys" class="tab-content">
@@ -571,7 +578,60 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
             </div>
         </div>
         
-        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · INSTAGRAM · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING</p></footer>
+        <!-- FRIKIBRAT -->
+        <div id="brat" class="page">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('brat-generate', 'brat')">Generar</button>
+                <button class="tab" onclick="showTab('brat-docs', 'brat')">Endpoints</button>
+                <button class="tab" onclick="showTab('brat-baileys', 'brat')">Baileys</button>
+            </div>
+            <div id="brat-generate" class="tab-content active">
+                <div class="card">
+                    <h2>Generar Imagen Estilo Brat</h2>
+                    <div class="input-group"><label>Texto</label><textarea id="brat-text" rows="3" placeholder="Escribe tu texto aquí..."></textarea></div>
+                    <div class="input-group"><label>Nivel de desenfoque</label><input type="range" id="brat-blur" min="0" max="10" value="3" step="0.5"></div>
+                    <p style="color: #888; margin-bottom: 20px;">Valor actual: <span id="brat-blur-value">3</span></p>
+                    <button onclick="generateBrat()" class="btn-brat">🎨 Generar Imagen</button>
+                    <div id="brat-result" style="display: none; margin-top: 20px;">
+                        <div class="brat-preview">
+                            <img id="brat-preview-img" src="" alt="Brat Image">
+                        </div>
+                        <div class="url-box">
+                            <label>URL de la imagen</label>
+                            <div class="url-copy-group">
+                                <input type="text" id="brat-url" readonly onclick="this.select()">
+                                <button onclick="copyText('brat-url')">Copiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="brat-docs" class="tab-content">
+                <div class="card"><h2>Endpoints</h2>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/brat/generate</h3><pre>{"text": "Tu texto aquí", "blur": 3}</pre></div>
+                    <div class="endpoint"><h3><span class="method get">GET</span> /api/brat/view/{id}</h3></div>
+                    <div class="endpoint"><h3><span class="method get">GET</span> /api/brat/download/{id}</h3></div>
+                </div>
+            </div>
+            <div id="brat-baileys" class="tab-content">
+                <div class="card"><h2>Baileys</h2>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <pre>const axios = require('axios');
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+
+async function generarBrat(sock, from, text) {
+    const res = await axios.post(`${API}/api/brat/generate`, { text, blur: 3 });
+    await sock.sendMessage(from, { 
+        image: { url: `${API}${res.data.url}` }, 
+        caption: `✨ ${text}` 
+    });
+}</pre>
+                    <button onclick="copyCode('brat-baileysCode')">Copiar</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · INSTAGRAM · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING · FRIKIBRAT</p></footer>
     </div>
     
     <script>
@@ -603,6 +663,39 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
         
         function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('¡Copiado!'); }
         function copyText(id) { document.getElementById(id).select(); document.execCommand('copy'); alert('¡Copiado!'); }
+        
+        // ========== FRIKIBRAT ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            const blurSlider = document.getElementById('brat-blur');
+            const blurValue = document.getElementById('brat-blur-value');
+            if (blurSlider && blurValue) {
+                blurSlider.addEventListener('input', function() {
+                    blurValue.textContent = this.value;
+                });
+            }
+        });
+        
+        async function generateBrat() {
+            const text = document.getElementById('brat-text').value;
+            const blur = parseFloat(document.getElementById('brat-blur').value);
+            if (!text) return alert('Escribe un texto');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/brat/generate`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({text, blur})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('brat-result').style.display = 'block';
+                    document.getElementById('brat-preview-img').src = window.location.origin + data.url;
+                    document.getElementById('brat-url').value = window.location.origin + data.url;
+                } else {
+                    alert('Error al generar');
+                }
+            } catch(e) { alert('Error: ' + e.message); }
+        }
         
         // ========== FRIKIHOSTING ==========
         function handleFileSelect(input) {
@@ -791,7 +884,7 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
                 if (data.success) {
                     document.getElementById('img-preview').style.display = 'block';
                     document.getElementById('img-preview-img').src = data.image_url;
-                    document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Google'}`;
+                    document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Bing'}`;
                 } else { alert('No se encontró'); }
             } catch(e) { alert('Error'); }
         }
@@ -805,7 +898,7 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
                 if (data.success) {
                     document.getElementById('img-preview').style.display = 'block';
                     document.getElementById('img-preview-img').src = data.image_url;
-                    document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Google'} | 🔞`;
+                    document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Bing'} | 🔞`;
                 } else { alert('No se encontró'); }
             } catch(e) { alert('Error'); }
         }
