@@ -1,5 +1,8 @@
 {
   "rewrites": [
+    { "source": "/api/brat/generate", "destination": "http://64.20.54.50:30325/api/brat/generate" },
+    { "source": "/api/brat/view/:file_id", "destination": "http://64.20.54.50:30325/api/brat/view/:file_id" },
+    { "source": "/api/brat/download/:file_id", "destination": "http://64.20.54.50:30325/api/brat/download/:file_id" },
     { "source": "/api/instagram", "destination": "http://64.20.54.50:30325/api/instagram" },
     { "source": "/api/instagram/info", "destination": "http://64.20.54.50:30325/api/instagram/info" },
     { "source": "/api/hosting/upload", "destination": "http://64.20.54.50:30325/api/hosting/upload" },
