@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/soundcloud", "destination": "http://64.20.54.50:30325/api/soundcloud" },
     { "source": "/api/waifu", "destination": "http://64.20.54.50:30325/api/waifu" },
     { "source": "/api/waifu/types", "destination": "http://64.20.54.50:30325/api/waifu/types" },
     { "source": "/api/waifu/download", "destination": "http://64.20.54.50:30325/api/waifu/download" },
