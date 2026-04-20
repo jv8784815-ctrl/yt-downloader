@@ -64,6 +64,7 @@
             color: #ffffff; font-size: 1.5em; font-weight: 400; letter-spacing: 2px;
             margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid #333333;
         }
+        .card h3 { color: #cccccc; font-size: 1em; font-weight: 400; letter-spacing: 2px; margin: 25px 0 15px; }
         .input-group { margin-bottom: 22px; }
         label {
             display: block; margin-bottom: 8px; color: #888888; font-size: 0.7em;
@@ -84,8 +85,8 @@
         .btn-18:hover { background: #ff3366 !important; border-color: #ff3366 !important; }
         .btn-waifu { background: #9b59b6 !important; border-color: #9b59b6 !important; }
         .btn-waifu:hover { background: #af7ac5 !important; border-color: #af7ac5 !important; }
-        .btn-ai { background: #00bcd4 !important; border-color: #00bcd4 !important; }
-        .btn-ai:hover { background: #33d4e8 !important; border-color: #33d4e8 !important; }
+        .btn-hosting { background: #ff8800 !important; border-color: #ff8800 !important; }
+        .btn-hosting:hover { background: #ffaa33 !important; border-color: #ffaa33 !important; }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -113,29 +114,60 @@
             background: #000000; padding: 18px; border-radius: 6px; overflow-x: auto;
             margin: 15px 0; font-size: 0.85em; color: #cccccc; border: 1px solid #333333;
         }
-        .chat-container {
-            background: #050505; border-radius: 8px; padding: 20px;
-            max-height: 500px; overflow-y: auto; margin: 20px 0;
-        }
-        .chat-message {
-            margin-bottom: 15px; padding: 12px 16px; border-radius: 8px;
-            max-width: 85%; word-wrap: break-word;
-        }
-        .chat-user {
-            background: #1a1a1a; color: #ffffff; margin-left: auto;
-            border: 1px solid #444444; text-align: right;
-        }
-        .chat-ai {
-            background: #0a2a2a; color: #e0e0e0; margin-right: auto;
-            border-left: 3px solid #00bcd4;
-        }
-        .chat-ai strong { color: #00bcd4; }
         .image-preview { text-align: center; margin: 20px 0; }
         .image-preview img { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444; }
+        .video-preview { text-align: center; margin: 20px 0; }
+        .video-preview video { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444; }
         .lyrics-box {
             background: #000000; padding: 25px; border-radius: 6px; border: 1px solid #333333;
             margin-top: 20px; max-height: 500px; overflow-y: auto; white-space: pre-line;
             line-height: 1.8; color: #cccccc; font-size: 0.95em;
+        }
+        .file-upload-area {
+            border: 2px dashed #444444;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        .file-upload-area:hover {
+            border-color: #ff8800;
+            background: #ff880011;
+        }
+        .file-upload-area input { display: none; }
+        .file-upload-area label { cursor: pointer; color: #888; }
+        .hosted-files-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .hosted-file-item {
+            background: #050505;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .hosted-file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .hosted-file-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .hosted-file-actions button {
+            padding: 8px 16px;
+            margin: 0;
+            font-size: 0.7em;
         }
         footer { text-align: center; padding: 30px 0; color: #555555; border-top: 1px solid #333333; }
         ::-webkit-scrollbar { width: 6px; }
@@ -153,6 +185,8 @@
         }
         .method.post { background: #00e67622; color: #00e676; }
         .method.get { background: #2196f322; color: #2196f3; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin: 15px 0; }
+        .checkbox-group input { width: auto; }
         @media (max-width: 700px) {
             .logo { font-size: 1.8em; letter-spacing: 4px; }
             .card { padding: 20px; }
@@ -164,7 +198,7 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>API</span></div>
-            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · IA</div>
+            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">VERIFICANDO</span>
@@ -177,7 +211,7 @@
             <button class="nav-btn" onclick="showPage('images')">FrikiIMG</button>
             <button class="nav-btn" onclick="showPage('waifu')">FrikiWaifu</button>
             <button class="nav-btn" onclick="showPage('lyrics')">FrikiLyric</button>
-            <button class="nav-btn" onclick="showPage('ai')">FrikiIA</button>
+            <button class="nav-btn" onclick="showPage('hosting')">FrikiHosting</button>
         </div>
         
         <!-- YOUTUBE -->
@@ -307,7 +341,6 @@ async function descargarTikTok(sock, from, url) {
             <div id="img-docs" class="tab-content">
                 <div class="card"><h2>Endpoints</h2>
                     <div class="endpoint"><h3><span class="method post">POST</span> /api/image/search</h3><pre>{"query": "gato", "adult": false}</pre></div>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/image/download</h3></div>
                 </div>
             </div>
             <div id="img-baileys" class="tab-content">
@@ -431,61 +464,116 @@ async function buscarLetra(sock, from, query) {
             </div>
         </div>
         
-        <!-- FRIKIIA -->
-        <div id="ai" class="page">
+        <!-- FRIKIHOSTING -->
+        <div id="hosting" class="page">
             <div class="tabs">
-                <button class="tab active" onclick="showTab('ai-chat', 'ai')">Chat</button>
-                <button class="tab" onclick="showTab('ai-docs', 'ai')">Endpoints</button>
-                <button class="tab" onclick="showTab('ai-baileys', 'ai')">Baileys</button>
+                <button class="tab active" onclick="showTab('host-upload', 'hosting')">Subir</button>
+                <button class="tab" onclick="showTab('host-list', 'hosting')">Mis Archivos</button>
+                <button class="tab" onclick="showTab('host-docs', 'hosting')">Endpoints</button>
+                <button class="tab" onclick="showTab('host-baileys', 'hosting')">Baileys</button>
             </div>
-            <div id="ai-chat" class="tab-content active">
+            
+            <!-- Subir -->
+            <div id="host-upload" class="tab-content active">
                 <div class="card">
-                    <h2>FrikiIA - Asistente Inteligente</h2>
-                    <div class="chat-container" id="ai-chatContainer">
-                        <div class="chat-message chat-ai">
-                            <strong>🤖 FrikiIA:</strong><br>
-                            ¡Hola! Soy FrikiIA. Pregúntame lo que quieras y buscaré la respuesta en internet.
+                    <h2>Subir Imagen o Video</h2>
+                    <div class="file-upload-area" onclick="document.getElementById('host-file').click()">
+                        <input type="file" id="host-file" accept="image/*,video/*" onchange="handleFileSelect(this)">
+                        <label>📁 Haz clic o arrastra un archivo<br><small>Imágenes (máx 20MB) · Videos (máx 100MB)</small></label>
+                    </div>
+                    <div id="host-file-info" style="display: none; margin-bottom: 20px;">
+                        <p><strong>Archivo seleccionado:</strong> <span id="host-file-name"></span></p>
+                        <p><strong>Tamaño:</strong> <span id="host-file-size"></span></p>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="host-compress" checked>
+                        <label style="margin: 0;">🗜️ Comprimir archivo (sin pérdida de calidad)</label>
+                    </div>
+                    <button onclick="uploadFile()" class="btn-hosting">⬆️ Subir y Generar Link</button>
+                    
+                    <div id="host-uploadResult" style="display: none; margin-top: 20px;">
+                        <div class="task-info">
+                            <p><strong>✅ ¡Archivo subido!</strong></p>
+                            <p><strong>ID:</strong> <span id="host-file-id"></span></p>
+                            <p><strong>Tamaño original:</strong> <span id="host-original-size"></span></p>
+                            <p><strong>Tamaño comprimido:</strong> <span id="host-compressed-size"></span></p>
+                            <p><strong>Compresión:</strong> <span id="host-compression-ratio"></span></p>
                         </div>
+                        <div class="url-box">
+                            <label>Link para compartir</label>
+                            <div class="url-copy-group">
+                                <input type="text" id="host-view-url" readonly onclick="this.select()">
+                                <button onclick="copyText('host-view-url')">Copiar</button>
+                            </div>
+                        </div>
+                        <div class="url-box">
+                            <label>Link de descarga directa</label>
+                            <div class="url-copy-group">
+                                <input type="text" id="host-download-url" readonly onclick="this.select()">
+                                <button onclick="copyText('host-download-url')">Copiar</button>
+                            </div>
+                        </div>
+                        <div id="host-preview" style="text-align: center; margin-top: 20px;"></div>
                     </div>
-                    <div class="input-group">
-                        <label>Tu pregunta</label>
-                        <textarea id="ai-question" rows="2" placeholder="¿Quién ganó el Mundial 2022?"></textarea>
-                    </div>
-                    <button onclick="askAI()" class="btn-ai">🤖 Preguntar a FrikiIA</button>
                 </div>
             </div>
-            <div id="ai-docs" class="tab-content">
+            
+            <!-- Mis Archivos -->
+            <div id="host-list" class="tab-content">
+                <div class="card">
+                    <h2>Archivos Hosteados</h2>
+                    <button onclick="loadHostedFiles()" class="btn-hosting" style="margin-bottom: 20px;">🔄 Actualizar</button>
+                    <div id="host-files-list" class="hosted-files-list">
+                        <p style="color: #888;">Cargando...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Endpoints -->
+            <div id="host-docs" class="tab-content">
                 <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/ai/ask</h3><pre>{"question": "¿Quién ganó el Mundial?"}</pre></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/ai/search?q=...</h3></div>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/hosting/upload</h3><pre>FormData: { file, compress }</pre></div>
+                    <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/view/{id}</h3></div>
+                    <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/download/{id}</h3></div>
+                    <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/info/{id}</h3></div>
+                    <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/list</h3></div>
                 </div>
             </div>
-            <div id="ai-baileys" class="tab-content">
+            
+            <!-- Baileys -->
+            <div id="host-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
                     <pre>const axios = require('axios');
+const FormData = require('form-data');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
-async function preguntarIA(sock, from, question) {
-    const res = await axios.post(`${API}/api/ai/ask`, {question});
-    if (res.data.success) {
-        await sock.sendMessage(from, { text: `🤖 *FrikiIA:*\n\n${res.data.answer}` });
-    } else {
-        await sock.sendMessage(from, { text: '❌ No pude responder eso.' });
-    }
+async function subirArchivo(sock, from, fileBuffer, filename) {
+    const form = new FormData();
+    form.append('file', fileBuffer, filename);
+    form.append('compress', 'true');
+    
+    const res = await axios.post(`${API}/api/hosting/upload`, form, {
+        headers: form.getHeaders()
+    });
+    
+    await sock.sendMessage(from, { 
+        text: `✅ *Archivo subido*\n📎 Link: ${API}/api/hosting/view/${res.data.file_id}` 
+    });
 }</pre>
-                    <button onclick="copyCode('ai-baileysCode')">Copiar</button>
+                    <button onclick="copyCode('host-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIIA</p></footer>
+        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING</p></footer>
     </div>
     
     <script>
         const API_URL = '';
         let ytTaskId = null, ttTaskId = null, imgTaskId = null, waifuTaskId = null;
         let ytInterval = null, ttInterval = null, imgInterval = null, waifuInterval = null;
+        let selectedFile = null;
         
         async function checkServerStatus() {
             try { await fetch(`${API_URL}/health`); document.getElementById('statusDot').classList.add('online'); document.getElementById('statusText').textContent = 'EN LÍNEA'; }
@@ -505,50 +593,107 @@ async function preguntarIA(sock, from, question) {
             pageEl.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
             document.getElementById(tab).classList.add('active');
             event.target.classList.add('active');
+            if (tab === 'host-list') loadHostedFiles();
         }
         
         function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('¡Copiado!'); }
+        function copyText(id) { document.getElementById(id).select(); document.execCommand('copy'); alert('¡Copiado!'); }
         
-        // ========== FRIKIIA ==========
-        async function askAI() {
-            const question = document.getElementById('ai-question').value;
-            if (!question) return alert('Escribe una pregunta');
+        // ========== FRIKIHOSTING ==========
+        function handleFileSelect(input) {
+            if (input.files.length > 0) {
+                selectedFile = input.files[0];
+                document.getElementById('host-file-info').style.display = 'block';
+                document.getElementById('host-file-name').textContent = selectedFile.name;
+                document.getElementById('host-file-size').textContent = formatFileSize(selectedFile.size);
+            }
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+        
+        async function uploadFile() {
+            if (!selectedFile) return alert('Selecciona un archivo');
             
-            const container = document.getElementById('ai-chatContainer');
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('compress', document.getElementById('host-compress').checked);
             
-            // Añadir pregunta del usuario
-            container.innerHTML += `<div class="chat-message chat-user"><strong>👤 Tú:</strong><br>${question}</div>`;
-            document.getElementById('ai-question').value = '';
-            
-            // Añadir mensaje de "pensando"
-            container.innerHTML += `<div class="chat-message chat-ai" id="ai-thinking"><strong>🤖 FrikiIA:</strong><br>⏳ Buscando información...</div>`;
-            container.scrollTop = container.scrollHeight;
+            document.getElementById('host-uploadResult').style.display = 'none';
             
             try {
-                const res = await fetch(`${API_URL}/api/ai/ask`, {
+                const res = await fetch(`${API_URL}/api/hosting/upload`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({question})
+                    body: formData
                 });
                 const data = await res.json();
                 
-                // Eliminar mensaje de "pensando"
-                document.getElementById('ai-thinking')?.remove();
-                
                 if (data.success) {
-                    let answer = data.answer;
-                    if (data.source && data.source !== 'FrikiIA') {
-                        answer += `\n\n📎 Fuente: ${data.source}`;
+                    document.getElementById('host-file-id').textContent = data.file_id;
+                    document.getElementById('host-original-size').textContent = data.original_size_str;
+                    document.getElementById('host-compressed-size').textContent = data.compressed_size_str;
+                    document.getElementById('host-compression-ratio').textContent = data.compression_ratio;
+                    
+                    const viewUrl = window.location.origin + data.view_url;
+                    const downloadUrl = window.location.origin + data.download_url;
+                    
+                    document.getElementById('host-view-url').value = viewUrl;
+                    document.getElementById('host-download-url').value = downloadUrl;
+                    
+                    // Vista previa
+                    const preview = document.getElementById('host-preview');
+                    if (data.type === 'image') {
+                        preview.innerHTML = `<img src="${viewUrl}" style="max-width: 100%; max-height: 300px; border-radius: 8px;">`;
+                    } else {
+                        preview.innerHTML = `<video src="${viewUrl}" controls style="max-width: 100%; max-height: 300px; border-radius: 8px;"></video>`;
                     }
-                    container.innerHTML += `<div class="chat-message chat-ai"><strong>🤖 FrikiIA:</strong><br>${answer.replace(/\n/g, '<br>')}</div>`;
+                    
+                    document.getElementById('host-uploadResult').style.display = 'block';
                 } else {
-                    container.innerHTML += `<div class="chat-message chat-ai"><strong>🤖 FrikiIA:</strong><br>❌ ${data.answer || 'Error al procesar la pregunta.'}</div>`;
+                    alert('Error al subir');
                 }
-                container.scrollTop = container.scrollHeight;
             } catch(e) {
-                document.getElementById('ai-thinking')?.remove();
-                container.innerHTML += `<div class="chat-message chat-ai"><strong>🤖 FrikiIA:</strong><br>❌ Error de conexión.</div>`;
+                alert('Error: ' + e.message);
             }
+        }
+        
+        async function loadHostedFiles() {
+            try {
+                const res = await fetch(`${API_URL}/api/hosting/list`);
+                const data = await res.json();
+                
+                let html = '';
+                if (data.files && data.files.length > 0) {
+                    data.files.forEach(f => {
+                        html += `<div class="hosted-file-item">
+                            <div class="hosted-file-info">
+                                <span>${f.type === 'image' ? '🖼️' : '🎬'}</span>
+                                <div>
+                                    <strong>${f.name}</strong><br>
+                                    <small>${f.size} · ${new Date(f.created_at).toLocaleString()}</small>
+                                </div>
+                            </div>
+                            <div class="hosted-file-actions">
+                                <button onclick="copyHostedLink('${f.id}')">📋 Link</button>
+                            </div>
+                        </div>`;
+                    });
+                } else {
+                    html = '<p style="color: #888;">No hay archivos hosteados</p>';
+                }
+                document.getElementById('host-files-list').innerHTML = html;
+            } catch(e) {
+                document.getElementById('host-files-list').innerHTML = '<p style="color: #ff4444;">Error al cargar</p>';
+            }
+        }
+        
+        function copyHostedLink(id) {
+            const url = `${window.location.origin}/api/hosting/view/${id}`;
+            navigator.clipboard?.writeText(url);
+            alert('Link copiado: ' + url);
         }
         
         // ========== YOUTUBE & TIKTOK ==========
