@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api/instagram", "destination": "http://64.20.54.50:30325/api/instagram" },
+    { "source": "/api/ai/ask", "destination": "http://64.20.54.50:30325/api/ai/ask" },
+    { "source": "/api/ai/search", "destination": "http://64.20.54.50:30325/api/ai/search" },
     { "source": "/api/waifu", "destination": "http://64.20.54.50:30325/api/waifu" },
     { "source": "/api/waifu/types", "destination": "http://64.20.54.50:30325/api/waifu/types" },
     { "source": "/api/waifu/download", "destination": "http://64.20.54.50:30325/api/waifu/download" },
