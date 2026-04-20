@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/api/instagram", "destination": "http://64.20.54.50:30325/api/instagram" },
+    { "source": "/api/instagram/info", "destination": "http://64.20.54.50:30325/api/instagram/info" },
     { "source": "/api/hosting/upload", "destination": "http://64.20.54.50:30325/api/hosting/upload" },
     { "source": "/api/hosting/view/:file_id", "destination": "http://64.20.54.50:30325/api/hosting/view/:file_id" },
     { "source": "/api/hosting/download/:file_id", "destination": "http://64.20.54.50:30325/api/hosting/download/:file_id" },
