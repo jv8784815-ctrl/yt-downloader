@@ -85,6 +85,8 @@
         .btn-18:hover { background: #ff3366 !important; border-color: #ff3366 !important; color: #ffffff !important; }
         .btn-waifu { background: #9b59b6 !important; border-color: #9b59b6 !important; }
         .btn-waifu:hover { background: #af7ac5 !important; border-color: #af7ac5 !important; color: #ffffff !important; }
+        .btn-soundcloud { background: #ff8800 !important; border-color: #ff8800 !important; }
+        .btn-soundcloud:hover { background: #ffaa33 !important; border-color: #ffaa33 !important; color: #ffffff !important; }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -146,7 +148,7 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>API</span></div>
-            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS</div>
+            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · SOUNDCLOUD</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">VERIFICANDO</span>
@@ -156,6 +158,7 @@
         <div class="nav-main">
             <button class="nav-btn active" onclick="showPage('youtube')">FrikiTube</button>
             <button class="nav-btn" onclick="showPage('tiktok')">FrikiTok</button>
+            <button class="nav-btn" onclick="showPage('soundcloud')">SoundCloud</button>
             <button class="nav-btn" onclick="showPage('images')">FrikiIMG</button>
             <button class="nav-btn" onclick="showPage('waifu')">FrikiWaifu</button>
             <button class="nav-btn" onclick="showPage('lyrics')">FrikiLyric</button>
@@ -206,10 +209,6 @@
                         <h3><span class="method get">GET</span> /api/stream/{task_id}</h3>
                         <p style="color: #888; margin: 10px 0;">Descarga el archivo procesado</p>
                     </div>
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/info?url=...</h3>
-                        <p style="color: #888; margin: 10px 0;">Obtiene información del video</p>
-                    </div>
                 </div>
             </div>
             
@@ -217,25 +216,16 @@
                 <div class="card">
                     <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre id="yt-baileysCode">const axios = require('axios');
+                    <pre>const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function descargarYouTube(sock, from, url) {
-    const res = await axios.post(`${API}/api/download`, {
-        url, format: 'mp4', quality: 'medium'
-    });
+    const res = await axios.post(`${API}/api/download`, {url, format: 'mp4', quality: 'medium'});
     const taskId = res.data.task_id;
     let status;
-    do {
-        await new Promise(r => setTimeout(r, 2000));
-        status = await axios.get(`${API}/api/status/${taskId}`);
-    } while (status.data.status !== 'completed');
-    
-    await sock.sendMessage(from, {
-        video: { url: `${API}/api/stream/${taskId}` },
-        mimetype: 'video/mp4',
-        caption: status.data.title
-    });
+    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
+    while (status.data.status !== 'completed');
+    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
 }</pre>
                     <button onclick="copyCode('yt-baileysCode')">Copiar Código</button>
                 </div>
@@ -273,22 +263,12 @@ async function descargarYouTube(sock, from, url) {
                     <div class="endpoint">
                         <h3><span class="method post">POST</span> /api/tiktok</h3>
                         <p style="color: #888; margin: 10px 0;">Descarga un video de TikTok</p>
-                        <pre>{
-  "url": "https://www.tiktok.com/...",
-  "watermark": false
-}</pre>
+                        <pre>{"url": "...", "watermark": false}</pre>
                     </div>
                     <div class="endpoint">
                         <h3><span class="method post">POST</span> /api/tiktok/search</h3>
                         <p style="color: #888; margin: 10px 0;">Busca videos en TikTok</p>
-                        <pre>{
-  "query": "gatos graciosos",
-  "limit": 10
-}</pre>
-                    </div>
-                    <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/tiktok/random?q=...</h3>
-                        <p style="color: #888; margin: 10px 0;">Obtiene un TikTok aleatorio</p>
+                        <pre>{"query": "gatos", "limit": 10}</pre>
                     </div>
                 </div>
             </div>
@@ -297,35 +277,80 @@ async function descargarYouTube(sock, from, url) {
                 <div class="card">
                     <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre id="tt-baileysCode">const axios = require('axios');
+                    <pre>const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function descargarTikTok(sock, from, url) {
-    const res = await axios.post(`${API}/api/tiktok`, {
-        url, watermark: false
-    });
+    const res = await axios.post(`${API}/api/tiktok`, {url, watermark: false});
     const taskId = res.data.task_id;
     let status;
-    do {
-        await new Promise(r => setTimeout(r, 2000));
-        status = await axios.get(`${API}/api/status/${taskId}`);
-    } while (status.data.status !== 'completed');
-    
-    await sock.sendMessage(from, {
-        video: { url: `${API}/api/stream/${taskId}` },
-        mimetype: 'video/mp4',
-        caption: status.data.title
-    });
-}
-
-// Buscar y enviar TikTok aleatorio
-async function tiktokAleatorio(sock, from, query) {
-    const random = await axios.get(`${API}/api/tiktok/random?q=${encodeURIComponent(query)}`);
-    if (random.data.success) {
-        await descargarTikTok(sock, from, random.data.url);
-    }
+    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
+    while (status.data.status !== 'completed');
+    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
 }</pre>
                     <button onclick="copyCode('tt-baileysCode')">Copiar Código</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== SOUNDCLOUD ========== -->
+        <div id="soundcloud" class="page">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('sc-download', 'soundcloud')">Descargar</button>
+                <button class="tab" onclick="showTab('sc-docs', 'soundcloud')">Endpoints</button>
+                <button class="tab" onclick="showTab('sc-baileys', 'soundcloud')">Baileys</button>
+            </div>
+            
+            <div id="sc-download" class="tab-content active">
+                <div class="card">
+                    <h2>Descargar de SoundCloud</h2>
+                    <div class="input-group"><label>URL de la canción</label><input type="text" id="sc-url" placeholder="https://on.soundcloud.com/..."></div>
+                    <button onclick="startDownload('sc')" class="btn-soundcloud">🎵 Descargar MP3</button>
+                    <div id="sc-downloadStatus" style="display: none;">
+                        <div class="progress-bar"><div class="progress-fill" id="sc-progressFill"></div></div>
+                        <div class="task-info" id="sc-taskInfo"></div>
+                        <div class="url-box" id="sc-downloadUrlBox" style="display: none;">
+                            <label>URL de descarga</label>
+                            <div class="url-copy-group"><input type="text" id="sc-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('sc')">Copiar</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="sc-docs" class="tab-content">
+                <div class="card">
+                    <h2>Endpoints de SoundCloud</h2>
+                    <div class="endpoint">
+                        <h3><span class="method post">POST</span> /api/soundcloud</h3>
+                        <p style="color: #888; margin: 10px 0;">Descarga audio de SoundCloud en MP3</p>
+                        <pre>{
+  "url": "https://on.soundcloud.com/...",
+  "quality": "best"
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="sc-baileys" class="tab-content">
+                <div class="card">
+                    <h2>Integración con Baileys</h2>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <pre>const axios = require('axios');
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+
+async function descargarSoundCloud(sock, from, url) {
+    const res = await axios.post(`${API}/api/soundcloud`, {url, quality: 'best'});
+    const taskId = res.data.task_id;
+    let status;
+    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
+    while (status.data.status !== 'completed');
+    await sock.sendMessage(from, { 
+        audio: { url: `${API}/api/stream/${taskId}` }, 
+        mimetype: 'audio/mp4',
+        fileName: `${status.data.title}.mp3`
+    });
+}</pre>
+                    <button onclick="copyCode('sc-baileysCode')">Copiar Código</button>
                 </div>
             </div>
         </div>
@@ -367,19 +392,11 @@ async function tiktokAleatorio(sock, from, query) {
                     <h2>Endpoints de FrikiIMG</h2>
                     <div class="endpoint">
                         <h3><span class="method post">POST</span> /api/image/search</h3>
-                        <p style="color: #888; margin: 10px 0;">Busca una imagen en Google</p>
-                        <pre>{
-  "query": "gato",
-  "adult": false
-}</pre>
+                        <pre>{"query": "gato", "adult": false}</pre>
                     </div>
                     <div class="endpoint">
                         <h3><span class="method post">POST</span> /api/image/download</h3>
-                        <p style="color: #888; margin: 10px 0;">Descarga la imagen encontrada</p>
-                        <pre>{
-  "query": "gato",
-  "adult": false
-}</pre>
+                        <pre>{"query": "gato", "adult": false}</pre>
                     </div>
                 </div>
             </div>
@@ -388,24 +405,16 @@ async function tiktokAleatorio(sock, from, query) {
                 <div class="card">
                     <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre id="img-baileysCode">const axios = require('axios');
+                    <pre>const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function buscarImagen(sock, from, query, adult = false) {
-    const res = await axios.post(`${API}/api/image/download`, {
-        query, adult
-    });
+    const res = await axios.post(`${API}/api/image/download`, {query, adult});
     const taskId = res.data.task_id;
     let status;
-    do {
-        await new Promise(r => setTimeout(r, 2000));
-        status = await axios.get(`${API}/api/status/${taskId}`);
-    } while (status.data.status !== 'completed');
-    
-    await sock.sendMessage(from, {
-        image: { url: `${API}/api/stream/${taskId}` },
-        caption: `🔍 ${query}${adult ? ' 🔞' : ''}`
-    });
+    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
+    while (status.data.status !== 'completed');
+    await sock.sendMessage(from, { image: { url: `${API}/api/stream/${taskId}` }, caption: `🔍 ${query}` });
 }</pre>
                     <button onclick="copyCode('img-baileysCode')">Copiar Código</button>
                 </div>
@@ -464,16 +473,8 @@ async function buscarImagen(sock, from, query, adult = false) {
                         <p style="color: #888; margin: 10px 0;">Obtiene una imagen aleatoria</p>
                     </div>
                     <div class="endpoint">
-                        <h3><span class="method get">GET</span> /api/waifu/types</h3>
-                        <p style="color: #888; margin: 10px 0;">Lista los tipos disponibles</p>
-                    </div>
-                    <div class="endpoint">
                         <h3><span class="method post">POST</span> /api/waifu/download</h3>
-                        <p style="color: #888; margin: 10px 0;">Descarga la imagen</p>
-                        <pre>{
-  "type": "waifu",
-  "category": "nsfw"
-}</pre>
+                        <pre>{"type": "waifu", "category": "nsfw"}</pre>
                     </div>
                 </div>
             </div>
@@ -482,58 +483,14 @@ async function buscarImagen(sock, from, query, adult = false) {
                 <div class="card">
                     <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    
-                    <h3>🎴 Waifu / Neko / Trap (Imagen)</h3>
                     <pre>const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
     const res = await axios.get(`${API}/api/waifu?type=${type}&category=${category}`);
-    await sock.sendMessage(from, {
-        image: { url: res.data.url },
-        caption: `🎴 ${type} (${category})`
-    });
-}
-
-// Comandos:
-// .waifu - Waifu NSFW
-// .waifu sfw - Waifu SFW
-// .neko - Neko NSFW
-// .trap - Trap NSFW</pre>
-                    
-                    <h3 style="margin-top: 30px;">🎬 Blowjob (VIDEO)</h3>
-                    <pre id="waifu-blowjobCode">const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
-
-async function obtenerBlowjob(sock, from) {
-    // 1. Obtener URL del video
-    const res = await axios.get(`${API}/api/waifu?type=blowjob&category=nsfw`);
-    const videoUrl = res.data.url;
-    
-    // 2. Descargar el video usando el endpoint de download
-    const downloadRes = await axios.post(`${API}/api/waifu/download`, {
-        type: 'blowjob',
-        category: 'nsfw'
-    });
-    
-    const taskId = downloadRes.data.task_id;
-    let status;
-    do {
-        await new Promise(r => setTimeout(r, 2000));
-        status = await axios.get(`${API}/api/status/${taskId}`);
-    } while (status.data.status !== 'completed');
-    
-    // 3. Enviar como video
-    await sock.sendMessage(from, {
-        video: { url: `${API}/api/stream/${taskId}` },
-        mimetype: 'video/mp4',
-        caption: '🎬 Blowjob NSFW',
-        gifPlayback: false
-    });
-}
-
-// Comando: .blowjob - Envía un video Blowjob NSFW</pre>
-                    <button onclick="copyCode('waifu-blowjobCode')">Copiar Código Blowjob</button>
+    await sock.sendMessage(from, { image: { url: res.data.url }, caption: `🎴 ${type}` });
+}</pre>
+                    <button onclick="copyCode('waifu-baileysCode')">Copiar Código</button>
                 </div>
             </div>
         </div>
@@ -567,14 +524,7 @@ async function obtenerBlowjob(sock, from) {
                     <h2>Endpoints de FrikiLyric</h2>
                     <div class="endpoint">
                         <h3><span class="method get">GET</span> /api/lyrics?q=...</h3>
-                        <p style="color: #888; margin: 10px 0;">Busca la letra de una canción</p>
-                        <pre>{
-  "success": true,
-  "artist": "Fleetwood Mac",
-  "title": "The Chain",
-  "lyrics": "Listen to the wind blow...",
-  "source": "lrclib"
-}</pre>
+                        <pre>{"success": true, "artist": "...", "title": "...", "lyrics": "..."}</pre>
                     </div>
                 </div>
             </div>
@@ -583,37 +533,27 @@ async function obtenerBlowjob(sock, from) {
                 <div class="card">
                     <h2>Integración con Baileys</h2>
                     <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
-                    <pre id="ly-baileysCode">const axios = require('axios');
+                    <pre>const axios = require('axios');
 const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
 
 async function buscarLetra(sock, from, query) {
     const res = await axios.get(`${API}/api/lyrics?q=${encodeURIComponent(query)}`);
-    const data = res.data;
-    
-    if (data.success) {
-        let mensaje = `🎵 *${data.title}*\n👤 *${data.artist}*\n\n`;
-        mensaje += data.lyrics.substring(0, 1000);
-        if (data.lyrics.length > 1000) mensaje += '...';
-        
-        await sock.sendMessage(from, { text: mensaje });
-    } else {
-        await sock.sendMessage(from, { text: '❌ No se encontró la letra' });
+    if (res.data.success) {
+        await sock.sendMessage(from, { text: `🎵 *${res.data.title}*\n👤 *${res.data.artist}*\n\n${res.data.lyrics.substring(0, 1000)}` });
     }
-}
-
-// Comando: .letra Fleetwood Mac - The Chain</pre>
+}</pre>
                     <button onclick="copyCode('ly-baileysCode')">Copiar Código</button>
                 </div>
             </div>
         </div>
         
-        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC</p></footer>
+        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · SOUNDCLOUD · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC</p></footer>
     </div>
     
     <script>
         const API_URL = '';
-        let ytTaskId = null, ttTaskId = null, imgTaskId = null, waifuTaskId = null;
-        let ytInterval = null, ttInterval = null, imgInterval = null, waifuInterval = null;
+        let ytTaskId = null, ttTaskId = null, scTaskId = null, imgTaskId = null, waifuTaskId = null;
+        let ytInterval = null, ttInterval = null, scInterval = null, imgInterval = null, waifuInterval = null;
         
         async function checkServerStatus() {
             try { await fetch(`${API_URL}/health`); document.getElementById('statusDot').classList.add('online'); document.getElementById('statusText').textContent = 'EN LÍNEA'; }
@@ -636,8 +576,75 @@ async function buscarLetra(sock, from, query) {
         }
         
         function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('¡Código copiado!'); }
-        
         function setLyricsExample(query) { document.getElementById('lyrics-query').value = query; }
+        
+        // ========== SOUNDCLOUD ==========
+        async function startDownload(platform) {
+            let url, endpoint, body;
+            
+            if (platform === 'yt') {
+                url = document.getElementById('yt-url').value;
+                if (!url) return alert('Ingresa una URL');
+                endpoint = '/api/download';
+                body = {url, format: document.getElementById('yt-format').value, quality: 'medium'};
+            } else if (platform === 'tt') {
+                url = document.getElementById('tt-url').value;
+                if (!url) return alert('Ingresa una URL');
+                endpoint = '/api/tiktok';
+                body = {url, watermark: document.getElementById('tt-watermark').value === 'true'};
+            } else if (platform === 'sc') {
+                url = document.getElementById('sc-url').value;
+                if (!url) return alert('Ingresa una URL');
+                endpoint = '/api/soundcloud';
+                body = {url, quality: 'best'};
+            } else {
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}${endpoint}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
+                const data = await res.json();
+                
+                if (platform === 'yt') { ytTaskId = data.task_id; if (ytInterval) clearInterval(ytInterval); ytInterval = setInterval(() => checkStatus('yt'), 2000); }
+                else if (platform === 'tt') { ttTaskId = data.task_id; if (ttInterval) clearInterval(ttInterval); ttInterval = setInterval(() => checkStatus('tt'), 2000); }
+                else if (platform === 'sc') { scTaskId = data.task_id; if (scInterval) clearInterval(scInterval); scInterval = setInterval(() => checkStatus('sc'), 2000); }
+                
+                document.getElementById(`${platform}-downloadStatus`).style.display = 'block';
+                document.getElementById(`${platform}-downloadUrlBox`).style.display = 'none';
+                document.getElementById(`${platform}-taskInfo`).innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p>`;
+            } catch(e) { alert('Error: ' + e.message); }
+        }
+        
+        async function checkStatus(platform) {
+            let taskId;
+            if (platform === 'yt') taskId = ytTaskId;
+            else if (platform === 'tt') taskId = ttTaskId;
+            else if (platform === 'sc') taskId = scTaskId;
+            else return;
+            
+            if (!taskId) return;
+            
+            try {
+                const res = await fetch(`${API_URL}/api/status/${taskId}`);
+                const data = await res.json();
+                document.getElementById(`${platform}-progressFill`).style.width = data.progress + '%';
+                let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
+                if (data.title) html += `<p><strong>Título</strong> ${data.title}</p>`;
+                if (data.uploader) html += `<p><strong>Artista</strong> ${data.uploader}</p>`;
+                if (data.duration_str) html += `<p><strong>Duración</strong> ${data.duration_str}</p>`;
+                document.getElementById(`${platform}-taskInfo`).innerHTML = html;
+                
+                if (data.status === 'completed') {
+                    if (platform === 'yt') clearInterval(ytInterval);
+                    else if (platform === 'tt') clearInterval(ttInterval);
+                    else if (platform === 'sc') clearInterval(scInterval);
+                    document.getElementById(`${platform}-downloadUrl`).value = window.location.origin + data.stream_url;
+                    document.getElementById(`${platform}-downloadUrlBox`).style.display = 'block';
+                }
+            } catch(e) {}
+        }
+        
+        function copyUrl(platform) { document.getElementById(`${platform}-downloadUrl`).select(); document.execCommand('copy'); alert('¡Copiado!'); }
         
         // ========== WAIFU ==========
         async function getWaifu() {
@@ -658,16 +665,13 @@ async function buscarLetra(sock, from, query) {
             const type = document.getElementById('waifu-type').value;
             const category = document.getElementById('waifu-category').value;
             try {
-                const res = await fetch(`${API_URL}/api/waifu/download`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({type, category})
-                });
+                const res = await fetch(`${API_URL}/api/waifu/download`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({type, category}) });
                 const data = await res.json();
                 waifuTaskId = data.task_id;
                 if (waifuInterval) clearInterval(waifuInterval);
                 waifuInterval = setInterval(checkWaifuStatus, 2000);
                 document.getElementById('waifu-downloadStatus').style.display = 'block';
-                document.getElementById('waifu-downloadUrlBox').style.display = 'none';
-                document.getElementById('waifu-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p><p><strong>Tipo</strong> ${type} (${category})</p>`;
+                document.getElementById('waifu-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p>`;
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -679,7 +683,6 @@ async function buscarLetra(sock, from, query) {
                 document.getElementById('waifu-progressFill').style.width = data.progress + '%';
                 let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
                 if (data.title) html += `<p><strong>Tipo</strong> ${data.title}</p>`;
-                if (data.file_size_str) html += `<p><strong>Tamaño</strong> ${data.file_size_str}</p>`;
                 document.getElementById('waifu-taskInfo').innerHTML = html;
                 if (data.status === 'completed') {
                     clearInterval(waifuInterval);
@@ -694,9 +697,7 @@ async function buscarLetra(sock, from, query) {
             const query = document.getElementById('img-query').value;
             if (!query) return alert('Ingresa una búsqueda');
             try {
-                const res = await fetch(`${API_URL}/api/image/search`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: false})
-                });
+                const res = await fetch(`${API_URL}/api/image/search`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: false}) });
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('img-preview').style.display = 'block';
@@ -710,9 +711,7 @@ async function buscarLetra(sock, from, query) {
             let query = document.getElementById('img-query').value;
             if (!query) return alert('Ingresa una búsqueda');
             try {
-                const res = await fetch(`${API_URL}/api/image/search`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: true})
-                });
+                const res = await fetch(`${API_URL}/api/image/search`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: true}) });
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('img-preview').style.display = 'block';
@@ -726,16 +725,13 @@ async function buscarLetra(sock, from, query) {
             const query = document.getElementById('img-query').value;
             if (!query) return alert('Ingresa una búsqueda');
             try {
-                const res = await fetch(`${API_URL}/api/image/download`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: false})
-                });
+                const res = await fetch(`${API_URL}/api/image/download`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: false}) });
                 const data = await res.json();
                 imgTaskId = data.task_id;
                 if (imgInterval) clearInterval(imgInterval);
                 imgInterval = setInterval(checkImageStatus, 2000);
                 document.getElementById('img-downloadStatus').style.display = 'block';
-                document.getElementById('img-downloadUrlBox').style.display = 'none';
-                document.getElementById('img-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p><p><strong>Búsqueda</strong> ${query}</p>`;
+                document.getElementById('img-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p>`;
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -747,7 +743,6 @@ async function buscarLetra(sock, from, query) {
                 document.getElementById('img-progressFill').style.width = data.progress + '%';
                 let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
                 if (data.title) html += `<p><strong>Búsqueda</strong> ${data.title}</p>`;
-                if (data.file_size_str) html += `<p><strong>Tamaño</strong> ${data.file_size_str}</p>`;
                 if (data.adult) html += `<p><span class="status-badge" style="background:#ff005022;color:#ff0050;">🔞 +18</span></p>`;
                 document.getElementById('img-taskInfo').innerHTML = html;
                 if (data.status === 'completed') {
@@ -757,50 +752,6 @@ async function buscarLetra(sock, from, query) {
                 }
             } catch(e) {}
         }
-        
-        // ========== YOUTUBE & TIKTOK ==========
-        async function startDownload(platform) {
-            const url = document.getElementById(`${platform}-url`).value;
-            if (!url) return alert('Ingresa una URL');
-            
-            let endpoint, body;
-            if (platform === 'yt') {
-                endpoint = '/api/download';
-                body = {url, format: document.getElementById('yt-format').value, quality: 'medium'};
-            } else {
-                endpoint = '/api/tiktok';
-                body = {url, watermark: document.getElementById('tt-watermark').value === 'true'};
-            }
-            
-            try {
-                const res = await fetch(`${API_URL}${endpoint}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
-                const data = await res.json();
-                if (platform === 'yt') { ytTaskId = data.task_id; if (ytInterval) clearInterval(ytInterval); ytInterval = setInterval(() => checkStatus('yt'), 2000); }
-                else { ttTaskId = data.task_id; if (ttInterval) clearInterval(ttInterval); ttInterval = setInterval(() => checkStatus('tt'), 2000); }
-                document.getElementById(`${platform}-downloadStatus`).style.display = 'block';
-                document.getElementById(`${platform}-taskInfo`).innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p>`;
-            } catch(e) { alert('Error: ' + e.message); }
-        }
-        
-        async function checkStatus(platform) {
-            const taskId = platform === 'yt' ? ytTaskId : ttTaskId;
-            if (!taskId) return;
-            try {
-                const res = await fetch(`${API_URL}/api/status/${taskId}`);
-                const data = await res.json();
-                document.getElementById(`${platform}-progressFill`).style.width = data.progress + '%';
-                let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
-                if (data.title) html += `<p><strong>Título</strong> ${data.title}</p>`;
-                document.getElementById(`${platform}-taskInfo`).innerHTML = html;
-                if (data.status === 'completed') {
-                    if (platform === 'yt') clearInterval(ytInterval); else clearInterval(ttInterval);
-                    document.getElementById(`${platform}-downloadUrl`).value = window.location.origin + data.stream_url;
-                    document.getElementById(`${platform}-downloadUrlBox`).style.display = 'block';
-                }
-            } catch(e) {}
-        }
-        
-        function copyUrl(platform) { document.getElementById(`${platform}-downloadUrl`).select(); document.execCommand('copy'); alert('¡Copiado!'); }
         
         // ========== LYRICS ==========
         async function searchLyrics() {
