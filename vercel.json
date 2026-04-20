@@ -1,7 +1,10 @@
 {
   "rewrites": [
-    { "source": "/api/ai/ask", "destination": "http://64.20.54.50:30325/api/ai/ask" },
-    { "source": "/api/ai/search", "destination": "http://64.20.54.50:30325/api/ai/search" },
+    { "source": "/api/hosting/upload", "destination": "http://64.20.54.50:30325/api/hosting/upload" },
+    { "source": "/api/hosting/view/:file_id", "destination": "http://64.20.54.50:30325/api/hosting/view/:file_id" },
+    { "source": "/api/hosting/download/:file_id", "destination": "http://64.20.54.50:30325/api/hosting/download/:file_id" },
+    { "source": "/api/hosting/info/:file_id", "destination": "http://64.20.54.50:30325/api/hosting/info/:file_id" },
+    { "source": "/api/hosting/list", "destination": "http://64.20.54.50:30325/api/hosting/list" },
     { "source": "/api/waifu", "destination": "http://64.20.54.50:30325/api/waifu" },
     { "source": "/api/waifu/types", "destination": "http://64.20.54.50:30325/api/waifu/types" },
     { "source": "/api/waifu/download", "destination": "http://64.20.54.50:30325/api/waifu/download" },
@@ -24,8 +27,8 @@
       "source": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
       ]
     }
   ]
