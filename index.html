@@ -91,6 +91,8 @@
         .btn-instagram:hover { background: #ff6b81 !important; border-color: #ff6b81 !important; }
         .btn-brat { background: #8bc34a !important; border-color: #8bc34a !important; }
         .btn-brat:hover { background: #aed581 !important; border-color: #aed581 !important; }
+        .btn-spotify { background: #1DB954 !important; border-color: #1DB954 !important; }
+        .btn-spotify:hover { background: #1ed760 !important; border-color: #1ed760 !important; }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -148,6 +150,15 @@
             text-align: center; margin: 20px 0;
         }
         .brat-preview img { max-width: 100%; max-height: 300px; border-radius: 8px; }
+        .spotify-results { max-height: 500px; overflow-y: auto; margin-top: 20px; }
+        .spotify-track {
+            background: #050505; border: 1px solid #333; border-radius: 6px;
+            padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 10px;
+        }
+        .spotify-track-info { display: flex; align-items: center; gap: 15px; }
+        .spotify-track-info img { width: 50px; height: 50px; border-radius: 4px; }
+        .spotify-track-actions { display: flex; gap: 8px; }
         footer { text-align: center; padding: 30px 0; color: #555555; border-top: 1px solid #333333; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
@@ -177,7 +188,7 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>API</span></div>
-            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · BRAT</div>
+            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · BRAT · SPOTIFY</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">VERIFICANDO</span>
@@ -188,6 +199,7 @@
             <button class="nav-btn active" onclick="showPage('youtube')">FrikiTube</button>
             <button class="nav-btn" onclick="showPage('tiktok')">FrikiTok</button>
             <button class="nav-btn" onclick="showPage('instagram')">Instagram</button>
+            <button class="nav-btn" onclick="showPage('spotify')">FrikiSpotify</button>
             <button class="nav-btn" onclick="showPage('images')">FrikiIMG</button>
             <button class="nav-btn" onclick="showPage('waifu')">FrikiWaifu</button>
             <button class="nav-btn" onclick="showPage('lyrics')">FrikiLyric</button>
@@ -331,6 +343,75 @@ async function descargarInstagram(sock, from, url) {
     await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
 }</pre>
                     <button onclick="copyCode('ig-baileysCode')">Copiar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SPOTIFY -->
+        <div id="spotify" class="page">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('sp-search', 'spotify')">Buscar</button>
+                <button class="tab" onclick="showTab('sp-download', 'spotify')">Descargar</button>
+                <button class="tab" onclick="showTab('sp-docs', 'spotify')">Endpoints</button>
+                <button class="tab" onclick="showTab('sp-baileys', 'spotify')">Baileys</button>
+            </div>
+            <div id="sp-search" class="tab-content active">
+                <div class="card">
+                    <h2>Buscar en Spotify</h2>
+                    <div class="input-group"><label>Búsqueda</label><input type="text" id="sp-query" placeholder="Bad Bunny - Me Porto Bonito"></div>
+                    <div class="input-group"><label>Tipo</label>
+                        <select id="sp-type">
+                            <option value="track">Canción</option>
+                            <option value="album">Álbum</option>
+                            <option value="playlist">Playlist</option>
+                        </select>
+                    </div>
+                    <button onclick="searchSpotify()" class="btn-spotify">🔍 Buscar</button>
+                    <div id="sp-results" class="spotify-results" style="display: none;"></div>
+                </div>
+            </div>
+            <div id="sp-download" class="tab-content">
+                <div class="card">
+                    <h2>Descargar de Spotify</h2>
+                    <div class="input-group"><label>URL de Spotify</label><input type="text" id="sp-url" placeholder="https://open.spotify.com/track/..."></div>
+                    <button onclick="downloadSpotify()" class="btn-spotify">⬇️ Descargar MP3</button>
+                    <div id="sp-downloadStatus" style="display: none;">
+                        <div class="progress-bar"><div class="progress-fill" id="sp-progressFill"></div></div>
+                        <div class="task-info" id="sp-taskInfo"></div>
+                        <div class="url-box" id="sp-downloadUrlBox" style="display: none;">
+                            <label>URL de descarga</label>
+                            <div class="url-copy-group"><input type="text" id="sp-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('sp')">Copiar</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sp-docs" class="tab-content">
+                <div class="card"><h2>Endpoints</h2>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/spotify/search</h3><pre>{"query": "bad bunny", "type": "track"}</pre></div>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/spotify/info</h3><pre>{"url": "https://open.spotify.com/track/..."}</pre></div>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/spotify/download</h3><pre>{"url": "https://open.spotify.com/track/..."}</pre></div>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/spotify/batch</h3><pre>{"url": "https://open.spotify.com/playlist/..."}</pre></div>
+                </div>
+            </div>
+            <div id="sp-baileys" class="tab-content">
+                <div class="card"><h2>Baileys</h2>
+                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <pre>const axios = require('axios');
+const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+
+async function descargarSpotify(sock, from, url) {
+    const res = await axios.post(`${API}/api/spotify/download`, {url});
+    const taskId = res.data.task_id;
+    let status;
+    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
+    while (status.data.status !== 'completed');
+    await sock.sendMessage(from, { 
+        audio: { url: `${API}/api/stream/${taskId}` }, 
+        mimetype: 'audio/mpeg',
+        fileName: `${status.data.title}.mp3`
+    });
+}</pre>
+                    <button onclick="copyCode('sp-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
@@ -631,13 +712,15 @@ async function generarBrat(sock, from, text) {
             </div>
         </div>
         
-        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · INSTAGRAM · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING · FRIKIBRAT</p></footer>
+        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · INSTAGRAM · FRIKISPOTIFY · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING · FRIKIBRAT</p></footer>
     </div>
     
     <script>
         const API_URL = '';
-        let ytTaskId = null, ttTaskId = null, igTaskId = null, imgTaskId = null, waifuTaskId = null;
-        let ytInterval = null, ttInterval = null, igInterval = null, imgInterval = null, waifuInterval = null;
+        let ytTaskId = null, ttTaskId = null, igTaskId = null, spTaskId = null;
+        let imgTaskId = null, waifuTaskId = null;
+        let ytInterval = null, ttInterval = null, igInterval = null, spInterval = null;
+        let imgInterval = null, waifuInterval = null;
         let selectedFile = null;
         
         async function checkServerStatus() {
@@ -770,7 +853,7 @@ async function generarBrat(sock, from, text) {
             alert('Link copiado: ' + url);
         }
         
-        // ========== YOUTUBE, TIKTOK E INSTAGRAM ==========
+        // ========== YOUTUBE, TIKTOK, INSTAGRAM, SPOTIFY ==========
         async function startDownload(platform) {
             let url, endpoint, body;
             if (platform === 'yt') {
@@ -806,6 +889,7 @@ async function generarBrat(sock, from, text) {
             if (platform === 'yt') taskId = ytTaskId;
             else if (platform === 'tt') taskId = ttTaskId;
             else if (platform === 'ig') taskId = igTaskId;
+            else if (platform === 'sp') taskId = spTaskId;
             else return;
             if (!taskId) return;
             try {
@@ -820,6 +904,7 @@ async function generarBrat(sock, from, text) {
                     if (platform === 'yt') clearInterval(ytInterval);
                     else if (platform === 'tt') clearInterval(ttInterval);
                     else if (platform === 'ig') clearInterval(igInterval);
+                    else if (platform === 'sp') clearInterval(spInterval);
                     document.getElementById(`${platform}-downloadUrl`).value = window.location.origin + data.stream_url;
                     document.getElementById(`${platform}-downloadUrlBox`).style.display = 'block';
                 }
@@ -827,6 +912,90 @@ async function generarBrat(sock, from, text) {
         }
         
         function copyUrl(platform) { document.getElementById(`${platform}-downloadUrl`).select(); document.execCommand('copy'); alert('¡Copiado!'); }
+        
+        // ========== SPOTIFY ==========
+        async function searchSpotify() {
+            const query = document.getElementById('sp-query').value;
+            const type = document.getElementById('sp-type').value;
+            if (!query) return alert('Ingresa una búsqueda');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/spotify/search`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({query, type})
+                });
+                const data = await res.json();
+                const resultsDiv = document.getElementById('sp-results');
+                resultsDiv.style.display = 'block';
+                
+                if (data.success && data.results) {
+                    let html = `<h3>Resultados (${data.total})</h3>`;
+                    data.results.forEach(track => {
+                        html += `<div class="spotify-track">
+                            <div class="spotify-track-info">
+                                ${track.image ? `<img src="${track.image}" alt="">` : '<span>🎵</span>'}
+                                <div>
+                                    <strong>${track.title}</strong><br>
+                                    <small>${track.artist} · ${track.duration_str || ''}</small>
+                                </div>
+                            </div>
+                            <div class="spotify-track-actions">
+                                <button onclick="downloadSpotifyUrl('${track.url}')" class="btn-spotify">⬇️</button>
+                            </div>
+                        </div>`;
+                    });
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<p style="color: #ff4444;">No se encontraron resultados</p>';
+                }
+            } catch(e) {
+                document.getElementById('sp-results').innerHTML = '<p style="color: #ff4444;">Error al buscar</p>';
+            }
+        }
+        
+        async function downloadSpotify() {
+            const url = document.getElementById('sp-url').value;
+            if (!url) return alert('Ingresa una URL de Spotify');
+            downloadSpotifyUrl(url);
+        }
+        
+        async function downloadSpotifyUrl(url) {
+            try {
+                const res = await fetch(`${API_URL}/api/spotify/download`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url})
+                });
+                const data = await res.json();
+                spTaskId = data.task_id;
+                if (spInterval) clearInterval(spInterval);
+                spInterval = setInterval(() => checkSpotifyStatus(), 2000);
+                document.getElementById('sp-downloadStatus').style.display = 'block';
+                document.getElementById('sp-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">Buscando...</span></p>`;
+            } catch(e) { alert('Error: ' + e.message); }
+        }
+        
+        async function checkSpotifyStatus() {
+            if (!spTaskId) return;
+            try {
+                const res = await fetch(`${API_URL}/api/status/${spTaskId}`);
+                const data = await res.json();
+                document.getElementById('sp-progressFill').style.width = data.progress + '%';
+                let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
+                if (data.title) html += `<p><strong>Título</strong> ${data.title}</p>`;
+                if (data.uploader) html += `<p><strong>Artista</strong> ${data.uploader}</p>`;
+                document.getElementById('sp-taskInfo').innerHTML = html;
+                if (data.status === 'completed') {
+                    clearInterval(spInterval);
+                    document.getElementById('sp-downloadUrl').value = window.location.origin + data.stream_url;
+                    document.getElementById('sp-downloadUrlBox').style.display = 'block';
+                } else if (data.status === 'failed') {
+                    clearInterval(spInterval);
+                    alert('Error: ' + (data.error || 'Desconocido'));
+                }
+            } catch(e) {}
+        }
         
         // ========== WAIFU ==========
         async function getWaifu() {
