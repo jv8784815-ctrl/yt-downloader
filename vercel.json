@@ -25,6 +25,11 @@
     { "source": "/api/info", "destination": "http://64.20.54.50:30325/api/info" },
     { "source": "/api/tasks", "destination": "http://64.20.54.50:30325/api/tasks" },
     { "source": "/api/download", "destination": "http://64.20.54.50:30325/api/download" },
+    { "source": "/api/spotify/search", "destination": "http://64.20.54.50:30325/api/spotify/search" },
+    { "source": "/api/spotify/info", "destination": "http://64.20.54.50:30325/api/spotify/info" },
+    { "source": "/api/spotify/download", "destination": "http://64.20.54.50:30325/api/spotify/download" },
+    { "source": "/api/spotify/batch", "destination": "http://64.20.54.50:30325/api/spotify/batch" },
+    { "source": "/api/gif/convert", "destination": "http://64.20.54.50:30325/api/gif/convert" },
     { "source": "/health", "destination": "http://64.20.54.50:30325/health" }
   ],
   "headers": [
