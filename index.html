@@ -169,9 +169,6 @@
         .method.get { background: #2196f322; color: #2196f3; }
         .checkbox-group { display: flex; align-items: center; gap: 10px; margin: 15px 0; }
         .checkbox-group input { width: auto; }
-        .range-group { display: flex; align-items: center; gap: 15px; }
-        .range-group input { flex: 1; }
-        .range-value { color: #888; font-size: 0.8em; min-width: 40px; }
         @media (max-width: 700px) {
             .logo { font-size: 1.8em; letter-spacing: 4px; }
             .card { padding: 20px; }
@@ -232,9 +229,9 @@
             </div>
             <div id="yt-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
-const API = 'https://TU_API';
+                    <div class="api-url-badge" id="apiUrlDisplay"></div>
+                    <pre id="yt-baileysCode">const axios = require('axios');
+const API = window.location.origin;
 
 async function descargarYouTube(sock, from, url) {
     const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});
@@ -277,9 +274,9 @@ async function descargarYouTube(sock, from, url) {
             </div>
             <div id="tt-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
-const API = 'https://TU_API';
+                    <div class="api-url-badge" id="apiUrlDisplay2"></div>
+                    <pre id="tt-baileysCode">const axios = require('axios');
+const API = window.location.origin;
 
 async function descargarTikTok(sock, from, url) {
     const res = await axios.post(`${API}/api/tiktok`, {url, watermark: false});
@@ -321,9 +318,9 @@ async function descargarTikTok(sock, from, url) {
             </div>
             <div id="ig-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
-const API = 'https://TU_API';
+                    <div class="api-url-badge" id="apiUrlDisplay3"></div>
+                    <pre id="ig-baileysCode">const axios = require('axios');
+const API = window.location.origin;
 
 async function descargarInstagram(sock, from, url) {
     const res = await axios.post(`${API}/api/instagram`, {url});
@@ -384,9 +381,9 @@ async function descargarInstagram(sock, from, url) {
             </div>
             <div id="sp-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
-const API = 'https://TU_API';
+                    <div class="api-url-badge" id="apiUrlDisplay4"></div>
+                    <pre id="sp-baileysCode">const axios = require('axios');
+const API = window.location.origin;
 
 async function descargarSpotify(sock, from, url) {
     const res = await axios.post(`${API}/api/spotify/download`, {url});
@@ -440,9 +437,9 @@ async function descargarSpotify(sock, from, url) {
             </div>
             <div id="img-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
-const API = 'https://TU_API';
+                    <div class="api-url-badge" id="apiUrlDisplay5"></div>
+                    <pre id="img-baileysCode">const axios = require('axios');
+const API = window.location.origin;
 
 async function buscarImagen(sock, from, query, adult = false) {
     const res = await axios.post(`${API}/api/image/download`, {query, adult});
@@ -504,9 +501,9 @@ async function buscarImagen(sock, from, query, adult = false) {
             </div>
             <div id="waifu-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
-const API = 'https://TU_API';
+                    <div class="api-url-badge" id="apiUrlDisplay6"></div>
+                    <pre id="waifu-baileysCode">const axios = require('axios');
+const API = window.location.origin;
 
 async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
     const res = await axios.get(`${API}/api/waifu?type=${type}&category=${category}`);
@@ -540,9 +537,9 @@ async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
             </div>
             <div id="ly-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
-const API = 'https://TU_API';
+                    <div class="api-url-badge" id="apiUrlDisplay7"></div>
+                    <pre id="ly-baileysCode">const axios = require('axios');
+const API = window.location.origin;
 
 async function buscarLetra(sock, from, query) {
     const res = await axios.get(`${API}/api/lyrics?q=${encodeURIComponent(query)}`);
@@ -623,10 +620,10 @@ async function buscarLetra(sock, from, query) {
             </div>
             <div id="host-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
+                    <div class="api-url-badge" id="apiUrlDisplay8"></div>
+                    <pre id="host-baileysCode">const axios = require('axios');
 const FormData = require('form-data');
-const API = 'https://TU_API';
+const API = window.location.origin;
 
 async function subirArchivo(sock, from, fileBuffer, filename) {
     const form = new FormData();
@@ -675,9 +672,9 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
             </div>
             <div id="brat-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
-const API = 'https://TU_API';
+                    <div class="api-url-badge" id="apiUrlDisplay9"></div>
+                    <pre id="brat-baileysCode">const axios = require('axios');
+const API = window.location.origin;
 
 async function generarBrat(sock, from, text) {
     const res = await axios.post(`${API}/api/brat/generate`, { text, blur: 3 });
@@ -751,10 +748,10 @@ async function generarBrat(sock, from, text) {
             </div>
             <div id="gif-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://TU_API';</div>
-                    <pre>const axios = require('axios');
+                    <div class="api-url-badge" id="apiUrlDisplay10"></div>
+                    <pre id="gif-baileysCode">const axios = require('axios');
 const FormData = require('form-data');
-const API = 'https://TU_API';
+const API = window.location.origin;
 
 async function convertirAGif(sock, from, fileBuffer, filename) {
     const form = new FormData();
@@ -776,12 +773,27 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
     </div>
     
     <script>
-        const API_URL = '';
+        const API_URL = window.location.origin;
         let ytTaskId = null, ttTaskId = null, igTaskId = null, spTaskId = null;
         let imgTaskId = null, waifuTaskId = null;
         let ytInterval = null, ttInterval = null, igInterval = null, spInterval = null;
         let imgInterval = null, waifuInterval = null;
         let selectedFile = null, selectedGifFile = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const badges = document.querySelectorAll('.api-url-badge');
+            badges.forEach(badge => {
+                badge.textContent = `const API = '${window.location.origin}';`;
+            });
+            
+            const blurSlider = document.getElementById('brat-blur');
+            const blurValue = document.getElementById('brat-blur-value');
+            if (blurSlider && blurValue) {
+                blurSlider.addEventListener('input', function() {
+                    blurValue.textContent = this.value;
+                });
+            }
+        });
         
         async function checkServerStatus() {
             try { await fetch(`${API_URL}/health`); document.getElementById('statusDot').classList.add('online'); document.getElementById('statusText').textContent = 'EN LÍNEA'; }
@@ -812,16 +824,6 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
         
         function copyText(id) { document.getElementById(id).select(); document.execCommand('copy'); alert('¡Copiado!'); }
         
-        document.addEventListener('DOMContentLoaded', function() {
-            const blurSlider = document.getElementById('brat-blur');
-            const blurValue = document.getElementById('brat-blur-value');
-            if (blurSlider && blurValue) {
-                blurSlider.addEventListener('input', function() {
-                    blurValue.textContent = this.value;
-                });
-            }
-        });
-        
         async function generateBrat() {
             const text = document.getElementById('brat-text').value;
             const blur = parseFloat(document.getElementById('brat-blur').value);
@@ -834,8 +836,8 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('brat-result').style.display = 'block';
-                    document.getElementById('brat-preview-img').src = window.location.origin + data.url;
-                    document.getElementById('brat-url').value = window.location.origin + data.url;
+                    document.getElementById('brat-preview-img').src = API_URL + data.url;
+                    document.getElementById('brat-url').value = API_URL + data.url;
                 }
             } catch(e) { alert('Error: ' + e.message); }
         }
@@ -863,8 +865,8 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                     document.getElementById('host-original-size').textContent = data.original_size_str;
                     document.getElementById('host-compressed-size').textContent = data.compressed_size_str;
                     document.getElementById('host-compression-ratio').textContent = data.compression_ratio;
-                    const viewUrl = window.location.origin + data.view_url;
-                    const downloadUrl = window.location.origin + data.download_url;
+                    const viewUrl = API_URL + data.view_url;
+                    const downloadUrl = API_URL + data.download_url;
                     document.getElementById('host-view-url').value = viewUrl;
                     document.getElementById('host-download-url').value = downloadUrl;
                     const preview = document.getElementById('host-preview');
@@ -901,7 +903,7 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
         }
         
         function copyHostedLink(id) {
-            const url = `${window.location.origin}/api/hosting/view/${id}`;
+            const url = `${API_URL}/api/hosting/view/${id}`;
             navigator.clipboard?.writeText(url);
             alert('Link copiado: ' + url);
         }
@@ -957,7 +959,7 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                     else if (platform === 'tt') clearInterval(ttInterval);
                     else if (platform === 'ig') clearInterval(igInterval);
                     else if (platform === 'sp') clearInterval(spInterval);
-                    document.getElementById(`${platform}-downloadUrl`).value = window.location.origin + data.stream_url;
+                    document.getElementById(`${platform}-downloadUrl`).value = API_URL + data.stream_url;
                     document.getElementById(`${platform}-downloadUrlBox`).style.display = 'block';
                 }
             } catch(e) {}
@@ -1030,7 +1032,7 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                 document.getElementById('sp-taskInfo').innerHTML = html;
                 if (data.status === 'completed') {
                     clearInterval(spInterval);
-                    document.getElementById('sp-downloadUrl').value = window.location.origin + data.stream_url;
+                    document.getElementById('sp-downloadUrl').value = API_URL + data.stream_url;
                     document.getElementById('sp-downloadUrlBox').style.display = 'block';
                 }
             } catch(e) {}
@@ -1075,7 +1077,7 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                 document.getElementById('waifu-taskInfo').innerHTML = html;
                 if (data.status === 'completed') {
                     clearInterval(waifuInterval);
-                    document.getElementById('waifu-downloadUrl').value = window.location.origin + data.stream_url;
+                    document.getElementById('waifu-downloadUrl').value = API_URL + data.stream_url;
                     document.getElementById('waifu-downloadUrlBox').style.display = 'block';
                 }
             } catch(e) {}
@@ -1134,7 +1136,7 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                 document.getElementById('img-taskInfo').innerHTML = html;
                 if (data.status === 'completed') {
                     clearInterval(imgInterval);
-                    document.getElementById('img-downloadUrl').value = window.location.origin + data.stream_url;
+                    document.getElementById('img-downloadUrl').value = API_URL + data.stream_url;
                     document.getElementById('img-downloadUrlBox').style.display = 'block';
                 }
             } catch(e) {}
@@ -1164,6 +1166,7 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
         
         async function convertToGif() {
             if (!selectedGifFile) return alert('Selecciona un video');
+            if (selectedGifFile.size > 50 * 1024 * 1024) return alert('El archivo es muy grande. Máximo 50MB');
             const formData = new FormData();
             formData.append('file', selectedGifFile);
             formData.append('width', document.getElementById('gif-width').value);
@@ -1171,13 +1174,17 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
             document.getElementById('gif-result').style.display = 'none';
             try {
                 const res = await fetch(`${API_URL}/api/gif/convert`, { method: 'POST', body: formData });
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error('Error del servidor: ' + text.substring(0, 100));
+                }
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('gif-file-id').textContent = data.file_id;
                     document.getElementById('gif-original-size').textContent = data.original_size_str;
                     document.getElementById('gif-size').textContent = data.gif_size_str;
-                    const viewUrl = window.location.origin + data.view_url;
-                    const downloadUrl = window.location.origin + data.download_url;
+                    const viewUrl = API_URL + data.view_url;
+                    const downloadUrl = API_URL + data.download_url;
                     document.getElementById('gif-view-url').value = viewUrl;
                     document.getElementById('gif-download-url').value = downloadUrl;
                     document.getElementById('gif-preview-img').src = viewUrl;
