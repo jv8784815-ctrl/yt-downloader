@@ -82,17 +82,12 @@
         }
         button:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
         .btn-18 { background: #ff0050 !important; border-color: #ff0050 !important; }
-        .btn-18:hover { background: #ff3366 !important; border-color: #ff3366 !important; }
         .btn-waifu { background: #9b59b6 !important; border-color: #9b59b6 !important; }
-        .btn-waifu:hover { background: #af7ac5 !important; border-color: #af7ac5 !important; }
         .btn-hosting { background: #ff8800 !important; border-color: #ff8800 !important; }
-        .btn-hosting:hover { background: #ffaa33 !important; border-color: #ffaa33 !important; }
         .btn-instagram { background: #e4405f !important; border-color: #e4405f !important; }
-        .btn-instagram:hover { background: #ff6b81 !important; border-color: #ff6b81 !important; }
         .btn-brat { background: #8bc34a !important; border-color: #8bc34a !important; }
-        .btn-brat:hover { background: #aed581 !important; border-color: #aed581 !important; }
         .btn-spotify { background: #1DB954 !important; border-color: #1DB954 !important; }
-        .btn-spotify:hover { background: #1ed760 !important; border-color: #1ed760 !important; }
+        .btn-gif { background: #00bcd4 !important; border-color: #00bcd4 !important; }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -120,10 +115,6 @@
             background: #000000; padding: 18px; border-radius: 6px; overflow-x: auto;
             margin: 15px 0; font-size: 0.85em; color: #cccccc; border: 1px solid #333333;
         }
-        .image-preview { text-align: center; margin: 20px 0; }
-        .image-preview img { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444; }
-        .video-preview { text-align: center; margin: 20px 0; }
-        .video-preview video { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444; }
         .lyrics-box {
             background: #000000; padding: 25px; border-radius: 6px; border: 1px solid #333333;
             margin-top: 20px; max-height: 500px; overflow-y: auto; white-space: pre-line;
@@ -159,12 +150,13 @@
         .spotify-track-info { display: flex; align-items: center; gap: 15px; }
         .spotify-track-info img { width: 50px; height: 50px; border-radius: 4px; }
         .spotify-track-actions { display: flex; gap: 8px; }
+        .gif-preview { text-align: center; margin: 20px 0; }
+        .gif-preview img { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444; }
         footer { text-align: center; padding: 30px 0; color: #555555; border-top: 1px solid #333333; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
         ::-webkit-scrollbar-thumb { background: #444444; }
         .button-group { display: flex; gap: 10px; margin-bottom: 15px; }
-        .button-group button { flex: 1; margin-right: 0; }
         .endpoint {
             padding: 20px; margin-bottom: 15px; background: #050505;
             border-radius: 6px; border-left: 3px solid #ffffff;
@@ -177,6 +169,9 @@
         .method.get { background: #2196f322; color: #2196f3; }
         .checkbox-group { display: flex; align-items: center; gap: 10px; margin: 15px 0; }
         .checkbox-group input { width: auto; }
+        .range-group { display: flex; align-items: center; gap: 15px; }
+        .range-group input { flex: 1; }
+        .range-value { color: #888; font-size: 0.8em; min-width: 40px; }
         @media (max-width: 700px) {
             .logo { font-size: 1.8em; letter-spacing: 4px; }
             .card { padding: 20px; }
@@ -188,7 +183,7 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>API</span></div>
-            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · BRAT · SPOTIFY</div>
+            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · BRAT · SPOTIFY · GIF</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">VERIFICANDO</span>
@@ -205,9 +200,9 @@
             <button class="nav-btn" onclick="showPage('lyrics')">FrikiLyric</button>
             <button class="nav-btn" onclick="showPage('hosting')">FrikiHosting</button>
             <button class="nav-btn" onclick="showPage('brat')">FrikiBrat</button>
+            <button class="nav-btn" onclick="showPage('gif')">FrikiGIF</button>
         </div>
         
-        <!-- YOUTUBE -->
         <div id="youtube" class="page active">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('yt-download', 'youtube')">Descargar</button>
@@ -237,9 +232,9 @@
             </div>
             <div id="yt-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function descargarYouTube(sock, from, url) {
     const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});
@@ -249,12 +244,10 @@ async function descargarYouTube(sock, from, url) {
     while (status.data.status !== 'completed');
     await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
 }</pre>
-                    <button onclick="copyCode('yt-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <!-- TIKTOK -->
         <div id="tiktok" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Descargar</button>
@@ -284,9 +277,9 @@ async function descargarYouTube(sock, from, url) {
             </div>
             <div id="tt-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function descargarTikTok(sock, from, url) {
     const res = await axios.post(`${API}/api/tiktok`, {url, watermark: false});
@@ -296,12 +289,10 @@ async function descargarTikTok(sock, from, url) {
     while (status.data.status !== 'completed');
     await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
 }</pre>
-                    <button onclick="copyCode('tt-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <!-- INSTAGRAM -->
         <div id="instagram" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('ig-download', 'instagram')">Descargar</button>
@@ -330,9 +321,9 @@ async function descargarTikTok(sock, from, url) {
             </div>
             <div id="ig-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function descargarInstagram(sock, from, url) {
     const res = await axios.post(`${API}/api/instagram`, {url});
@@ -342,12 +333,10 @@ async function descargarInstagram(sock, from, url) {
     while (status.data.status !== 'completed');
     await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
 }</pre>
-                    <button onclick="copyCode('ig-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <!-- SPOTIFY -->
         <div id="spotify" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('sp-search', 'spotify')">Buscar</button>
@@ -395,9 +384,9 @@ async function descargarInstagram(sock, from, url) {
             </div>
             <div id="sp-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function descargarSpotify(sock, from, url) {
     const res = await axios.post(`${API}/api/spotify/download`, {url});
@@ -411,12 +400,10 @@ async function descargarSpotify(sock, from, url) {
         fileName: `${status.data.title}.mp3`
     });
 }</pre>
-                    <button onclick="copyCode('sp-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <!-- IMÁGENES -->
         <div id="images" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('img-search', 'images')">Buscar</button>
@@ -453,9 +440,9 @@ async function descargarSpotify(sock, from, url) {
             </div>
             <div id="img-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function buscarImagen(sock, from, query, adult = false) {
     const res = await axios.post(`${API}/api/image/download`, {query, adult});
@@ -465,12 +452,10 @@ async function buscarImagen(sock, from, query, adult = false) {
     while (status.data.status !== 'completed');
     await sock.sendMessage(from, { image: { url: `${API}/api/stream/${taskId}` }, caption: query });
 }</pre>
-                    <button onclick="copyCode('img-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <!-- WAIFU -->
         <div id="waifu" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('waifu-search', 'waifu')">Obtener</button>
@@ -519,20 +504,18 @@ async function buscarImagen(sock, from, query, adult = false) {
             </div>
             <div id="waifu-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
     const res = await axios.get(`${API}/api/waifu?type=${type}&category=${category}`);
     await sock.sendMessage(from, { image: { url: res.data.url }, caption: `🎴 ${type}` });
 }</pre>
-                    <button onclick="copyCode('waifu-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <!-- LYRICS -->
         <div id="lyrics" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('ly-search', 'lyrics')">Buscar</button>
@@ -557,9 +540,9 @@ async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
             </div>
             <div id="ly-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function buscarLetra(sock, from, query) {
     const res = await axios.get(`${API}/api/lyrics?q=${encodeURIComponent(query)}`);
@@ -567,12 +550,10 @@ async function buscarLetra(sock, from, query) {
         await sock.sendMessage(from, { text: `🎵 *${res.data.title}*\n👤 *${res.data.artist}*\n\n${res.data.lyrics.substring(0, 1000)}` });
     }
 }</pre>
-                    <button onclick="copyCode('ly-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <!-- FRIKIHOSTING -->
         <div id="hosting" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('host-upload', 'hosting')">Subir</button>
@@ -593,7 +574,7 @@ async function buscarLetra(sock, from, query) {
                     </div>
                     <div class="checkbox-group">
                         <input type="checkbox" id="host-compress" checked>
-                        <label style="margin: 0;">🗜️ Comprimir archivo (sin pérdida de calidad)</label>
+                        <label style="margin: 0;">🗜️ Comprimir archivo</label>
                     </div>
                     <button onclick="uploadFile()" class="btn-hosting">⬆️ Subir y Generar Link</button>
                     <div id="host-uploadResult" style="display: none; margin-top: 20px;">
@@ -642,10 +623,10 @@ async function buscarLetra(sock, from, query) {
             </div>
             <div id="host-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
 const FormData = require('form-data');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function subirArchivo(sock, from, fileBuffer, filename) {
     const form = new FormData();
@@ -654,12 +635,10 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
     const res = await axios.post(`${API}/api/hosting/upload`, form, { headers: form.getHeaders() });
     await sock.sendMessage(from, { text: `✅ *Archivo subido*\n📎 Link: ${API}/api/hosting/view/${res.data.file_id}` });
 }</pre>
-                    <button onclick="copyCode('host-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <!-- FRIKIBRAT -->
         <div id="brat" class="page">
             <div class="tabs">
                 <button class="tab active" onclick="showTab('brat-generate', 'brat')">Generar</button>
@@ -696,9 +675,9 @@ async function subirArchivo(sock, from, fileBuffer, filename) {
             </div>
             <div id="brat-baileys" class="tab-content">
                 <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge">const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';</div>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
                     <pre>const axios = require('axios');
-const API = 'https://yt-downloader-by-josexo-and-abejitadiceiwiwiwi.vercel.app';
+const API = 'https://TU_API';
 
 async function generarBrat(sock, from, text) {
     const res = await axios.post(`${API}/api/brat/generate`, { text, blur: 3 });
@@ -707,12 +686,93 @@ async function generarBrat(sock, from, text) {
         caption: `✨ ${text}` 
     });
 }</pre>
-                    <button onclick="copyCode('brat-baileysCode')">Copiar</button>
                 </div>
             </div>
         </div>
         
-        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · INSTAGRAM · FRIKISPOTIFY · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING · FRIKIBRAT</p></footer>
+        <div id="gif" class="page">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('gif-convert', 'gif')">Convertir</button>
+                <button class="tab" onclick="showTab('gif-docs', 'gif')">Endpoints</button>
+                <button class="tab" onclick="showTab('gif-baileys', 'gif')">Baileys</button>
+            </div>
+            <div id="gif-convert" class="tab-content active">
+                <div class="card">
+                    <h2>Convertir Video a GIF</h2>
+                    <div class="file-upload-area" onclick="document.getElementById('gif-file').click()">
+                        <input type="file" id="gif-file" accept="video/*" onchange="handleGifFileSelect(this)">
+                        <label>📁 Selecciona un video<br><small>Máximo 50MB</small></label>
+                    </div>
+                    <div id="gif-file-info" style="display: none; margin-bottom: 20px;">
+                        <p><strong>Archivo seleccionado:</strong> <span id="gif-file-name"></span></p>
+                        <p><strong>Tamaño:</strong> <span id="gif-file-size"></span></p>
+                    </div>
+                    <div class="input-group"><label>Ancho del GIF (px)</label><input type="number" id="gif-width" value="480" min="100" max="1280"></div>
+                    <div class="input-group"><label>FPS</label>
+                        <select id="gif-fps">
+                            <option value="5">5 FPS (ligero)</option>
+                            <option value="10" selected>10 FPS (normal)</option>
+                            <option value="15">15 FPS (fluido)</option>
+                            <option value="24">24 FPS (cine)</option>
+                        </select>
+                    </div>
+                    <button onclick="convertToGif()" class="btn-gif">🎞️ Convertir a GIF</button>
+                    <div id="gif-result" style="display: none; margin-top: 20px;">
+                        <div class="task-info">
+                            <p><strong>✅ ¡GIF generado!</strong></p>
+                            <p><strong>ID:</strong> <span id="gif-file-id"></span></p>
+                            <p><strong>Tamaño original:</strong> <span id="gif-original-size"></span></p>
+                            <p><strong>Tamaño GIF:</strong> <span id="gif-size"></span></p>
+                        </div>
+                        <div class="gif-preview">
+                            <img id="gif-preview-img" src="" alt="GIF Preview">
+                        </div>
+                        <div class="url-box">
+                            <label>Link del GIF</label>
+                            <div class="url-copy-group">
+                                <input type="text" id="gif-view-url" readonly onclick="this.select()">
+                                <button onclick="copyText('gif-view-url')">Copiar</button>
+                            </div>
+                        </div>
+                        <div class="url-box">
+                            <label>Link de descarga</label>
+                            <div class="url-copy-group">
+                                <input type="text" id="gif-download-url" readonly onclick="this.select()">
+                                <button onclick="copyText('gif-download-url')">Copiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="gif-docs" class="tab-content">
+                <div class="card"><h2>Endpoints</h2>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/gif/convert</h3><pre>FormData: { file, width, fps }</pre></div>
+                </div>
+            </div>
+            <div id="gif-baileys" class="tab-content">
+                <div class="card"><h2>Baileys</h2>
+                    <div class="api-url-badge">const API = 'https://TU_API';</div>
+                    <pre>const axios = require('axios');
+const FormData = require('form-data');
+const API = 'https://TU_API';
+
+async function convertirAGif(sock, from, fileBuffer, filename) {
+    const form = new FormData();
+    form.append('file', fileBuffer, filename);
+    form.append('width', '480');
+    form.append('fps', '10');
+    const res = await axios.post(`${API}/api/gif/convert`, form, { headers: form.getHeaders() });
+    await sock.sendMessage(from, { 
+        video: { url: `${API}/api/hosting/view/${res.data.file_id}` }, 
+        gifPlayback: true,
+        caption: '🎞️ GIF generado' 
+    });
+}</pre>
+                </div>
+            </div>
+        </div>
+        
+        <footer><p>FRIKIAPI · FRIKITUBE · FRIKITOK · INSTAGRAM · FRIKISPOTIFY · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING · FRIKIBRAT · FRIKIGIF</p></footer>
     </div>
     
     <script>
@@ -721,7 +781,7 @@ async function generarBrat(sock, from, text) {
         let imgTaskId = null, waifuTaskId = null;
         let ytInterval = null, ttInterval = null, igInterval = null, spInterval = null;
         let imgInterval = null, waifuInterval = null;
-        let selectedFile = null;
+        let selectedFile = null, selectedGifFile = null;
         
         async function checkServerStatus() {
             try { await fetch(`${API_URL}/health`); document.getElementById('statusDot').classList.add('online'); document.getElementById('statusText').textContent = 'EN LÍNEA'; }
@@ -744,10 +804,14 @@ async function generarBrat(sock, from, text) {
             if (tab === 'host-list') loadHostedFiles();
         }
         
-        function copyCode(id) { navigator.clipboard?.writeText(document.getElementById(id).textContent); alert('¡Copiado!'); }
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+        
         function copyText(id) { document.getElementById(id).select(); document.execCommand('copy'); alert('¡Copiado!'); }
         
-        // ========== FRIKIBRAT ==========
         document.addEventListener('DOMContentLoaded', function() {
             const blurSlider = document.getElementById('brat-blur');
             const blurValue = document.getElementById('brat-blur-value');
@@ -762,11 +826,9 @@ async function generarBrat(sock, from, text) {
             const text = document.getElementById('brat-text').value;
             const blur = parseFloat(document.getElementById('brat-blur').value);
             if (!text) return alert('Escribe un texto');
-            
             try {
                 const res = await fetch(`${API_URL}/api/brat/generate`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({text, blur})
                 });
                 const data = await res.json();
@@ -774,13 +836,10 @@ async function generarBrat(sock, from, text) {
                     document.getElementById('brat-result').style.display = 'block';
                     document.getElementById('brat-preview-img').src = window.location.origin + data.url;
                     document.getElementById('brat-url').value = window.location.origin + data.url;
-                } else {
-                    alert('Error al generar');
                 }
             } catch(e) { alert('Error: ' + e.message); }
         }
         
-        // ========== FRIKIHOSTING ==========
         function handleFileSelect(input) {
             if (input.files.length > 0) {
                 selectedFile = input.files[0];
@@ -788,12 +847,6 @@ async function generarBrat(sock, from, text) {
                 document.getElementById('host-file-name').textContent = selectedFile.name;
                 document.getElementById('host-file-size').textContent = formatFileSize(selectedFile.size);
             }
-        }
-        
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' B';
-            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
         }
         
         async function uploadFile() {
@@ -821,7 +874,7 @@ async function generarBrat(sock, from, text) {
                         preview.innerHTML = `<video src="${viewUrl}" controls style="max-width: 100%; max-height: 300px; border-radius: 8px;"></video>`;
                     }
                     document.getElementById('host-uploadResult').style.display = 'block';
-                } else { alert('Error al subir'); }
+                }
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -834,7 +887,7 @@ async function generarBrat(sock, from, text) {
                     data.files.forEach(f => {
                         html += `<div class="hosted-file-item">
                             <div class="hosted-file-info">
-                                <span>${f.type === 'image' ? '🖼️' : '🎬'}</span>
+                                <span>${f.type === 'image' ? '🖼️' : f.type === 'gif' ? '🎞️' : '🎬'}</span>
                                 <div><strong>${f.name}</strong><br><small>${f.size} · ${new Date(f.created_at).toLocaleString()}</small></div>
                             </div>
                             <div class="hosted-file-actions">
@@ -853,7 +906,6 @@ async function generarBrat(sock, from, text) {
             alert('Link copiado: ' + url);
         }
         
-        // ========== YOUTUBE, TIKTOK, INSTAGRAM, SPOTIFY ==========
         async function startDownload(platform) {
             let url, endpoint, body;
             if (platform === 'yt') {
@@ -913,32 +965,25 @@ async function generarBrat(sock, from, text) {
         
         function copyUrl(platform) { document.getElementById(`${platform}-downloadUrl`).select(); document.execCommand('copy'); alert('¡Copiado!'); }
         
-        // ========== SPOTIFY ==========
         async function searchSpotify() {
             const query = document.getElementById('sp-query').value;
             const type = document.getElementById('sp-type').value;
             if (!query) return alert('Ingresa una búsqueda');
-            
             try {
                 const res = await fetch(`${API_URL}/api/spotify/search`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({query, type})
                 });
                 const data = await res.json();
                 const resultsDiv = document.getElementById('sp-results');
                 resultsDiv.style.display = 'block';
-                
                 if (data.success && data.results) {
                     let html = `<h3>Resultados (${data.total})</h3>`;
                     data.results.forEach(track => {
                         html += `<div class="spotify-track">
                             <div class="spotify-track-info">
                                 ${track.image ? `<img src="${track.image}" alt="">` : '<span>🎵</span>'}
-                                <div>
-                                    <strong>${track.title}</strong><br>
-                                    <small>${track.artist} · ${track.duration_str || ''}</small>
-                                </div>
+                                <div><strong>${track.title}</strong><br><small>${track.artist} · ${track.duration_str || ''}</small></div>
                             </div>
                             <div class="spotify-track-actions">
                                 <button onclick="downloadSpotifyUrl('${track.url}')" class="btn-spotify">⬇️</button>
@@ -949,9 +994,7 @@ async function generarBrat(sock, from, text) {
                 } else {
                     resultsDiv.innerHTML = '<p style="color: #ff4444;">No se encontraron resultados</p>';
                 }
-            } catch(e) {
-                document.getElementById('sp-results').innerHTML = '<p style="color: #ff4444;">Error al buscar</p>';
-            }
+            } catch(e) { document.getElementById('sp-results').innerHTML = '<p style="color: #ff4444;">Error al buscar</p>'; }
         }
         
         async function downloadSpotify() {
@@ -963,8 +1006,7 @@ async function generarBrat(sock, from, text) {
         async function downloadSpotifyUrl(url) {
             try {
                 const res = await fetch(`${API_URL}/api/spotify/download`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({url})
                 });
                 const data = await res.json();
@@ -990,14 +1032,10 @@ async function generarBrat(sock, from, text) {
                     clearInterval(spInterval);
                     document.getElementById('sp-downloadUrl').value = window.location.origin + data.stream_url;
                     document.getElementById('sp-downloadUrlBox').style.display = 'block';
-                } else if (data.status === 'failed') {
-                    clearInterval(spInterval);
-                    alert('Error: ' + (data.error || 'Desconocido'));
                 }
             } catch(e) {}
         }
         
-        // ========== WAIFU ==========
         async function getWaifu() {
             const type = document.getElementById('waifu-type').value;
             const category = document.getElementById('waifu-category').value;
@@ -1008,7 +1046,7 @@ async function generarBrat(sock, from, text) {
                     document.getElementById('waifu-preview').style.display = 'block';
                     document.getElementById('waifu-preview-img').src = data.url;
                     document.getElementById('waifu-source').textContent = `Fuente: waifu.pics | ${data.category}`;
-                } else { alert('Error'); }
+                }
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -1043,7 +1081,6 @@ async function generarBrat(sock, from, text) {
             } catch(e) {}
         }
         
-        // ========== IMÁGENES ==========
         async function searchImage() {
             const query = document.getElementById('img-query').value;
             if (!query) return alert('Ingresa una búsqueda');
@@ -1054,7 +1091,7 @@ async function generarBrat(sock, from, text) {
                     document.getElementById('img-preview').style.display = 'block';
                     document.getElementById('img-preview-img').src = data.image_url;
                     document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Bing'}`;
-                } else { alert('No se encontró'); }
+                }
             } catch(e) { alert('Error'); }
         }
         
@@ -1068,7 +1105,7 @@ async function generarBrat(sock, from, text) {
                     document.getElementById('img-preview').style.display = 'block';
                     document.getElementById('img-preview-img').src = data.image_url;
                     document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Bing'} | 🔞`;
-                } else { alert('No se encontró'); }
+                }
             } catch(e) { alert('Error'); }
         }
         
@@ -1094,7 +1131,6 @@ async function generarBrat(sock, from, text) {
                 document.getElementById('img-progressFill').style.width = data.progress + '%';
                 let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
                 if (data.title) html += `<p><strong>Búsqueda</strong> ${data.title}</p>`;
-                if (data.adult) html += `<p><span class="status-badge" style="background:#ff005022;color:#ff0050;">🔞 +18</span></p>`;
                 document.getElementById('img-taskInfo').innerHTML = html;
                 if (data.status === 'completed') {
                     clearInterval(imgInterval);
@@ -1104,7 +1140,6 @@ async function generarBrat(sock, from, text) {
             } catch(e) {}
         }
         
-        // ========== LYRICS ==========
         async function searchLyrics() {
             const query = document.getElementById('lyrics-query').value;
             if (!query) return alert('Ingresa una canción');
@@ -1116,6 +1151,39 @@ async function generarBrat(sock, from, text) {
                 document.getElementById('lyricsInfo').innerHTML = data.artist ? `<p><strong>${data.artist}</strong> - ${data.title}</p>` : '';
                 document.getElementById('lyricsContent').textContent = data.lyrics || 'No encontrada.';
             } catch(e) { document.getElementById('lyricsContent').textContent = 'Error.'; }
+        }
+        
+        function handleGifFileSelect(input) {
+            if (input.files.length > 0) {
+                selectedGifFile = input.files[0];
+                document.getElementById('gif-file-info').style.display = 'block';
+                document.getElementById('gif-file-name').textContent = selectedGifFile.name;
+                document.getElementById('gif-file-size').textContent = formatFileSize(selectedGifFile.size);
+            }
+        }
+        
+        async function convertToGif() {
+            if (!selectedGifFile) return alert('Selecciona un video');
+            const formData = new FormData();
+            formData.append('file', selectedGifFile);
+            formData.append('width', document.getElementById('gif-width').value);
+            formData.append('fps', document.getElementById('gif-fps').value);
+            document.getElementById('gif-result').style.display = 'none';
+            try {
+                const res = await fetch(`${API_URL}/api/gif/convert`, { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('gif-file-id').textContent = data.file_id;
+                    document.getElementById('gif-original-size').textContent = data.original_size_str;
+                    document.getElementById('gif-size').textContent = data.gif_size_str;
+                    const viewUrl = window.location.origin + data.view_url;
+                    const downloadUrl = window.location.origin + data.download_url;
+                    document.getElementById('gif-view-url').value = viewUrl;
+                    document.getElementById('gif-download-url').value = downloadUrl;
+                    document.getElementById('gif-preview-img').src = viewUrl;
+                    document.getElementById('gif-result').style.display = 'block';
+                } else { alert('Error al convertir'); }
+            } catch(e) { alert('Error: ' + e.message); }
         }
         
         checkServerStatus();
