@@ -30,6 +30,7 @@
     { "source": "/api/spotify/download", "destination": "http://64.20.54.50:30325/api/spotify/download" },
     { "source": "/api/spotify/batch", "destination": "http://64.20.54.50:30325/api/spotify/batch" },
     { "source": "/api/gif/convert", "destination": "http://64.20.54.50:30325/api/gif/convert" },
+    { "source": "/api/search", "destination": "http://64.20.54.50:30325/api/search" },
     { "source": "/health", "destination": "http://64.20.54.50:30325/health" }
   ],
   "headers": [
