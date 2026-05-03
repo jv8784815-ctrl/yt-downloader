@@ -182,6 +182,29 @@
             margin: 0 auto 15px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .answer-box {
+            background: #0d1b2a; border: 1px solid #1b3a5c; border-radius: 8px;
+            padding: 25px; margin: 20px 0;
+        }
+        .answer-box .answer-label {
+            color: #2196f3; font-size: 0.7em; letter-spacing: 3px;
+            text-transform: uppercase; margin-bottom: 10px;
+        }
+        .answer-box .answer-text {
+            color: #e0e0e0; font-size: 1em; line-height: 1.7;
+        }
+        .sources-box {
+            margin-top: 20px; padding: 15px; background: #050505;
+            border-radius: 6px; border: 1px solid #333;
+        }
+        .sources-box .sources-label {
+            color: #888; font-size: 0.7em; letter-spacing: 2px;
+            text-transform: uppercase; margin-bottom: 10px;
+        }
+        .sources-box a {
+            color: #4caf50; font-size: 0.85em; display: block;
+            margin: 5px 0; word-break: break-all;
+        }
         footer { text-align: center; padding: 30px 0; color: #555555; border-top: 1px solid #333333; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
@@ -210,7 +233,7 @@
     <div class="container">
         <header>
             <div class="logo">FRIKI<span>API</span></div>
-            <div class="subtitle">STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · BRAT · SPOTIFY · GIF · BÚSQUEDA</div>
+            <div class="subtitle">BÚSQUEDA · STREAMING · IMÁGENES · WAIFU · LETRAS · HOSTING · BRAT · SPOTIFY · GIF</div>
             <div class="server-status" id="serverStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">VERIFICANDO</span>
@@ -232,22 +255,47 @@
         </div>
         
         <div id="search" class="page active">
-            <div class="card">
-                <h2>🔍 Buscar en la Web</h2>
-                <div class="input-group">
-                    <label>¿Qué quieres buscar?</label>
-                    <input type="text" id="search-query" placeholder="Escribe tu búsqueda aquí..." onkeydown="if(event.key==='Enter')performSearch()">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('search-web', 'search')">Búsqueda Web</button>
+                <button class="tab" onclick="showTab('search-answer', 'search')">Respuesta Directa</button>
+                <button class="tab" onclick="showTab('search-docs', 'search')">Endpoints</button>
+            </div>
+            <div id="search-web" class="tab-content active">
+                <div class="card">
+                    <h2>🔍 Buscar en la Web</h2>
+                    <div class="input-group">
+                        <label>¿Qué quieres buscar?</label>
+                        <input type="text" id="search-query" placeholder="Escribe tu búsqueda aquí..." onkeydown="if(event.key==='Enter')performSearch()">
+                    </div>
+                    <div class="input-group">
+                        <label>Resultados (1-10)</label>
+                        <select id="search-limit">
+                            <option value="3">3 resultados</option>
+                            <option value="5" selected>5 resultados</option>
+                            <option value="10">10 resultados</option>
+                        </select>
+                    </div>
+                    <button onclick="performSearch()" class="btn-search">🔍 Buscar</button>
+                    <div id="search-results" class="search-results"></div>
                 </div>
-                <div class="input-group">
-                    <label>Resultados (1-10)</label>
-                    <select id="search-limit">
-                        <option value="3">3 resultados</option>
-                        <option value="5" selected>5 resultados</option>
-                        <option value="10">10 resultados</option>
-                    </select>
+            </div>
+            <div id="search-answer" class="tab-content">
+                <div class="card">
+                    <h2>🧠 Respuesta Directa</h2>
+                    <p style="color: #888; margin-bottom: 20px;">Haz una pregunta y obtén una respuesta resumida de la web</p>
+                    <div class="input-group">
+                        <label>¿Qué quieres saber?</label>
+                        <input type="text" id="answer-query" placeholder="Ej: ¿Cuál es la capital de Francia?" onkeydown="if(event.key==='Enter')performAnswer()">
+                    </div>
+                    <button onclick="performAnswer()" class="btn-search">🧠 Preguntar</button>
+                    <div id="answer-results"></div>
                 </div>
-                <button onclick="performSearch()" class="btn-search">🔍 Buscar</button>
-                <div id="search-results" class="search-results"></div>
+            </div>
+            <div id="search-docs" class="tab-content">
+                <div class="card"><h2>Endpoints</h2>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/search</h3><pre>{"query": "gatos", "max_results": 5}</pre></div>
+                    <div class="endpoint"><h3><span class="method post">POST</span> /api/answer</h3><pre>{"query": "capital de Francia"}</pre></div>
+                </div>
             </div>
         </div>
         
@@ -255,7 +303,6 @@
             <div class="tabs">
                 <button class="tab active" onclick="showTab('yt-download', 'youtube')">Descargar</button>
                 <button class="tab" onclick="showTab('yt-docs', 'youtube')">Endpoints</button>
-                <button class="tab" onclick="showTab('yt-baileys', 'youtube')">Baileys</button>
             </div>
             <div id="yt-download" class="tab-content active">
                 <div class="card">
@@ -278,549 +325,200 @@
                     <div class="endpoint"><h3><span class="method post">POST</span> /api/download</h3><pre>{"url": "...", "format": "mp3"}</pre></div>
                 </div>
             </div>
-            <div id="yt-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-yt"></div>
-                    <pre>const axios = require('axios');
-const API = window.location.origin;
-
-async function descargarYouTube(sock, from, url) {
-    const res = await axios.post(`${API}/api/download`, {url, format: 'mp4'});
-    const taskId = res.data.task_id;
-    let status;
-    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
-    while (status.data.status !== 'completed');
-    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
-}</pre>
-                </div>
-            </div>
         </div>
         
         <div id="tiktok" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('tt-download', 'tiktok')">Descargar</button>
-                <button class="tab" onclick="showTab('tt-docs', 'tiktok')">Endpoints</button>
-                <button class="tab" onclick="showTab('tt-baileys', 'tiktok')">Baileys</button>
-            </div>
-            <div id="tt-download" class="tab-content active">
-                <div class="card">
-                    <h2>Descargar de TikTok</h2>
-                    <div class="input-group"><label>URL</label><input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/..."></div>
-                    <div class="input-group"><label>Marca de agua</label><select id="tt-watermark"><option value="false">Sin marca</option><option value="true">Con marca</option></select></div>
-                    <button onclick="startDownload('tt')">Descargar</button>
-                    <div id="tt-downloadStatus" style="display: none;">
-                        <div class="progress-bar"><div class="progress-fill" id="tt-progressFill"></div></div>
-                        <div class="task-info" id="tt-taskInfo"></div>
-                        <div class="url-box" id="tt-downloadUrlBox" style="display: none;">
-                            <label>URL de descarga</label>
-                            <div class="url-copy-group"><input type="text" id="tt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('tt')">Copiar</button></div>
-                        </div>
+            <div class="card">
+                <h2>Descargar de TikTok</h2>
+                <div class="input-group"><label>URL</label><input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/..."></div>
+                <div class="input-group"><label>Marca de agua</label><select id="tt-watermark"><option value="false">Sin marca</option><option value="true">Con marca</option></select></div>
+                <button onclick="startDownload('tt')">Descargar</button>
+                <div id="tt-downloadStatus" style="display: none;">
+                    <div class="progress-bar"><div class="progress-fill" id="tt-progressFill"></div></div>
+                    <div class="task-info" id="tt-taskInfo"></div>
+                    <div class="url-box" id="tt-downloadUrlBox" style="display: none;">
+                        <label>URL de descarga</label>
+                        <div class="url-copy-group"><input type="text" id="tt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('tt')">Copiar</button></div>
                     </div>
-                </div>
-            </div>
-            <div id="tt-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/tiktok</h3><pre>{"url": "...", "watermark": false}</pre></div>
-                </div>
-            </div>
-            <div id="tt-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-tt"></div>
-                    <pre>const axios = require('axios');
-const API = window.location.origin;
-
-async function descargarTikTok(sock, from, url) {
-    const res = await axios.post(`${API}/api/tiktok`, {url, watermark: false});
-    const taskId = res.data.task_id;
-    let status;
-    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
-    while (status.data.status !== 'completed');
-    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
-}</pre>
                 </div>
             </div>
         </div>
         
         <div id="instagram" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('ig-download', 'instagram')">Descargar</button>
-                <button class="tab" onclick="showTab('ig-docs', 'instagram')">Endpoints</button>
-                <button class="tab" onclick="showTab('ig-baileys', 'instagram')">Baileys</button>
-            </div>
-            <div id="ig-download" class="tab-content active">
-                <div class="card">
-                    <h2>Descargar de Instagram</h2>
-                    <div class="input-group"><label>URL del Reel/Video</label><input type="text" id="ig-url" placeholder="https://www.instagram.com/reel/..."></div>
-                    <button onclick="startDownload('ig')" class="btn-instagram">📸 Descargar</button>
-                    <div id="ig-downloadStatus" style="display: none;">
-                        <div class="progress-bar"><div class="progress-fill" id="ig-progressFill"></div></div>
-                        <div class="task-info" id="ig-taskInfo"></div>
-                        <div class="url-box" id="ig-downloadUrlBox" style="display: none;">
-                            <label>URL de descarga</label>
-                            <div class="url-copy-group"><input type="text" id="ig-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('ig')">Copiar</button></div>
-                        </div>
+            <div class="card">
+                <h2>Descargar de Instagram</h2>
+                <div class="input-group"><label>URL del Reel/Video</label><input type="text" id="ig-url" placeholder="https://www.instagram.com/reel/..."></div>
+                <button onclick="startDownload('ig')" class="btn-instagram">📸 Descargar</button>
+                <div id="ig-downloadStatus" style="display: none;">
+                    <div class="progress-bar"><div class="progress-fill" id="ig-progressFill"></div></div>
+                    <div class="task-info" id="ig-taskInfo"></div>
+                    <div class="url-box" id="ig-downloadUrlBox" style="display: none;">
+                        <label>URL de descarga</label>
+                        <div class="url-copy-group"><input type="text" id="ig-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('ig')">Copiar</button></div>
                     </div>
-                </div>
-            </div>
-            <div id="ig-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/instagram</h3><pre>{"url": "..."}</pre></div>
-                </div>
-            </div>
-            <div id="ig-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-ig"></div>
-                    <pre>const axios = require('axios');
-const API = window.location.origin;
-
-async function descargarInstagram(sock, from, url) {
-    const res = await axios.post(`${API}/api/instagram`, {url});
-    const taskId = res.data.task_id;
-    let status;
-    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
-    while (status.data.status !== 'completed');
-    await sock.sendMessage(from, { video: { url: `${API}/api/stream/${taskId}` }, mimetype: 'video/mp4' });
-}</pre>
                 </div>
             </div>
         </div>
         
         <div id="spotify" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('sp-search', 'spotify')">Buscar</button>
-                <button class="tab" onclick="showTab('sp-download', 'spotify')">Descargar</button>
-                <button class="tab" onclick="showTab('sp-docs', 'spotify')">Endpoints</button>
-                <button class="tab" onclick="showTab('sp-baileys', 'spotify')">Baileys</button>
-            </div>
-            <div id="sp-search" class="tab-content active">
-                <div class="card">
-                    <h2>Buscar en Spotify</h2>
-                    <div class="input-group"><label>Búsqueda</label><input type="text" id="sp-query" placeholder="Bad Bunny - Me Porto Bonito"></div>
-                    <div class="input-group"><label>Tipo</label>
-                        <select id="sp-type">
-                            <option value="track">Canción</option>
-                            <option value="album">Álbum</option>
-                            <option value="playlist">Playlist</option>
-                        </select>
-                    </div>
-                    <button onclick="searchSpotify()" class="btn-spotify">🔍 Buscar</button>
-                    <div id="sp-results" class="spotify-results" style="display: none;"></div>
-                </div>
-            </div>
-            <div id="sp-download" class="tab-content">
-                <div class="card">
-                    <h2>Descargar de Spotify</h2>
-                    <div class="input-group"><label>URL de Spotify</label><input type="text" id="sp-url" placeholder="https://open.spotify.com/track/..."></div>
-                    <button onclick="downloadSpotify()" class="btn-spotify">⬇️ Descargar MP3</button>
-                    <div id="sp-downloadStatus" style="display: none;">
-                        <div class="progress-bar"><div class="progress-fill" id="sp-progressFill"></div></div>
-                        <div class="task-info" id="sp-taskInfo"></div>
-                        <div class="url-box" id="sp-downloadUrlBox" style="display: none;">
-                            <label>URL de descarga</label>
-                            <div class="url-copy-group"><input type="text" id="sp-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('sp')">Copiar</button></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="sp-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/spotify/search</h3><pre>{"query": "bad bunny", "type": "track"}</pre></div>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/spotify/info</h3><pre>{"url": "https://open.spotify.com/track/..."}</pre></div>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/spotify/download</h3><pre>{"url": "https://open.spotify.com/track/..."}</pre></div>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/spotify/batch</h3><pre>{"url": "https://open.spotify.com/playlist/..."}</pre></div>
-                </div>
-            </div>
-            <div id="sp-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-sp"></div>
-                    <pre>const axios = require('axios');
-const API = window.location.origin;
-
-async function descargarSpotify(sock, from, url) {
-    const res = await axios.post(`${API}/api/spotify/download`, {url});
-    const taskId = res.data.task_id;
-    let status;
-    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
-    while (status.data.status !== 'completed');
-    await sock.sendMessage(from, { 
-        audio: { url: `${API}/api/stream/${taskId}` }, 
-        mimetype: 'audio/mpeg',
-        fileName: `${status.data.title}.mp3`
-    });
-}</pre>
-                </div>
+            <div class="card">
+                <h2>Buscar en Spotify</h2>
+                <div class="input-group"><label>Búsqueda</label><input type="text" id="sp-query" placeholder="Bad Bunny - Me Porto Bonito"></div>
+                <div class="input-group"><label>Tipo</label><select id="sp-type"><option value="track">Canción</option><option value="album">Álbum</option><option value="playlist">Playlist</option></select></div>
+                <button onclick="searchSpotify()" class="btn-spotify">🔍 Buscar</button>
+                <div id="sp-results" class="spotify-results" style="display: none;"></div>
             </div>
         </div>
         
         <div id="images" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('img-search', 'images')">Buscar</button>
-                <button class="tab" onclick="showTab('img-docs', 'images')">Endpoints</button>
-                <button class="tab" onclick="showTab('img-baileys', 'images')">Baileys</button>
-            </div>
-            <div id="img-search" class="tab-content active">
-                <div class="card">
-                    <h2>Buscar Imágenes</h2>
-                    <div class="input-group"><label>Búsqueda</label><input type="text" id="img-query" placeholder="gato gracioso..."></div>
-                    <div class="button-group">
-                        <button onclick="searchImage()">🔍 Buscar</button>
-                        <button onclick="searchImage18()" class="btn-18">🔞 +18</button>
-                    </div>
-                    <button onclick="downloadImage()">⬇️ Descargar</button>
-                    <div id="img-preview" style="display: none; text-align: center; margin: 20px 0;">
-                        <p style="color: #888;"><span id="img-source"></span></p>
-                        <img id="img-preview-img" src="" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
-                    </div>
-                    <div id="img-downloadStatus" style="display: none;">
-                        <div class="progress-bar"><div class="progress-fill" id="img-progressFill"></div></div>
-                        <div class="task-info" id="img-taskInfo"></div>
-                        <div class="url-box" id="img-downloadUrlBox" style="display: none;">
-                            <label>URL</label>
-                            <div class="url-copy-group"><input type="text" id="img-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('img')">Copiar</button></div>
-                        </div>
-                    </div>
+            <div class="card">
+                <h2>Buscar Imágenes</h2>
+                <div class="input-group"><label>Búsqueda</label><input type="text" id="img-query" placeholder="gato gracioso..."></div>
+                <div class="button-group">
+                    <button onclick="searchImage()">🔍 Buscar</button>
+                    <button onclick="searchImage18()" class="btn-18">🔞 +18</button>
                 </div>
-            </div>
-            <div id="img-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/image/search</h3><pre>{"query": "gato", "adult": false}</pre></div>
+                <button onclick="downloadImage()">⬇️ Descargar</button>
+                <div id="img-preview" style="display: none; text-align: center; margin: 20px 0;">
+                    <p style="color: #888;"><span id="img-source"></span></p>
+                    <img id="img-preview-img" src="" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
                 </div>
-            </div>
-            <div id="img-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-img"></div>
-                    <pre>const axios = require('axios');
-const API = window.location.origin;
-
-async function buscarImagen(sock, from, query, adult = false) {
-    const res = await axios.post(`${API}/api/image/download`, {query, adult});
-    const taskId = res.data.task_id;
-    let status;
-    do { await new Promise(r => setTimeout(r, 2000)); status = await axios.get(`${API}/api/status/${taskId}`); }
-    while (status.data.status !== 'completed');
-    await sock.sendMessage(from, { image: { url: `${API}/api/stream/${taskId}` }, caption: query });
-}</pre>
+                <div id="img-downloadStatus" style="display: none;">
+                    <div class="progress-bar"><div class="progress-fill" id="img-progressFill"></div></div>
+                    <div class="task-info" id="img-taskInfo"></div>
+                    <div class="url-box" id="img-downloadUrlBox" style="display: none;">
+                        <label>URL</label>
+                        <div class="url-copy-group"><input type="text" id="img-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('img')">Copiar</button></div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div id="waifu" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('waifu-search', 'waifu')">Obtener</button>
-                <button class="tab" onclick="showTab('waifu-docs', 'waifu')">Endpoints</button>
-                <button class="tab" onclick="showTab('waifu-baileys', 'waifu')">Baileys</button>
-            </div>
-            <div id="waifu-search" class="tab-content active">
-                <div class="card">
-                    <h2>Obtener Waifu</h2>
-                    <div class="input-group"><label>Categoría</label>
-                        <select id="waifu-category">
-                            <option value="nsfw">🔞 NSFW</option>
-                            <option value="sfw">✅ SFW</option>
-                        </select>
-                    </div>
-                    <div class="input-group"><label>Tipo</label>
-                        <select id="waifu-type">
-                            <option value="waifu">Waifu</option>
-                            <option value="neko">Neko</option>
-                            <option value="trap">Trap</option>
-                            <option value="blowjob">Blowjob (Video)</option>
-                        </select>
-                    </div>
-                    <div class="button-group">
-                        <button onclick="getWaifu()" class="btn-waifu">🎴 Obtener</button>
-                        <button onclick="downloadWaifu()">⬇️ Descargar</button>
-                    </div>
-                    <div id="waifu-preview" style="display: none; text-align: center; margin: 20px 0;">
-                        <p style="color: #888;"><span id="waifu-source"></span></p>
-                        <img id="waifu-preview-img" src="" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
-                    </div>
-                    <div id="waifu-downloadStatus" style="display: none;">
-                        <div class="progress-bar"><div class="progress-fill" id="waifu-progressFill"></div></div>
-                        <div class="task-info" id="waifu-taskInfo"></div>
-                        <div class="url-box" id="waifu-downloadUrlBox" style="display: none;">
-                            <label>URL</label>
-                            <div class="url-copy-group"><input type="text" id="waifu-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('waifu')">Copiar</button></div>
-                        </div>
-                    </div>
+            <div class="card">
+                <h2>Obtener Waifu</h2>
+                <div class="input-group"><label>Categoría</label><select id="waifu-category"><option value="nsfw">🔞 NSFW</option><option value="sfw">✅ SFW</option></select></div>
+                <div class="input-group"><label>Tipo</label><select id="waifu-type"><option value="waifu">Waifu</option><option value="neko">Neko</option><option value="trap">Trap</option><option value="blowjob">Blowjob (Video)</option></select></div>
+                <div class="button-group">
+                    <button onclick="getWaifu()" class="btn-waifu">🎴 Obtener</button>
+                    <button onclick="downloadWaifu()">⬇️ Descargar</button>
                 </div>
-            </div>
-            <div id="waifu-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/waifu?type=waifu&category=nsfw</h3></div>
+                <div id="waifu-preview" style="display: none; text-align: center; margin: 20px 0;">
+                    <p style="color: #888;"><span id="waifu-source"></span></p>
+                    <img id="waifu-preview-img" src="" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
                 </div>
-            </div>
-            <div id="waifu-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-waifu"></div>
-                    <pre>const axios = require('axios');
-const API = window.location.origin;
-
-async function obtenerWaifu(sock, from, type = 'waifu', category = 'nsfw') {
-    const res = await axios.get(`${API}/api/waifu?type=${type}&category=${category}`);
-    await sock.sendMessage(from, { image: { url: res.data.url }, caption: `🎴 ${type}` });
-}</pre>
+                <div id="waifu-downloadStatus" style="display: none;">
+                    <div class="progress-bar"><div class="progress-fill" id="waifu-progressFill"></div></div>
+                    <div class="task-info" id="waifu-taskInfo"></div>
+                    <div class="url-box" id="waifu-downloadUrlBox" style="display: none;">
+                        <label>URL</label>
+                        <div class="url-copy-group"><input type="text" id="waifu-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('waifu')">Copiar</button></div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div id="lyrics" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('ly-search', 'lyrics')">Buscar</button>
-                <button class="tab" onclick="showTab('ly-docs', 'lyrics')">Endpoints</button>
-                <button class="tab" onclick="showTab('ly-baileys', 'lyrics')">Baileys</button>
-            </div>
-            <div id="ly-search" class="tab-content active">
-                <div class="card">
-                    <h2>Buscar Letra</h2>
-                    <div class="input-group"><label>Canción</label><input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain"></div>
-                    <button onclick="searchLyrics()">Buscar</button>
-                    <div id="lyricsResult" style="display: none;">
-                        <div class="task-info" id="lyricsInfo"></div>
-                        <div class="lyrics-box" id="lyricsContent"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="ly-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/lyrics?q=...</h3></div>
-                </div>
-            </div>
-            <div id="ly-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-ly"></div>
-                    <pre>const axios = require('axios');
-const API = window.location.origin;
-
-async function buscarLetra(sock, from, query) {
-    const res = await axios.get(`${API}/api/lyrics?q=${encodeURIComponent(query)}`);
-    if (res.data.success) {
-        await sock.sendMessage(from, { text: `🎵 *${res.data.title}*\n👤 *${res.data.artist}*\n\n${res.data.lyrics.substring(0, 1000)}` });
-    }
-}</pre>
+            <div class="card">
+                <h2>Buscar Letra</h2>
+                <div class="input-group"><label>Canción</label><input type="text" id="lyrics-query" placeholder="Fleetwood Mac - The Chain"></div>
+                <button onclick="searchLyrics()">Buscar</button>
+                <div id="lyricsResult" style="display: none;">
+                    <div class="task-info" id="lyricsInfo"></div>
+                    <div class="lyrics-box" id="lyricsContent"></div>
                 </div>
             </div>
         </div>
         
         <div id="hosting" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('host-upload', 'hosting')">Subir</button>
-                <button class="tab" onclick="showTab('host-list', 'hosting')">Mis Archivos</button>
-                <button class="tab" onclick="showTab('host-docs', 'hosting')">Endpoints</button>
-                <button class="tab" onclick="showTab('host-baileys', 'hosting')">Baileys</button>
-            </div>
-            <div id="host-upload" class="tab-content active">
-                <div class="card">
-                    <h2>Subir Imagen o Video</h2>
-                    <div class="file-upload-area" onclick="document.getElementById('host-file').click()">
-                        <input type="file" id="host-file" accept="image/*,video/*" onchange="handleFileSelect(this)">
-                        <label>📁 Haz clic o arrastra un archivo<br><small>Imágenes (máx 20MB) · Videos (máx 100MB)</small></label>
-                    </div>
-                    <div id="host-file-info" style="display: none; margin-bottom: 20px;">
-                        <p><strong>Archivo seleccionado:</strong> <span id="host-file-name"></span></p>
-                        <p><strong>Tamaño:</strong> <span id="host-file-size"></span></p>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="host-compress" checked>
-                        <label style="margin: 0;">🗜️ Comprimir archivo</label>
-                    </div>
-                    <button onclick="uploadFile()" class="btn-hosting">⬆️ Subir y Generar Link</button>
-                    <div id="host-uploadResult" style="display: none; margin-top: 20px;">
-                        <div class="task-info">
-                            <p><strong>✅ ¡Archivo subido!</strong></p>
-                            <p><strong>ID:</strong> <span id="host-file-id"></span></p>
-                            <p><strong>Tamaño original:</strong> <span id="host-original-size"></span></p>
-                            <p><strong>Tamaño comprimido:</strong> <span id="host-compressed-size"></span></p>
-                            <p><strong>Compresión:</strong> <span id="host-compression-ratio"></span></p>
-                        </div>
-                        <div class="url-box">
-                            <label>Link para compartir</label>
-                            <div class="url-copy-group">
-                                <input type="text" id="host-view-url" readonly onclick="this.select()">
-                                <button onclick="copyText('host-view-url')">Copiar</button>
-                            </div>
-                        </div>
-                        <div class="url-box">
-                            <label>Link de descarga directa</label>
-                            <div class="url-copy-group">
-                                <input type="text" id="host-download-url" readonly onclick="this.select()">
-                                <button onclick="copyText('host-download-url')">Copiar</button>
-                            </div>
-                        </div>
-                        <div id="host-preview" style="text-align: center; margin-top: 20px;"></div>
-                    </div>
+            <div class="card">
+                <h2>Subir Imagen o Video</h2>
+                <div class="file-upload-area" onclick="document.getElementById('host-file').click()">
+                    <input type="file" id="host-file" accept="image/*,video/*" onchange="handleFileSelect(this)">
+                    <label>📁 Haz clic o arrastra un archivo<br><small>Imágenes (máx 20MB) · Videos (máx 100MB)</small></label>
                 </div>
-            </div>
-            <div id="host-list" class="tab-content">
-                <div class="card">
-                    <h2>Archivos Hosteados</h2>
-                    <button onclick="loadHostedFiles()" class="btn-hosting" style="margin-bottom: 20px;">🔄 Actualizar</button>
-                    <div id="host-files-list" class="hosted-files-list">
-                        <p style="color: #888;">Cargando...</p>
+                <div id="host-file-info" style="display: none; margin-bottom: 20px;">
+                    <p><strong>Archivo seleccionado:</strong> <span id="host-file-name"></span></p>
+                    <p><strong>Tamaño:</strong> <span id="host-file-size"></span></p>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="host-compress" checked>
+                    <label style="margin: 0;">🗜️ Comprimir archivo</label>
+                </div>
+                <button onclick="uploadFile()" class="btn-hosting">⬆️ Subir y Generar Link</button>
+                <div id="host-uploadResult" style="display: none; margin-top: 20px;">
+                    <div class="task-info">
+                        <p><strong>✅ ¡Archivo subido!</strong></p>
+                        <p><strong>ID:</strong> <span id="host-file-id"></span></p>
+                        <p><strong>Tamaño original:</strong> <span id="host-original-size"></span></p>
+                        <p><strong>Tamaño comprimido:</strong> <span id="host-compressed-size"></span></p>
+                        <p><strong>Compresión:</strong> <span id="host-compression-ratio"></span></p>
                     </div>
-                </div>
-            </div>
-            <div id="host-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/hosting/upload</h3><pre>FormData: { file, compress }</pre></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/view/{id}</h3></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/download/{id}</h3></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/info/{id}</h3></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/hosting/list</h3></div>
-                </div>
-            </div>
-            <div id="host-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-host"></div>
-                    <pre>const axios = require('axios');
-const FormData = require('form-data');
-const API = window.location.origin;
-
-async function subirArchivo(sock, from, fileBuffer, filename) {
-    const form = new FormData();
-    form.append('file', fileBuffer, filename);
-    form.append('compress', 'true');
-    const res = await axios.post(`${API}/api/hosting/upload`, form, { headers: form.getHeaders() });
-    await sock.sendMessage(from, { text: `✅ *Archivo subido*\n📎 Link: ${API}/api/hosting/view/${res.data.file_id}` });
-}</pre>
+                    <div class="url-box">
+                        <label>Link para compartir</label>
+                        <div class="url-copy-group"><input type="text" id="host-view-url" readonly onclick="this.select()"><button onclick="copyText('host-view-url')">Copiar</button></div>
+                    </div>
+                    <div class="url-box">
+                        <label>Link de descarga directa</label>
+                        <div class="url-copy-group"><input type="text" id="host-download-url" readonly onclick="this.select()"><button onclick="copyText('host-download-url')">Copiar</button></div>
+                    </div>
+                    <div id="host-preview" style="text-align: center; margin-top: 20px;"></div>
                 </div>
             </div>
         </div>
         
         <div id="brat" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('brat-generate', 'brat')">Generar</button>
-                <button class="tab" onclick="showTab('brat-docs', 'brat')">Endpoints</button>
-                <button class="tab" onclick="showTab('brat-baileys', 'brat')">Baileys</button>
-            </div>
-            <div id="brat-generate" class="tab-content active">
-                <div class="card">
-                    <h2>Generar Imagen Estilo Brat</h2>
-                    <div class="input-group"><label>Texto</label><textarea id="brat-text" rows="3" placeholder="Escribe tu texto aquí..."></textarea></div>
-                    <div class="input-group"><label>Nivel de desenfoque</label><input type="range" id="brat-blur" min="0" max="10" value="3" step="0.5"></div>
-                    <p style="color: #888; margin-bottom: 20px;">Valor actual: <span id="brat-blur-value">3</span></p>
-                    <button onclick="generateBrat()" class="btn-brat">🎨 Generar Imagen</button>
-                    <div id="brat-result" style="display: none; margin-top: 20px;">
-                        <div class="brat-preview">
-                            <img id="brat-preview-img" src="" alt="Brat Image">
-                        </div>
-                        <div class="url-box">
-                            <label>URL de la imagen</label>
-                            <div class="url-copy-group">
-                                <input type="text" id="brat-url" readonly onclick="this.select()">
-                                <button onclick="copyText('brat-url')">Copiar</button>
-                            </div>
-                        </div>
+            <div class="card">
+                <h2>Generar Imagen Estilo Brat</h2>
+                <div class="input-group"><label>Texto</label><textarea id="brat-text" rows="3" placeholder="Escribe tu texto aquí..."></textarea></div>
+                <div class="input-group"><label>Nivel de desenfoque</label><input type="range" id="brat-blur" min="0" max="10" value="3" step="0.5"></div>
+                <p style="color: #888; margin-bottom: 20px;">Valor actual: <span id="brat-blur-value">3</span></p>
+                <button onclick="generateBrat()" class="btn-brat">🎨 Generar Imagen</button>
+                <div id="brat-result" style="display: none; margin-top: 20px;">
+                    <div class="brat-preview"><img id="brat-preview-img" src="" alt="Brat Image"></div>
+                    <div class="url-box">
+                        <label>URL de la imagen</label>
+                        <div class="url-copy-group"><input type="text" id="brat-url" readonly onclick="this.select()"><button onclick="copyText('brat-url')">Copiar</button></div>
                     </div>
-                </div>
-            </div>
-            <div id="brat-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/brat/generate</h3><pre>{"text": "Tu texto aquí", "blur": 3}</pre></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/brat/view/{id}</h3></div>
-                    <div class="endpoint"><h3><span class="method get">GET</span> /api/brat/download/{id}</h3></div>
-                </div>
-            </div>
-            <div id="brat-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-brat"></div>
-                    <pre>const axios = require('axios');
-const API = window.location.origin;
-
-async function generarBrat(sock, from, text) {
-    const res = await axios.post(`${API}/api/brat/generate`, { text, blur: 3 });
-    await sock.sendMessage(from, { 
-        image: { url: `${API}${res.data.url}` }, 
-        caption: `✨ ${text}` 
-    });
-}</pre>
                 </div>
             </div>
         </div>
         
         <div id="gif" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('gif-convert', 'gif')">Convertir</button>
-                <button class="tab" onclick="showTab('gif-docs', 'gif')">Endpoints</button>
-                <button class="tab" onclick="showTab('gif-baileys', 'gif')">Baileys</button>
-            </div>
-            <div id="gif-convert" class="tab-content active">
-                <div class="card">
-                    <h2>Convertir Video a GIF</h2>
-                    <div class="file-upload-area" onclick="document.getElementById('gif-file').click()">
-                        <input type="file" id="gif-file" accept="video/*" onchange="handleGifFileSelect(this)">
-                        <label>📁 Selecciona un video<br><small>Máximo 50MB</small></label>
-                    </div>
-                    <div id="gif-file-info" style="display: none; margin-bottom: 20px;">
-                        <p><strong>Archivo seleccionado:</strong> <span id="gif-file-name"></span></p>
-                        <p><strong>Tamaño:</strong> <span id="gif-file-size"></span></p>
-                    </div>
-                    <div class="input-group"><label>Ancho del GIF (px)</label><input type="number" id="gif-width" value="480" min="100" max="1280"></div>
-                    <div class="input-group"><label>FPS</label>
-                        <select id="gif-fps">
-                            <option value="5">5 FPS (ligero)</option>
-                            <option value="10" selected>10 FPS (normal)</option>
-                            <option value="15">15 FPS (fluido)</option>
-                            <option value="24">24 FPS (cine)</option>
-                        </select>
-                    </div>
-                    <button onclick="convertToGif()" class="btn-gif">🎞️ Convertir a GIF</button>
-                    <div id="gif-result" style="display: none; margin-top: 20px;">
-                        <div class="task-info">
-                            <p><strong>✅ ¡GIF generado!</strong></p>
-                            <p><strong>ID:</strong> <span id="gif-file-id"></span></p>
-                            <p><strong>Tamaño original:</strong> <span id="gif-original-size"></span></p>
-                            <p><strong>Tamaño GIF:</strong> <span id="gif-size"></span></p>
-                        </div>
-                        <div class="gif-preview">
-                            <img id="gif-preview-img" src="" alt="GIF Preview">
-                        </div>
-                        <div class="url-box">
-                            <label>Link del GIF</label>
-                            <div class="url-copy-group">
-                                <input type="text" id="gif-view-url" readonly onclick="this.select()">
-                                <button onclick="copyText('gif-view-url')">Copiar</button>
-                            </div>
-                        </div>
-                        <div class="url-box">
-                            <label>Link de descarga</label>
-                            <div class="url-copy-group">
-                                <input type="text" id="gif-download-url" readonly onclick="this.select()">
-                                <button onclick="copyText('gif-download-url')">Copiar</button>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card">
+                <h2>Convertir Video a GIF</h2>
+                <div class="file-upload-area" onclick="document.getElementById('gif-file').click()">
+                    <input type="file" id="gif-file" accept="video/*" onchange="handleGifFileSelect(this)">
+                    <label>📁 Selecciona un video<br><small>Máximo 50MB</small></label>
                 </div>
-            </div>
-            <div id="gif-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/gif/convert</h3><pre>FormData: { file, width, fps }</pre></div>
+                <div id="gif-file-info" style="display: none; margin-bottom: 20px;">
+                    <p><strong>Archivo seleccionado:</strong> <span id="gif-file-name"></span></p>
+                    <p><strong>Tamaño:</strong> <span id="gif-file-size"></span></p>
                 </div>
-            </div>
-            <div id="gif-baileys" class="tab-content">
-                <div class="card"><h2>Baileys</h2>
-                    <div class="api-url-badge" id="apiUrlDisplay-gif"></div>
-                    <pre>const axios = require('axios');
-const FormData = require('form-data');
-const API = window.location.origin;
-
-async function convertirAGif(sock, from, fileBuffer, filename) {
-    const form = new FormData();
-    form.append('file', fileBuffer, filename);
-    form.append('width', '480');
-    form.append('fps', '10');
-    const res = await axios.post(`${API}/api/gif/convert`, form, { headers: form.getHeaders() });
-    await sock.sendMessage(from, { 
-        video: { url: `${API}/api/hosting/view/${res.data.file_id}` }, 
-        gifPlayback: true,
-        caption: '🎞️ GIF generado' 
-    });
-}</pre>
+                <div class="input-group"><label>Ancho del GIF (px)</label><input type="number" id="gif-width" value="480" min="100" max="1280"></div>
+                <div class="input-group"><label>FPS</label><select id="gif-fps"><option value="5">5 FPS (ligero)</option><option value="10" selected>10 FPS (normal)</option><option value="15">15 FPS (fluido)</option><option value="24">24 FPS (cine)</option></select></div>
+                <button onclick="convertToGif()" class="btn-gif">🎞️ Convertir a GIF</button>
+                <div id="gif-result" style="display: none; margin-top: 20px;">
+                    <div class="task-info">
+                        <p><strong>✅ ¡GIF generado!</strong></p>
+                        <p><strong>ID:</strong> <span id="gif-file-id"></span></p>
+                        <p><strong>Tamaño original:</strong> <span id="gif-original-size"></span></p>
+                        <p><strong>Tamaño GIF:</strong> <span id="gif-size"></span></p>
+                    </div>
+                    <div class="gif-preview"><img id="gif-preview-img" src="" alt="GIF Preview"></div>
+                    <div class="url-box">
+                        <label>Link del GIF</label>
+                        <div class="url-copy-group"><input type="text" id="gif-view-url" readonly onclick="this.select()"><button onclick="copyText('gif-view-url')">Copiar</button></div>
+                    </div>
+                    <div class="url-box">
+                        <label>Link de descarga</label>
+                        <div class="url-copy-group"><input type="text" id="gif-download-url" readonly onclick="this.select()"><button onclick="copyText('gif-download-url')">Copiar</button></div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <footer><p>FRIKIAPI · FRIKISEARCH · FRIKITUBE · FRIKITOK · INSTAGRAM · FRIKISPOTIFY · FRIKIIMG · FRIKIWAIFU · FRIKILYRIC · FRIKIHOSTING · FRIKIBRAT · FRIKIGIF</p></footer>
+        <footer><p>FRIKIAPI © 2026</p></footer>
     </div>
     
     <script>
@@ -832,17 +530,10 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
         let selectedFile = null, selectedGifFile = null;
         
         document.addEventListener('DOMContentLoaded', function() {
-            const badges = document.querySelectorAll('.api-url-badge');
-            badges.forEach(badge => {
-                badge.textContent = `const API = '${window.location.origin}';`;
-            });
-            
             const blurSlider = document.getElementById('brat-blur');
             const blurValue = document.getElementById('brat-blur-value');
             if (blurSlider && blurValue) {
-                blurSlider.addEventListener('input', function() {
-                    blurValue.textContent = this.value;
-                });
+                blurSlider.addEventListener('input', function() { blurValue.textContent = this.value; });
             }
         });
         
@@ -864,7 +555,6 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
             pageEl.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
             document.getElementById(tab).classList.add('active');
             event.target.classList.add('active');
-            if (tab === 'host-list') loadHostedFiles();
         }
         
         function formatFileSize(bytes) {
@@ -878,47 +568,68 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
         async function performSearch() {
             const query = document.getElementById('search-query').value.trim();
             const limit = parseInt(document.getElementById('search-limit').value);
-            
             if (!query) return alert('Escribe una búsqueda');
             
             const resultsDiv = document.getElementById('search-results');
-            resultsDiv.innerHTML = `
-                <div class="search-loading">
-                    <div class="spinner"></div>
-                    <p>Buscando "${query}"...</p>
-                </div>
-            `;
+            resultsDiv.innerHTML = '<div class="search-loading"><div class="spinner"></div><p>Buscando...</p></div>';
             
             try {
                 const res = await fetch(`${API_URL}/api/search`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({query, max_results: limit})
                 });
-                
                 const data = await res.json();
                 
-                if (data.success && data.results) {
-                    if (data.results.length === 0 || data.results[0].error) {
-                        resultsDiv.innerHTML = '<p style="color: #ff4444; text-align: center; padding: 40px;">❌ No se encontraron resultados</p>';
-                        return;
-                    }
-                    
-                    let html = `<h3 style="color: #888; margin-bottom: 20px;">${data.results.length} resultados para "${query}"</h3>`;
-                    
+                if (data.success && data.results && !data.results[0]?.error) {
+                    let html = `<h3 style="color: #888; margin-bottom: 20px;">${data.results.length} resultados</h3>`;
                     data.results.forEach(r => {
-                        html += `
-                            <div class="search-result-item">
-                                <a href="${r.link}" target="_blank" class="search-result-title">${r.title || 'Sin título'}</a>
-                                <div class="search-result-link">${r.link || ''}</div>
-                                <div class="search-result-snippet">${r.snippet || 'Sin descripción'}</div>
-                            </div>
-                        `;
+                        html += `<div class="search-result-item">
+                            <a href="${r.link}" target="_blank" class="search-result-title">${r.title || 'Sin título'}</a>
+                            <div class="search-result-link">${r.link || ''}</div>
+                            <div class="search-result-snippet">${r.snippet || ''}</div>
+                        </div>`;
                     });
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<p style="color: #ff4444; text-align: center; padding: 40px;">❌ No se encontraron resultados</p>';
+                }
+            } catch(e) {
+                resultsDiv.innerHTML = `<p style="color: #ff4444; text-align: center; padding: 40px;">❌ Error: ${e.message}</p>`;
+            }
+        }
+        
+        async function performAnswer() {
+            const query = document.getElementById('answer-query').value.trim();
+            if (!query) return alert('Escribe una pregunta');
+            
+            const resultsDiv = document.getElementById('answer-results');
+            resultsDiv.innerHTML = '<div class="search-loading"><div class="spinner"></div><p>Buscando respuesta...</p></div>';
+            
+            try {
+                const res = await fetch(`${API_URL}/api/answer`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({query})
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    let html = `<div class="answer-box">
+                        <div class="answer-label">🧠 Respuesta</div>
+                        <div class="answer-text">${data.answer}</div>
+                    </div>`;
+                    
+                    if (data.sources && data.sources.length > 0) {
+                        html += `<div class="sources-box">
+                            <div class="sources-label">📎 Fuentes</div>`;
+                        data.sources.forEach(s => {
+                            html += `<a href="${s}" target="_blank">${s}</a>`;
+                        });
+                        html += `</div>`;
+                    }
                     
                     resultsDiv.innerHTML = html;
                 } else {
-                    resultsDiv.innerHTML = '<p style="color: #ff4444; text-align: center; padding: 40px;">❌ Error al buscar</p>';
+                    resultsDiv.innerHTML = `<p style="color: #ff4444; text-align: center; padding: 40px;">${data.answer || '❌ Error al buscar'}</p>`;
                 }
             } catch(e) {
                 resultsDiv.innerHTML = `<p style="color: #ff4444; text-align: center; padding: 40px;">❌ Error: ${e.message}</p>`;
@@ -979,34 +690,6 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                     document.getElementById('host-uploadResult').style.display = 'block';
                 }
             } catch(e) { alert('Error: ' + e.message); }
-        }
-        
-        async function loadHostedFiles() {
-            try {
-                const res = await fetch(`${API_URL}/api/hosting/list`);
-                const data = await res.json();
-                let html = '';
-                if (data.files && data.files.length > 0) {
-                    data.files.forEach(f => {
-                        html += `<div class="hosted-file-item">
-                            <div class="hosted-file-info">
-                                <span>${f.type === 'image' ? '🖼️' : f.type === 'gif' ? '🎞️' : '🎬'}</span>
-                                <div><strong>${f.name}</strong><br><small>${f.size} · ${new Date(f.created_at).toLocaleString()}</small></div>
-                            </div>
-                            <div class="hosted-file-actions">
-                                <button onclick="copyHostedLink('${f.id}')">📋 Link</button>
-                            </div>
-                        </div>`;
-                    });
-                } else { html = '<p style="color: #888;">No hay archivos hosteados</p>'; }
-                document.getElementById('host-files-list').innerHTML = html;
-            } catch(e) { document.getElementById('host-files-list').innerHTML = '<p style="color: #ff4444;">Error al cargar</p>'; }
-        }
-        
-        function copyHostedLink(id) {
-            const url = `${API_URL}/api/hosting/view/${id}`;
-            navigator.clipboard?.writeText(url);
-            alert('Link copiado: ' + url);
         }
         
         async function startDownload(platform) {
@@ -1098,12 +781,6 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                     resultsDiv.innerHTML = '<p style="color: #ff4444;">No se encontraron resultados</p>';
                 }
             } catch(e) { document.getElementById('sp-results').innerHTML = '<p style="color: #ff4444;">Error al buscar</p>'; }
-        }
-        
-        async function downloadSpotify() {
-            const url = document.getElementById('sp-url').value;
-            if (!url) return alert('Ingresa una URL de Spotify');
-            downloadSpotifyUrl(url);
         }
         
         async function downloadSpotifyUrl(url) {
@@ -1275,10 +952,7 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
             document.getElementById('gif-result').style.display = 'none';
             try {
                 const res = await fetch(`${API_URL}/api/gif/convert`, { method: 'POST', body: formData });
-                if (!res.ok) {
-                    const text = await res.text();
-                    throw new Error('Error del servidor: ' + text.substring(0, 100));
-                }
+                if (!res.ok) { const text = await res.text(); throw new Error('Error del servidor: ' + text.substring(0, 100)); }
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('gif-file-id').textContent = data.file_id;
@@ -1290,7 +964,7 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
                     document.getElementById('gif-download-url').value = downloadUrl;
                     document.getElementById('gif-preview-img').src = viewUrl;
                     document.getElementById('gif-result').style.display = 'block';
-                } else { alert('Error al convertir'); }
+                }
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -1298,4 +972,4 @@ async function convertirAGif(sock, from, fileBuffer, filename) {
         setInterval(checkServerStatus, 30000);
     </script>
 </body>
-                                                           </html>
+</html>
