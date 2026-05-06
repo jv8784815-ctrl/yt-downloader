@@ -81,8 +81,6 @@
             margin-right: 10px; margin-bottom: 10px; border-radius: 6px; text-transform: uppercase;
         }
         button:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
-        .btn-search { background: #2196f3 !important; border-color: #2196f3 !important; }
-        .btn-search:hover { background: #42a5f5 !important; }
         .btn-18 { background: #ff0050 !important; border-color: #ff0050 !important; }
         .btn-waifu { background: #9b59b6 !important; border-color: #9b59b6 !important; }
         .btn-hosting { background: #ff8800 !important; border-color: #ff8800 !important; }
@@ -90,6 +88,7 @@
         .btn-brat { background: #8bc34a !important; border-color: #8bc34a !important; }
         .btn-spotify { background: #1DB954 !important; border-color: #1DB954 !important; }
         .btn-gif { background: #00bcd4 !important; border-color: #00bcd4 !important; }
+        .btn-search { background: #2196f3 !important; border-color: #2196f3 !important; }
         .progress-bar { width: 100%; height: 4px; background: #222222; border-radius: 4px; margin: 25px 0; }
         .progress-fill { height: 100%; background: #ffffff; width: 0%; transition: width 0.3s; }
         .task-info {
@@ -157,54 +156,29 @@
         .search-results { margin-top: 25px; }
         .search-result-item {
             background: #050505; border: 1px solid #333; border-radius: 8px;
-            padding: 20px; margin-bottom: 15px; transition: all 0.2s;
+            padding: 20px; margin-bottom: 15px;
         }
-        .search-result-item:hover { border-color: #555; }
-        .search-result-title {
-            color: #2196f3; font-size: 1.1em; font-weight: 500; margin-bottom: 8px;
-            text-decoration: none; display: block;
-        }
-        .search-result-title:hover { text-decoration: underline; }
-        .search-result-link {
-            color: #4caf50; font-size: 0.8em; margin-bottom: 8px;
-            word-break: break-all;
-        }
-        .search-result-snippet {
-            color: #aaaaaa; font-size: 0.9em; line-height: 1.6;
-        }
-        .search-loading {
-            text-align: center; padding: 40px; color: #888;
-        }
+        .search-result-title { color: #2196f3; font-size: 1.1em; margin-bottom: 8px; text-decoration: none; display: block; }
+        .search-result-link { color: #4caf50; font-size: 0.8em; margin-bottom: 8px; word-break: break-all; }
+        .search-result-snippet { color: #aaaaaa; font-size: 0.9em; line-height: 1.6; }
+        .search-loading { text-align: center; padding: 40px; color: #888; }
         .search-loading .spinner {
             width: 40px; height: 40px; border: 3px solid #333;
             border-top-color: #2196f3; border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 15px;
+            animation: spin 0.8s linear infinite; margin: 0 auto 15px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
         .answer-box {
             background: #0d1b2a; border: 1px solid #1b3a5c; border-radius: 8px;
             padding: 25px; margin: 20px 0;
         }
-        .answer-box .answer-label {
-            color: #2196f3; font-size: 0.7em; letter-spacing: 3px;
-            text-transform: uppercase; margin-bottom: 10px;
-        }
-        .answer-box .answer-text {
-            color: #e0e0e0; font-size: 1em; line-height: 1.7;
-        }
-        .sources-box {
-            margin-top: 20px; padding: 15px; background: #050505;
-            border-radius: 6px; border: 1px solid #333;
-        }
-        .sources-box .sources-label {
-            color: #888; font-size: 0.7em; letter-spacing: 2px;
-            text-transform: uppercase; margin-bottom: 10px;
-        }
-        .sources-box a {
-            color: #4caf50; font-size: 0.85em; display: block;
-            margin: 5px 0; word-break: break-all;
-        }
+        .answer-box .answer-label { color: #2196f3; font-size: 0.7em; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        .answer-box .answer-text { color: #e0e0e0; font-size: 1em; line-height: 1.7; }
+        .sources-box { margin-top: 20px; padding: 15px; background: #050505; border-radius: 6px; border: 1px solid #333; }
+        .sources-box .sources-label { color: #888; font-size: 0.7em; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+        .sources-box a { color: #4caf50; font-size: 0.85em; display: block; margin: 5px 0; word-break: break-all; }
+        .audio-preview { margin: 15px 0; }
+        .audio-preview audio { width: 100%; border-radius: 8px; }
         footer { text-align: center; padding: 30px 0; color: #555555; border-top: 1px solid #333333; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
@@ -263,18 +237,8 @@
             <div id="search-web" class="tab-content active">
                 <div class="card">
                     <h2>🔍 Buscar en la Web</h2>
-                    <div class="input-group">
-                        <label>¿Qué quieres buscar?</label>
-                        <input type="text" id="search-query" placeholder="Escribe tu búsqueda aquí..." onkeydown="if(event.key==='Enter')performSearch()">
-                    </div>
-                    <div class="input-group">
-                        <label>Resultados (1-10)</label>
-                        <select id="search-limit">
-                            <option value="3">3 resultados</option>
-                            <option value="5" selected>5 resultados</option>
-                            <option value="10">10 resultados</option>
-                        </select>
-                    </div>
+                    <div class="input-group"><label>¿Qué quieres buscar?</label><input type="text" id="search-query" placeholder="Escribe tu búsqueda aquí..." onkeydown="if(event.key==='Enter')performSearch()"></div>
+                    <div class="input-group"><label>Resultados (1-10)</label><select id="search-limit"><option value="3">3 resultados</option><option value="5" selected>5 resultados</option><option value="10">10 resultados</option></select></div>
                     <button onclick="performSearch()" class="btn-search">🔍 Buscar</button>
                     <div id="search-results" class="search-results"></div>
                 </div>
@@ -283,10 +247,7 @@
                 <div class="card">
                     <h2>🧠 Respuesta Directa</h2>
                     <p style="color: #888; margin-bottom: 20px;">Haz una pregunta y obtén una respuesta resumida de la web</p>
-                    <div class="input-group">
-                        <label>¿Qué quieres saber?</label>
-                        <input type="text" id="answer-query" placeholder="Ej: ¿Cuál es la capital de Francia?" onkeydown="if(event.key==='Enter')performAnswer()">
-                    </div>
+                    <div class="input-group"><label>¿Qué quieres saber?</label><input type="text" id="answer-query" placeholder="Ej: ¿Cuál es la capital de Francia?" onkeydown="if(event.key==='Enter')performAnswer()"></div>
                     <button onclick="performAnswer()" class="btn-search">🧠 Preguntar</button>
                     <div id="answer-results"></div>
                 </div>
@@ -300,29 +261,18 @@
         </div>
         
         <div id="youtube" class="page">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('yt-download', 'youtube')">Descargar</button>
-                <button class="tab" onclick="showTab('yt-docs', 'youtube')">Endpoints</button>
-            </div>
-            <div id="yt-download" class="tab-content active">
-                <div class="card">
-                    <h2>Descargar de YouTube</h2>
-                    <div class="input-group"><label>URL del video</label><input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..."></div>
-                    <div class="input-group"><label>Formato</label><select id="yt-format"><option value="mp3">MP3 (Audio)</option><option value="mp4">MP4 (Video)</option></select></div>
-                    <button onclick="startDownload('yt')">Descargar</button>
-                    <div id="yt-downloadStatus" style="display: none;">
-                        <div class="progress-bar"><div class="progress-fill" id="yt-progressFill"></div></div>
-                        <div class="task-info" id="yt-taskInfo"></div>
-                        <div class="url-box" id="yt-downloadUrlBox" style="display: none;">
-                            <label>URL de descarga</label>
-                            <div class="url-copy-group"><input type="text" id="yt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('yt')">Copiar</button></div>
-                        </div>
+            <div class="card">
+                <h2>Descargar de YouTube</h2>
+                <div class="input-group"><label>URL del video</label><input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..."></div>
+                <div class="input-group"><label>Formato</label><select id="yt-format"><option value="mp3">MP3 (Audio)</option><option value="mp4">MP4 (Video)</option></select></div>
+                <button onclick="startDownload('yt')">Descargar</button>
+                <div id="yt-downloadStatus" style="display: none;">
+                    <div class="progress-bar"><div class="progress-fill" id="yt-progressFill"></div></div>
+                    <div class="task-info" id="yt-taskInfo"></div>
+                    <div class="url-box" id="yt-downloadUrlBox" style="display: none;">
+                        <label>URL de descarga</label>
+                        <div class="url-copy-group"><input type="text" id="yt-downloadUrl" readonly onclick="this.select()"><button onclick="copyUrl('yt')">Copiar</button></div>
                     </div>
-                </div>
-            </div>
-            <div id="yt-docs" class="tab-content">
-                <div class="card"><h2>Endpoints</h2>
-                    <div class="endpoint"><h3><span class="method post">POST</span> /api/download</h3><pre>{"url": "...", "format": "mp3"}</pre></div>
                 </div>
             </div>
         </div>
@@ -374,10 +324,7 @@
             <div class="card">
                 <h2>Buscar Imágenes</h2>
                 <div class="input-group"><label>Búsqueda</label><input type="text" id="img-query" placeholder="gato gracioso..."></div>
-                <div class="button-group">
-                    <button onclick="searchImage()">🔍 Buscar</button>
-                    <button onclick="searchImage18()" class="btn-18">🔞 +18</button>
-                </div>
+                <div class="button-group"><button onclick="searchImage()">🔍 Buscar</button><button onclick="searchImage18()" class="btn-18">🔞 +18</button></div>
                 <button onclick="downloadImage()">⬇️ Descargar</button>
                 <div id="img-preview" style="display: none; text-align: center; margin: 20px 0;">
                     <p style="color: #888;"><span id="img-source"></span></p>
@@ -399,10 +346,7 @@
                 <h2>Obtener Waifu</h2>
                 <div class="input-group"><label>Categoría</label><select id="waifu-category"><option value="nsfw">🔞 NSFW</option><option value="sfw">✅ SFW</option></select></div>
                 <div class="input-group"><label>Tipo</label><select id="waifu-type"><option value="waifu">Waifu</option><option value="neko">Neko</option><option value="trap">Trap</option><option value="blowjob">Blowjob (Video)</option></select></div>
-                <div class="button-group">
-                    <button onclick="getWaifu()" class="btn-waifu">🎴 Obtener</button>
-                    <button onclick="downloadWaifu()">⬇️ Descargar</button>
-                </div>
+                <div class="button-group"><button onclick="getWaifu()" class="btn-waifu">🎴 Obtener</button><button onclick="downloadWaifu()">⬇️ Descargar</button></div>
                 <div id="waifu-preview" style="display: none; text-align: center; margin: 20px 0;">
                     <p style="color: #888;"><span id="waifu-source"></span></p>
                     <img id="waifu-preview-img" src="" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444;">
@@ -432,14 +376,15 @@
         
         <div id="hosting" class="page">
             <div class="card">
-                <h2>Subir Imagen o Video</h2>
+                <h2>Subir Imagen, Video o Audio</h2>
                 <div class="file-upload-area" onclick="document.getElementById('host-file').click()">
-                    <input type="file" id="host-file" accept="image/*,video/*" onchange="handleFileSelect(this)">
-                    <label>📁 Haz clic o arrastra un archivo<br><small>Imágenes (máx 20MB) · Videos (máx 100MB)</small></label>
+                    <input type="file" id="host-file" accept="image/*,video/*,audio/*" onchange="handleFileSelect(this)">
+                    <label>📁 Haz clic o arrastra un archivo<br><small>Imágenes (máx 20MB) · Videos (máx 100MB) · Audios (máx 30MB)</small></label>
                 </div>
                 <div id="host-file-info" style="display: none; margin-bottom: 20px;">
                     <p><strong>Archivo seleccionado:</strong> <span id="host-file-name"></span></p>
                     <p><strong>Tamaño:</strong> <span id="host-file-size"></span></p>
+                    <p><strong>Tipo:</strong> <span id="host-file-type"></span></p>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="host-compress" checked>
@@ -450,10 +395,12 @@
                     <div class="task-info">
                         <p><strong>✅ ¡Archivo subido!</strong></p>
                         <p><strong>ID:</strong> <span id="host-file-id"></span></p>
+                        <p><strong>Tipo:</strong> <span id="host-uploaded-type"></span></p>
                         <p><strong>Tamaño original:</strong> <span id="host-original-size"></span></p>
                         <p><strong>Tamaño comprimido:</strong> <span id="host-compressed-size"></span></p>
                         <p><strong>Compresión:</strong> <span id="host-compression-ratio"></span></p>
                     </div>
+                    <div id="host-preview" style="text-align: center; margin-top: 20px;"></div>
                     <div class="url-box">
                         <label>Link para compartir</label>
                         <div class="url-copy-group"><input type="text" id="host-view-url" readonly onclick="this.select()"><button onclick="copyText('host-view-url')">Copiar</button></div>
@@ -462,7 +409,6 @@
                         <label>Link de descarga directa</label>
                         <div class="url-copy-group"><input type="text" id="host-download-url" readonly onclick="this.select()"><button onclick="copyText('host-download-url')">Copiar</button></div>
                     </div>
-                    <div id="host-preview" style="text-align: center; margin-top: 20px;"></div>
                 </div>
             </div>
         </div>
@@ -476,10 +422,7 @@
                 <button onclick="generateBrat()" class="btn-brat">🎨 Generar Imagen</button>
                 <div id="brat-result" style="display: none; margin-top: 20px;">
                     <div class="brat-preview"><img id="brat-preview-img" src="" alt="Brat Image"></div>
-                    <div class="url-box">
-                        <label>URL de la imagen</label>
-                        <div class="url-copy-group"><input type="text" id="brat-url" readonly onclick="this.select()"><button onclick="copyText('brat-url')">Copiar</button></div>
-                    </div>
+                    <div class="url-box"><label>URL de la imagen</label><div class="url-copy-group"><input type="text" id="brat-url" readonly onclick="this.select()"><button onclick="copyText('brat-url')">Copiar</button></div></div>
                 </div>
             </div>
         </div>
@@ -506,14 +449,8 @@
                         <p><strong>Tamaño GIF:</strong> <span id="gif-size"></span></p>
                     </div>
                     <div class="gif-preview"><img id="gif-preview-img" src="" alt="GIF Preview"></div>
-                    <div class="url-box">
-                        <label>Link del GIF</label>
-                        <div class="url-copy-group"><input type="text" id="gif-view-url" readonly onclick="this.select()"><button onclick="copyText('gif-view-url')">Copiar</button></div>
-                    </div>
-                    <div class="url-box">
-                        <label>Link de descarga</label>
-                        <div class="url-copy-group"><input type="text" id="gif-download-url" readonly onclick="this.select()"><button onclick="copyText('gif-download-url')">Copiar</button></div>
-                    </div>
+                    <div class="url-box"><label>Link del GIF</label><div class="url-copy-group"><input type="text" id="gif-view-url" readonly onclick="this.select()"><button onclick="copyText('gif-view-url')">Copiar</button></div></div>
+                    <div class="url-box"><label>Link de descarga</label><div class="url-copy-group"><input type="text" id="gif-download-url" readonly onclick="this.select()"><button onclick="copyText('gif-download-url')">Copiar</button></div></div>
                 </div>
             </div>
         </div>
@@ -569,71 +506,43 @@
             const query = document.getElementById('search-query').value.trim();
             const limit = parseInt(document.getElementById('search-limit').value);
             if (!query) return alert('Escribe una búsqueda');
-            
             const resultsDiv = document.getElementById('search-results');
             resultsDiv.innerHTML = '<div class="search-loading"><div class="spinner"></div><p>Buscando...</p></div>';
-            
             try {
-                const res = await fetch(`${API_URL}/api/search`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query, max_results: limit})
-                });
+                const res = await fetch(`${API_URL}/api/search`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, max_results: limit}) });
                 const data = await res.json();
-                
                 if (data.success && data.results && !data.results[0]?.error) {
                     let html = `<h3 style="color: #888; margin-bottom: 20px;">${data.results.length} resultados</h3>`;
                     data.results.forEach(r => {
-                        html += `<div class="search-result-item">
-                            <a href="${r.link}" target="_blank" class="search-result-title">${r.title || 'Sin título'}</a>
-                            <div class="search-result-link">${r.link || ''}</div>
-                            <div class="search-result-snippet">${r.snippet || ''}</div>
-                        </div>`;
+                        html += `<div class="search-result-item"><a href="${r.link}" target="_blank" class="search-result-title">${r.title || 'Sin título'}</a><div class="search-result-link">${r.link || ''}</div><div class="search-result-snippet">${r.snippet || ''}</div></div>`;
                     });
                     resultsDiv.innerHTML = html;
                 } else {
                     resultsDiv.innerHTML = '<p style="color: #ff4444; text-align: center; padding: 40px;">❌ No se encontraron resultados</p>';
                 }
-            } catch(e) {
-                resultsDiv.innerHTML = `<p style="color: #ff4444; text-align: center; padding: 40px;">❌ Error: ${e.message}</p>`;
-            }
+            } catch(e) { resultsDiv.innerHTML = `<p style="color: #ff4444; text-align: center; padding: 40px;">❌ Error: ${e.message}</p>`; }
         }
         
         async function performAnswer() {
             const query = document.getElementById('answer-query').value.trim();
             if (!query) return alert('Escribe una pregunta');
-            
             const resultsDiv = document.getElementById('answer-results');
             resultsDiv.innerHTML = '<div class="search-loading"><div class="spinner"></div><p>Buscando respuesta...</p></div>';
-            
             try {
-                const res = await fetch(`${API_URL}/api/answer`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query})
-                });
+                const res = await fetch(`${API_URL}/api/answer`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query}) });
                 const data = await res.json();
-                
                 if (data.success) {
-                    let html = `<div class="answer-box">
-                        <div class="answer-label">🧠 Respuesta</div>
-                        <div class="answer-text">${data.answer}</div>
-                    </div>`;
-                    
+                    let html = `<div class="answer-box"><div class="answer-label">🧠 Respuesta</div><div class="answer-text">${data.answer}</div></div>`;
                     if (data.sources && data.sources.length > 0) {
-                        html += `<div class="sources-box">
-                            <div class="sources-label">📎 Fuentes</div>`;
-                        data.sources.forEach(s => {
-                            html += `<a href="${s}" target="_blank">${s}</a>`;
-                        });
+                        html += `<div class="sources-box"><div class="sources-label">📎 Fuentes</div>`;
+                        data.sources.forEach(s => { html += `<a href="${s}" target="_blank">${s}</a>`; });
                         html += `</div>`;
                     }
-                    
                     resultsDiv.innerHTML = html;
                 } else {
                     resultsDiv.innerHTML = `<p style="color: #ff4444; text-align: center; padding: 40px;">${data.answer || '❌ Error al buscar'}</p>`;
                 }
-            } catch(e) {
-                resultsDiv.innerHTML = `<p style="color: #ff4444; text-align: center; padding: 40px;">❌ Error: ${e.message}</p>`;
-            }
+            } catch(e) { resultsDiv.innerHTML = `<p style="color: #ff4444; text-align: center; padding: 40px;">❌ Error: ${e.message}</p>`; }
         }
         
         async function generateBrat() {
@@ -641,10 +550,7 @@
             const blur = parseFloat(document.getElementById('brat-blur').value);
             if (!text) return alert('Escribe un texto');
             try {
-                const res = await fetch(`${API_URL}/api/brat/generate`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({text, blur})
-                });
+                const res = await fetch(`${API_URL}/api/brat/generate`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text, blur}) });
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('brat-result').style.display = 'block';
@@ -660,6 +566,12 @@
                 document.getElementById('host-file-info').style.display = 'block';
                 document.getElementById('host-file-name').textContent = selectedFile.name;
                 document.getElementById('host-file-size').textContent = formatFileSize(selectedFile.size);
+                
+                let fileType = 'Desconocido';
+                if (selectedFile.type.startsWith('image/')) fileType = '🖼️ Imagen';
+                else if (selectedFile.type.startsWith('video/')) fileType = '🎬 Video';
+                else if (selectedFile.type.startsWith('audio/')) fileType = '🎵 Audio';
+                document.getElementById('host-file-type').textContent = fileType;
             }
         }
         
@@ -674,6 +586,7 @@
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('host-file-id').textContent = data.file_id;
+                    document.getElementById('host-uploaded-type').textContent = data.type === 'image' ? '🖼️ Imagen' : data.type === 'video' ? '🎬 Video' : '🎵 Audio';
                     document.getElementById('host-original-size').textContent = data.original_size_str;
                     document.getElementById('host-compressed-size').textContent = data.compressed_size_str;
                     document.getElementById('host-compression-ratio').textContent = data.compression_ratio;
@@ -681,12 +594,16 @@
                     const downloadUrl = API_URL + data.download_url;
                     document.getElementById('host-view-url').value = viewUrl;
                     document.getElementById('host-download-url').value = downloadUrl;
+                    
                     const preview = document.getElementById('host-preview');
                     if (data.type === 'image') {
                         preview.innerHTML = `<img src="${viewUrl}" style="max-width: 100%; max-height: 300px; border-radius: 8px;">`;
+                    } else if (data.type === 'audio') {
+                        preview.innerHTML = `<div class="audio-preview"><audio controls src="${viewUrl}"></audio></div>`;
                     } else {
                         preview.innerHTML = `<video src="${viewUrl}" controls style="max-width: 100%; max-height: 300px; border-radius: 8px;"></video>`;
                     }
+                    
                     document.getElementById('host-uploadResult').style.display = 'block';
                 }
             } catch(e) { alert('Error: ' + e.message); }
@@ -710,7 +627,6 @@
                 endpoint = '/api/instagram';
                 body = {url};
             } else { return; }
-            
             try {
                 const res = await fetch(`${API_URL}${endpoint}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
                 const data = await res.json();
@@ -756,43 +672,26 @@
             const type = document.getElementById('sp-type').value;
             if (!query) return alert('Ingresa una búsqueda');
             try {
-                const res = await fetch(`${API_URL}/api/spotify/search`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({query, type})
-                });
+                const res = await fetch(`${API_URL}/api/spotify/search`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, type}) });
                 const data = await res.json();
                 const resultsDiv = document.getElementById('sp-results');
                 resultsDiv.style.display = 'block';
                 if (data.success && data.results) {
                     let html = `<h3>Resultados (${data.total})</h3>`;
                     data.results.forEach(track => {
-                        html += `<div class="spotify-track">
-                            <div class="spotify-track-info">
-                                ${track.image ? `<img src="${track.image}" alt="">` : '<span>🎵</span>'}
-                                <div><strong>${track.title}</strong><br><small>${track.artist} · ${track.duration_str || ''}</small></div>
-                            </div>
-                            <div class="spotify-track-actions">
-                                <button onclick="downloadSpotifyUrl('${track.url}')" class="btn-spotify">⬇️</button>
-                            </div>
-                        </div>`;
+                        html += `<div class="spotify-track"><div class="spotify-track-info">${track.image ? `<img src="${track.image}" alt="">` : '<span>🎵</span>'}<div><strong>${track.title}</strong><br><small>${track.artist} · ${track.duration_str || ''}</small></div></div><div class="spotify-track-actions"><button onclick="downloadSpotifyUrl('${track.url}')" class="btn-spotify">⬇️</button></div></div>`;
                     });
                     resultsDiv.innerHTML = html;
-                } else {
-                    resultsDiv.innerHTML = '<p style="color: #ff4444;">No se encontraron resultados</p>';
-                }
+                } else { resultsDiv.innerHTML = '<p style="color: #ff4444;">No se encontraron resultados</p>'; }
             } catch(e) { document.getElementById('sp-results').innerHTML = '<p style="color: #ff4444;">Error al buscar</p>'; }
         }
         
         async function downloadSpotifyUrl(url) {
             try {
-                const res = await fetch(`${API_URL}/api/spotify/download`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({url})
-                });
+                const res = await fetch(`${API_URL}/api/spotify/download`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({url}) });
                 const data = await res.json();
                 spTaskId = data.task_id;
-                if (spInterval) clearInterval(spInterval);
-                spInterval = setInterval(() => checkSpotifyStatus(), 2000);
+                if (spInterval) clearInterval(spInterval); spInterval = setInterval(() => checkSpotifyStatus(), 2000);
                 document.getElementById('sp-downloadStatus').style.display = 'block';
                 document.getElementById('sp-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">Buscando...</span></p>`;
             } catch(e) { alert('Error: ' + e.message); }
@@ -808,11 +707,7 @@
                 if (data.title) html += `<p><strong>Título</strong> ${data.title}</p>`;
                 if (data.uploader) html += `<p><strong>Artista</strong> ${data.uploader}</p>`;
                 document.getElementById('sp-taskInfo').innerHTML = html;
-                if (data.status === 'completed') {
-                    clearInterval(spInterval);
-                    document.getElementById('sp-downloadUrl').value = API_URL + data.stream_url;
-                    document.getElementById('sp-downloadUrlBox').style.display = 'block';
-                }
+                if (data.status === 'completed') { clearInterval(spInterval); document.getElementById('sp-downloadUrl').value = API_URL + data.stream_url; document.getElementById('sp-downloadUrlBox').style.display = 'block'; }
             } catch(e) {}
         }
         
@@ -822,11 +717,7 @@
             try {
                 const res = await fetch(`${API_URL}/api/waifu?type=${type}&category=${category}`);
                 const data = await res.json();
-                if (data.success) {
-                    document.getElementById('waifu-preview').style.display = 'block';
-                    document.getElementById('waifu-preview-img').src = data.url;
-                    document.getElementById('waifu-source').textContent = `Fuente: waifu.pics | ${data.category}`;
-                }
+                if (data.success) { document.getElementById('waifu-preview').style.display = 'block'; document.getElementById('waifu-preview-img').src = data.url; document.getElementById('waifu-source').textContent = `Fuente: waifu.pics | ${data.category}`; }
             } catch(e) { alert('Error: ' + e.message); }
         }
         
@@ -836,9 +727,7 @@
             try {
                 const res = await fetch(`${API_URL}/api/waifu/download`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({type, category}) });
                 const data = await res.json();
-                waifuTaskId = data.task_id;
-                if (waifuInterval) clearInterval(waifuInterval);
-                waifuInterval = setInterval(checkWaifuStatus, 2000);
+                waifuTaskId = data.task_id; if (waifuInterval) clearInterval(waifuInterval); waifuInterval = setInterval(checkWaifuStatus, 2000);
                 document.getElementById('waifu-downloadStatus').style.display = 'block';
                 document.getElementById('waifu-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p>`;
             } catch(e) { alert('Error: ' + e.message); }
@@ -853,11 +742,7 @@
                 let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
                 if (data.title) html += `<p><strong>Tipo</strong> ${data.title}</p>`;
                 document.getElementById('waifu-taskInfo').innerHTML = html;
-                if (data.status === 'completed') {
-                    clearInterval(waifuInterval);
-                    document.getElementById('waifu-downloadUrl').value = API_URL + data.stream_url;
-                    document.getElementById('waifu-downloadUrlBox').style.display = 'block';
-                }
+                if (data.status === 'completed') { clearInterval(waifuInterval); document.getElementById('waifu-downloadUrl').value = API_URL + data.stream_url; document.getElementById('waifu-downloadUrlBox').style.display = 'block'; }
             } catch(e) {}
         }
         
@@ -867,11 +752,7 @@
             try {
                 const res = await fetch(`${API_URL}/api/image/search`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: false}) });
                 const data = await res.json();
-                if (data.success) {
-                    document.getElementById('img-preview').style.display = 'block';
-                    document.getElementById('img-preview-img').src = data.image_url;
-                    document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Bing'}`;
-                }
+                if (data.success) { document.getElementById('img-preview').style.display = 'block'; document.getElementById('img-preview-img').src = data.image_url; document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Bing'}`; }
             } catch(e) { alert('Error'); }
         }
         
@@ -881,11 +762,7 @@
             try {
                 const res = await fetch(`${API_URL}/api/image/search`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: true}) });
                 const data = await res.json();
-                if (data.success) {
-                    document.getElementById('img-preview').style.display = 'block';
-                    document.getElementById('img-preview-img').src = data.image_url;
-                    document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Bing'} | 🔞`;
-                }
+                if (data.success) { document.getElementById('img-preview').style.display = 'block'; document.getElementById('img-preview-img').src = data.image_url; document.getElementById('img-source').textContent = `Fuente: ${data.source || 'Bing'} | 🔞`; }
             } catch(e) { alert('Error'); }
         }
         
@@ -895,9 +772,7 @@
             try {
                 const res = await fetch(`${API_URL}/api/image/download`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, adult: false}) });
                 const data = await res.json();
-                imgTaskId = data.task_id;
-                if (imgInterval) clearInterval(imgInterval);
-                imgInterval = setInterval(checkImageStatus, 2000);
+                imgTaskId = data.task_id; if (imgInterval) clearInterval(imgInterval); imgInterval = setInterval(checkImageStatus, 2000);
                 document.getElementById('img-downloadStatus').style.display = 'block';
                 document.getElementById('img-taskInfo').innerHTML = `<p><strong>Estado</strong> <span class="status-badge status-pending">pendiente</span></p>`;
             } catch(e) { alert('Error'); }
@@ -912,11 +787,7 @@
                 let html = `<p><strong>Estado</strong> <span class="status-badge status-${data.status}">${data.status}</span></p>`;
                 if (data.title) html += `<p><strong>Búsqueda</strong> ${data.title}</p>`;
                 document.getElementById('img-taskInfo').innerHTML = html;
-                if (data.status === 'completed') {
-                    clearInterval(imgInterval);
-                    document.getElementById('img-downloadUrl').value = API_URL + data.stream_url;
-                    document.getElementById('img-downloadUrlBox').style.display = 'block';
-                }
+                if (data.status === 'completed') { clearInterval(imgInterval); document.getElementById('img-downloadUrl').value = API_URL + data.stream_url; document.getElementById('img-downloadUrlBox').style.display = 'block'; }
             } catch(e) {}
         }
         
