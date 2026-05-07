@@ -4,7 +4,6 @@
     { "source": "/api/brat/view/:file_id", "destination": "http://64.20.54.50:30325/api/brat/view/:file_id" },
     { "source": "/api/brat/download/:file_id", "destination": "http://64.20.54.50:30325/api/brat/download/:file_id" },
     { "source": "/api/instagram", "destination": "http://64.20.54.50:30325/api/instagram" },
-    { "source": "/api/instagram/info", "destination": "http://64.20.54.50:30325/api/instagram/info" },
     { "source": "/api/hosting/upload", "destination": "http://64.20.54.50:30325/api/hosting/upload" },
     { "source": "/api/hosting/view/:file_id", "destination": "http://64.20.54.50:30325/api/hosting/view/:file_id" },
     { "source": "/api/hosting/download/:file_id", "destination": "http://64.20.54.50:30325/api/hosting/download/:file_id" },
@@ -20,7 +19,6 @@
     { "source": "/api/lyrics", "destination": "http://64.20.54.50:30325/api/lyrics" },
     { "source": "/api/tiktok", "destination": "http://64.20.54.50:30325/api/tiktok" },
     { "source": "/api/stream/:task_id", "destination": "http://64.20.54.50:30325/api/stream/:task_id" },
-    { "source": "/api/download/:task_id", "destination": "http://64.20.54.50:30325/api/download/:task_id" },
     { "source": "/api/status/:task_id", "destination": "http://64.20.54.50:30325/api/status/:task_id" },
     { "source": "/api/info", "destination": "http://64.20.54.50:30325/api/info" },
     { "source": "/api/tasks", "destination": "http://64.20.54.50:30325/api/tasks" },
@@ -32,6 +30,8 @@
     { "source": "/api/gif/convert", "destination": "http://64.20.54.50:30325/api/gif/convert" },
     { "source": "/api/search", "destination": "http://64.20.54.50:30325/api/search" },
     { "source": "/api/answer", "destination": "http://64.20.54.50:30325/api/answer" },
+    { "source": "/api/ytmp3", "destination": "http://64.20.54.50:30325/api/ytmp3" },
+    { "source": "/api/ytmp4", "destination": "http://64.20.54.50:30325/api/ytmp4" },
     { "source": "/health", "destination": "http://64.20.54.50:30325/health" }
   ],
   "headers": [
