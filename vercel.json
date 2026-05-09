@@ -32,6 +32,10 @@
     { "source": "/api/answer", "destination": "http://64.20.54.50:30325/api/answer" },
     { "source": "/api/ytmp3", "destination": "http://64.20.54.50:30325/api/ytmp3" },
     { "source": "/api/ytmp4", "destination": "http://64.20.54.50:30325/api/ytmp4" },
+    { "source": "/api/youtube/search", "destination": "http://64.20.54.50:30325/api/youtube/search" },
+    { "source": "/api/stream-url", "destination": "http://64.20.54.50:30325/api/stream-url" },
+    { "source": "/api/app-download", "destination": "http://64.20.54.50:30325/api/app-download" },
+    { "source": "/api/app-stream/:video_id", "destination": "http://64.20.54.50:30325/api/app-stream/:video_id" },
     { "source": "/health", "destination": "http://64.20.54.50:30325/health" }
   ],
   "headers": [
