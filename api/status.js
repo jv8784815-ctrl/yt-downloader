@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
     const { task_id } = req.query;
-    const API_BASE = 'http://64.20.54.50:30325';
+    const API_BASE = 'https://mazier-bounteously-justice.ngrok-free.dev';
     
     try {
         const response = await fetch(`${API_BASE}/api/status/${task_id}`);
