@@ -7,7 +7,6 @@ let tunnelCachedAt = 0;
 const TUNNEL_TTL = 5 * 60 * 1000; // 5 minutos
 
 async function getTunnelUrl() {
-  // Si ya tenemos tunnel y no ha expirado, usarlo
   if (tunnelUrl && Date.now() - tunnelCachedAt < TUNNEL_TTL) {
     return tunnelUrl;
   }
@@ -39,7 +38,6 @@ async function getTunnelUrl() {
   } catch (error) {
     console.error(`[Middleware] ❌ Error obteniendo tunnel: ${error.message}`);
     
-    // Si tenemos tunnel antiguo, usarlo como fallback
     if (tunnelUrl) {
       console.log(`[Middleware] ⚠️ Usando tunnel antiguo como fallback: ${tunnelUrl}`);
       return tunnelUrl;
@@ -104,7 +102,6 @@ export async function middleware(request) {
       headers.delete('origin');
       headers.delete('referer');
       headers.set('ngrok-skip-browser-warning', 'true');
-      headers.set('Accept-Encoding', 'gzip, deflate, br');
 
       // Preparar body
       let body = null;
@@ -113,8 +110,7 @@ export async function middleware(request) {
         const contentType = request.headers.get('content-type') || '';
         
         if (contentType.includes('application/json')) {
-          body = await request.json();
-          body = JSON.stringify(body);
+          body = await request.text();
         } else if (contentType.includes('multipart/form-data')) {
           body = await request.formData();
         } else {
@@ -127,13 +123,12 @@ export async function middleware(request) {
         method: request.method,
         headers: headers,
         body: body,
-        duplex: 'half',
       });
 
-      // Obtener el content-type para manejar diferentes tipos de respuesta
+      // Obtener el content-type
       const contentType = response.headers.get('content-type') || '';
 
-      // Para archivos (video, audio, imágenes, etc.)
+      // Para archivos (video, audio, imágenes, descargas)
       if (
         contentType.includes('video') ||
         contentType.includes('audio') ||
@@ -143,19 +138,12 @@ export async function middleware(request) {
         path.includes('/stream/') ||
         path.includes('/download/')
       ) {
-        // Para descargas, obtener el nombre del archivo
-        const contentDisposition = response.headers.get('content-disposition');
-        const fileName = contentDisposition 
-          ? contentDisposition.split('filename=')[1]?.replace(/["']/g, '') 
-          : null;
-
         const responseHeaders = new Headers(response.headers);
         responseHeaders.set('Access-Control-Allow-Origin', '*');
         responseHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         responseHeaders.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
         responseHeaders.set('ngrok-skip-browser-warning', 'true');
 
-        // Si es un archivo, devolverlo como stream
         return new NextResponse(response.body, {
           status: response.status,
           headers: responseHeaders,
@@ -163,28 +151,14 @@ export async function middleware(request) {
       }
 
       // Para JSON y texto
-      let data;
-      try {
-        data = await response.text();
-        // Intentar parsear como JSON para mantener consistencia
-        try {
-          const jsonData = JSON.parse(data);
-          data = JSON.stringify(jsonData);
-        } catch (e) {
-          // Si no es JSON, mantener como texto
-        }
-      } catch (error) {
-        data = 'Error al leer la respuesta';
-      }
-
-      // Crear headers de respuesta
+      const data = await response.text();
+      
       const responseHeaders = new Headers();
       responseHeaders.set('Access-Control-Allow-Origin', '*');
       responseHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
       responseHeaders.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
       responseHeaders.set('ngrok-skip-browser-warning', 'true');
       
-      // Mantener content-type de la respuesta original
       if (response.headers.get('content-type')) {
         responseHeaders.set('content-type', response.headers.get('content-type'));
       }
@@ -212,11 +186,9 @@ export async function middleware(request) {
     }
   }
 
-  // Para rutas no-API, continuar normalmente
   return NextResponse.next();
 }
 
-// Configurar para que solo ejecute en rutas API
 export const config = {
   matcher: '/api/:path*',
 };
