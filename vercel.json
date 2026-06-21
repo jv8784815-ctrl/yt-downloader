@@ -1,4 +1,13 @@
 {
+  "rewrites": [
+    { "source": "/api/download", "destination": "/api/proxy/download" },
+    { "source": "/api/status/:task_id", "destination": "/api/proxy/status/:task_id" },
+    { "source": "/api/stream/:task_id", "destination": "/api/proxy/stream/:task_id" },
+    { "source": "/api/ytmp3", "destination": "/api/proxy/ytmp3" },
+    { "source": "/api/ytmp4", "destination": "/api/proxy/ytmp4" },
+    { "source": "/api/tiktok", "destination": "/api/proxy/tiktok" },
+    { "source": "/api/:path*", "destination": "/api/proxy/:path*" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
